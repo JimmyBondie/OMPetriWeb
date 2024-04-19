@@ -25,6 +25,7 @@
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
     "@mdi/font": "^7.4.47",
+    "custom-electron-titlebar": "^4.2.8",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "vue-router": "^4.3.2",

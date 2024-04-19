@@ -2,6 +2,10 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { setupTitlebar, attachTitlebarToWindow } from 'custom-electron-titlebar/main'
+
+// setup the titlebar main process
+setupTitlebar()
 
 function createWindow(): void {
   // Create the browser window.
@@ -10,6 +14,8 @@ function createWindow(): void {
     height: 670,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    titleBarOverlay: true,
     ...(process && process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.mjs'),
@@ -18,6 +24,8 @@ function createWindow(): void {
   })
 
   mainWindow.on('ready-to-show', () => {
+    // attach fullScreen(f11 and not 'maximized') && focus listeners
+    attachTitlebarToWindow(mainWindow)
     mainWindow.show()
   })
 

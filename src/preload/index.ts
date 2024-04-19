@@ -1,5 +1,8 @@
-import { contextBridge } from 'electron'
+import { contextBridge, nativeImage } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import { Titlebar, TitlebarColor } from 'custom-electron-titlebar'
+import { TitleBarOptions } from 'custom-electron-titlebar/titlebar/options'
+import path from 'path'
 
 // Custom APIs for renderer
 const api = {}
@@ -20,3 +23,12 @@ if (process && process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.api = api
 }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const options: TitleBarOptions = {
+    icon: nativeImage.createFromPath(path.join(__dirname, '../../resources/icon.png')),
+    backgroundColor: TitlebarColor.fromHex('#2196F3'), // "blue" color from vuetify
+    titleHorizontalAlignment: 'left'
+  }
+  new Titlebar(options)
+})
