@@ -13,6 +13,9 @@ import * as directives from 'vuetify/directives'
 // Material Design Icons
 import '@mdi/font/css/materialdesignicons.css'
 
+// Vue Store
+import store from './store'
+
 const vuetify = createVuetify({
   components,
   directives
@@ -21,4 +24,5 @@ const vuetify = createVuetify({
 const app = createApp(App)
 app.use(router)
 app.use(vuetify)
+app.use(store)
 app.mount('#app')
