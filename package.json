@@ -28,6 +28,7 @@
     "custom-electron-titlebar": "^4.2.8",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
+    "vue-i18n": "^9.13.0",
     "vue-router": "^4.3.2",
     "vuex": "^4.0.2"
   },
