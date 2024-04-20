@@ -1,8 +1,9 @@
 import { contextBridge, nativeImage } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import { Titlebar, TitlebarColor } from 'custom-electron-titlebar'
+import TitleBarPkg from 'custom-electron-titlebar'
 import { TitleBarOptions } from 'custom-electron-titlebar/titlebar/options'
 import path from 'path'
+const { TitlebarColor, Titlebar } = TitleBarPkg
 
 // Custom APIs for renderer
 const api = {}
