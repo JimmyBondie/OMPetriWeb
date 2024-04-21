@@ -1,5 +1,13 @@
 {
   "About": "About",
+  "Graph": "Graph",
+  "Inspector": "Inspector",
+  "Model": "Model",
+  "New": "New",
+  "Open": "Open",
   "Overview": "Overview",
-  "Settings": "Settings"
+  "QuickView": "Quick View",
+  "Settings": "Settings",
+  "Simulation": "Simulation",
+  "Tools": "Tools"
 }

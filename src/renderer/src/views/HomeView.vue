@@ -1,20 +1,24 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import About from '../components/About.vue'
+import Overview from '../components/Overview.vue'
+import Settings from '../components/Settings.vue'
+</script>
 
 <template>
   <main>
-    <v-app-bar density="comfortable" color="blue">
+    <v-toolbar density="comfortable" color="blue">
       <template v-slot:prepend>
         <v-app-bar-nav-icon variant="text" @click.stop="menuOpen = !menuOpen"></v-app-bar-nav-icon>
       </template>
 
-      <v-app-bar-title>OMPetriWeb</v-app-bar-title>
-    </v-app-bar>
+      <v-toolbar-title>OMPetriWeb</v-toolbar-title>
+    </v-toolbar>
 
     <v-navigation-drawer
       v-model="menuOpen"
       :location="$vuetify.display.mobile ? 'bottom' : undefined"
     >
-      <v-list v-model:selected="tabs" nav>
+      <v-list v-model:selected="selectedTab" nav>
         <v-list-item prepend-icon="mdi-graph-outline" value="overview">
           {{ $t('Overview') }}
         </v-list-item>
@@ -28,10 +32,21 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-window v-model="tabs" direction="vertical">
-        <v-window-item value="overview">Graph</v-window-item>
-        <v-window-item value="settings">Settings</v-window-item>
-        <v-window-item value="about">About</v-window-item>
+      <v-window v-model="selectedTab" direction="vertical">
+        <!-- Overview -->
+        <v-window-item value="overview">
+          <Overview></Overview>
+        </v-window-item>
+
+        <!-- Settings -->
+        <v-window-item value="settings">
+          <Settings></Settings>
+        </v-window-item>
+
+        <!-- About -->
+        <v-window-item value="about">
+          <About></About>
+        </v-window-item>
       </v-window>
     </v-main>
   </main>
@@ -42,7 +57,7 @@ export default {
   data() {
     return {
       menuOpen: false,
-      tabs: []
+      selectedTab: []
     }
   }
 }
