@@ -6,13 +6,13 @@ import Settings from '../components/Settings.vue'
 
 <template>
   <main>
-    <v-toolbar density="comfortable" color="blue">
+    <v-app-bar density="comfortable" color="blue">
       <template v-slot:prepend>
         <v-app-bar-nav-icon variant="text" @click.stop="menuOpen = !menuOpen"></v-app-bar-nav-icon>
       </template>
 
-      <v-toolbar-title>OMPetriWeb</v-toolbar-title>
-    </v-toolbar>
+      <v-app-bar-title>OMPetriWeb</v-app-bar-title>
+    </v-app-bar>
 
     <v-navigation-drawer
       v-model="menuOpen"
