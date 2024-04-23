@@ -1,25 +1,11 @@
-import { ModelXmlConverter } from '@renderer/io/ModelXmlConverter'
 import { ModelService } from './ModelService'
+import { IServiceManager } from './intf'
 
-export class CustomService extends Object {
-  private _services: ServiceManager
-
-  public constructor(services: ServiceManager) {
-    super()
-    this._services = services
-  }
-
-  protected get services(): ServiceManager {
-    return this._services
-  }
-}
-
-export class ServiceManager extends Object {
+export class ServiceManager extends Object implements IServiceManager {
   private _modelService: ModelService = new ModelService(this)
 
   public get modelService(): ModelService {
     return this._modelService
   }
-}
 
-export const services = new ServiceManager()
+}
