@@ -1,11 +1,11 @@
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { Store, createStore } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { ModelService } from '@renderer/services/ModelService'
-import { services } from './services'
+import { services } from '@renderer/services'
+import { IModelService } from '@renderer/services/intf/IModelService'
 
 class StoreState extends Object {
-  public get modelService(): ModelService {
+  public get modelService(): IModelService {
     return services.modelService
   }
 

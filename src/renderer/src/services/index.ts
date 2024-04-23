@@ -1,3 +1,3 @@
-import { ServiceManager } from './Manager'
+import { ServiceManager } from './impl/Manager'
 
 export const services = new ServiceManager()
