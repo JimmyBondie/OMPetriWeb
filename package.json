@@ -26,8 +26,10 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@mdi/font": "^7.4.47",
     "custom-electron-titlebar": "^4.2.8",
+    "guid-typescript": "^1.0.9",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
+    "typescript-string-operations": "^1.5.1",
     "vue-i18n": "^9.13.0",
     "vue-router": "^4.3.2",
     "vuex": "^4.0.2"

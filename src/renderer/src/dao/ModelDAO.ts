@@ -1,9 +1,9 @@
-import { Model } from '@renderer/core/Model'
+import { Model } from '../core/Model'
 import { File } from 'buffer'
 
 export class ModelDAO extends Object {
   private _author: string = ''
-  private _creationDateTime: Date = new Date()
+  private _creationDateTime: number = new Date().getTime()
   private _description: string = ''
   private _file: File | undefined
   private _hasChanges: boolean = false
@@ -26,7 +26,7 @@ export class ModelDAO extends Object {
     return this._author
   }
 
-  public get creationDateTime(): Date {
+  public get creationDateTime(): number {
     return this._creationDateTime
   }
 
@@ -78,7 +78,7 @@ export class ModelDAO extends Object {
     this._author = author
   }
 
-  public set creationDateTime(creationDateTime: Date) {
+  public set creationDateTime(creationDateTime: number) {
     this._creationDateTime = creationDateTime
   }
 

@@ -1,13 +1,19 @@
 {
   "About": "Über",
+  "Cancel": "Abbrechen",
+  "Close": "Schließen",
   "Graph": "Graph",
   "Inspector": "Inspektor",
   "Model": "Modell",
   "New": "Neu",
+  "No": "Nein",
   "Open": "Öffnen",
   "Overview": "Übersicht",
   "QuickView": "Schnellansicht",
   "Settings": "Einstellungen",
   "Simulation": "Simulation",
-  "Tools": "Werkzeuge"
+  "Tools": "Werkzeuge",
+  "Untitled": "Unbenannt",
+  "WantToSaveChanges": "Möchten Sie die Änderungen speichern, die Sie an \"{0:00}\" vorgenommen haben?",
+  "Yes": "Ja"
 }

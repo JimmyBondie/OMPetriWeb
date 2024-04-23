@@ -1,9 +1,9 @@
-import { Arc } from '@renderer/entity/impl/Arc'
+import { Arc } from '../entity/impl/Arc'
 import { Color } from './Color'
-import { Place } from '@renderer/entity/impl/Place'
-import { Transition } from '@renderer/entity/impl/Transition'
-import { ElementType, IElement } from '@renderer/entity/intf/IElement'
-import { IArc } from '@renderer/entity/intf/IArc'
+import { Place } from '../entity/impl/Place'
+import { Transition } from '../entity/impl/Transition'
+import { ElementType, IElement } from '../entity/intf/IElement'
+import { IArc } from '../entity/intf/IArc'
 import { Parameter } from './Parameter'
 
 export class Model extends Object {
@@ -37,6 +37,12 @@ export class Model extends Object {
     this._arcs.set(arc.id, arc as Arc)
     arc.source.arcsOut.push(arc)
     arc.target.arcsIn.push(arc)
+  }
+
+  public addColor(color: Color) {
+    if (color) {
+      this._colors.set(color.id, color)
+    }
   }
 
   public addElement(element: IElement) {

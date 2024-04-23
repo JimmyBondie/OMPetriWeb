@@ -41,3 +41,5 @@ app.use(router)
 app.use(vuetify)
 app.use(store)
 app.mount('#app')
+
+export default i18n

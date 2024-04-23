@@ -1,13 +1,19 @@
 {
   "About": "About",
+  "Cancel": "Cancel",
+  "Close": "Close",
   "Graph": "Graph",
   "Inspector": "Inspector",
   "Model": "Model",
   "New": "New",
+  "No": "No",
   "Open": "Open",
   "Overview": "Overview",
   "QuickView": "Quick View",
   "Settings": "Settings",
   "Simulation": "Simulation",
-  "Tools": "Tools"
+  "Tools": "Tools",
+  "Untitled": "Untitled",
+  "WantToSaveChanges": "Do you want to save the changes you made to \"{0:00}\"",
+  "Yes": "Yes"
 }
