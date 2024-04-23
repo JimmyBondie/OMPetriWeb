@@ -1,7 +1,7 @@
 import { Guid } from 'guid-typescript'
-import { ModelDAO } from '../dao/ModelDAO'
-import { Color } from '../core/Color'
 import i18n from '../main'
+import { Color } from '@renderer/core/Color'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
 
 export class ModelService extends Object {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')

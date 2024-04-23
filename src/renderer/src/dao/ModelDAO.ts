@@ -1,4 +1,4 @@
-import { Model } from '../core/Model'
+import { Model } from '@renderer/core/Model'
 import { File } from 'buffer'
 
 export class ModelDAO extends Object {

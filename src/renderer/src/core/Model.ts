@@ -1,10 +1,10 @@
-import { Arc } from '../entity/impl/Arc'
+import { Arc } from '@renderer/entity/impl/Arc'
 import { Color } from './Color'
-import { Place } from '../entity/impl/Place'
-import { Transition } from '../entity/impl/Transition'
-import { ElementType, IElement } from '../entity/intf/IElement'
-import { IArc } from '../entity/intf/IArc'
 import { Parameter } from './Parameter'
+import { Place } from '@renderer/entity/impl/Place'
+import { Transition } from '@renderer/entity/impl/Transition'
+import { IArc } from '@renderer/entity/intf/IArc'
+import { ElementType, IElement } from '@renderer/entity/intf/IElement'
 
 export class Model extends Object {
   private _arcs: Map<string, Arc> = new Map<string, Arc>()
