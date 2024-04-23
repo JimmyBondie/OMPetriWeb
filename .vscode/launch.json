@@ -25,6 +25,13 @@
       "presentation": {
         "hidden": true
       }
+    },
+    {
+      "type": "msedge",
+      "request": "launch",
+      "name": "Debug Web",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/src/renderer/src"
     }
   ],
   "compounds": [
