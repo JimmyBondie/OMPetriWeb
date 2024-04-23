@@ -56,7 +56,7 @@ import Settings from '../components/Settings.vue'
 export default {
   data() {
     return {
-      menuOpen: false,
+      menuOpen: true,
       selectedTab: []
     }
   }
