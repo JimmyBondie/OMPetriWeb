@@ -64,4 +64,8 @@ export class Function extends Object {
   public addElement(element: Function) {
     this._elements.push(element)
   }
+
+  public addElementFirst(element: Function) {
+    this._elements.unshift(element)
+  }
 }

@@ -1,10 +1,14 @@
 import { Arc } from '@renderer/entity/impl/Arc'
 import { Color } from './Color'
-import { Parameter } from './Parameter'
+import { Parameter, ParameterType } from './Parameter'
 import { Place } from '@renderer/entity/impl/Place'
 import { Transition } from '@renderer/entity/impl/Transition'
 import { IArc } from '@renderer/entity/intf/IArc'
 import { ElementType, IElement } from '@renderer/entity/intf/IElement'
+import i18n from '@renderer/main'
+import { CustomError } from '@renderer/utils/CustomError'
+
+export class ModelError extends CustomError {}
 
 export class Model extends Object {
   private _arcs: Map<string, Arc> = new Map<string, Arc>()
@@ -60,6 +64,37 @@ export class Model extends Object {
     }
   }
 
+  public addParameter(param: Parameter) {
+    switch (param.type) {
+      case ParameterType.GLOBAL: {
+        if (this.containsParameter(param.id)) {
+          throw new ModelError('ParameterHasSameId')
+        }
+        this._parameters.set(param.id, param)
+        break
+      }
+
+      case ParameterType.LOCAL: {
+        if (!param.relatedElement || param.relatedElement.getLocalParameter(param.id)) {
+          throw new ModelError(i18n.global.t('ParameterHasSameId'))
+        }
+        param.relatedElement.addLocalParameter(param)
+        break
+      }
+
+      case ParameterType.REFERENCE: {
+        if (param.relatedElement) {
+          param.relatedElement.addLocalParameter(param)
+        }
+        break
+      }
+
+      default: {
+        throw new ModelError(i18n.global.t('ImportFailedUnhandledParamType'))
+      }
+    }
+  }
+
   public clear() {
     this._arcs.clear()
     this._colors.clear()
@@ -82,5 +117,25 @@ export class Model extends Object {
     }
 
     return found ? found.equals(element) : false
+  }
+
+  private containsParameter(id: string): boolean {
+    return this._parameters.has(id)
+  }
+
+  public getColor(id: string): Color | undefined {
+    return this._colors.get(id)
+  }
+
+  public getElement(id: string): IElement | undefined {
+    if (this._places.has(id)) {
+      return this._places.get(id)
+    } else if (this._transitions.has(id)) {
+      return this._transitions.get(id)
+    } else if (this._arcs.has(id)) {
+      return this._arcs.get(id)
+    } else {
+      return undefined
+    }
   }
 }

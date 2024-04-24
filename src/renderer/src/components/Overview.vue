@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { mergeProps } from 'vue'
-import { String } from 'typescript-string-operations'
 import Editor from './Editor.vue'
 </script>
 
@@ -28,7 +27,7 @@ import Editor from './Editor.vue'
 
           <template v-slot:default="{ isActive }">
             <v-card>
-              <v-card-text>{{ String.format($t('WantToSaveChanges'), model.name) }}</v-card-text>
+              <v-card-text>{{ $t('WantToSaveChanges', { name: model.name }) }}</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
@@ -66,7 +65,12 @@ import Editor from './Editor.vue'
       <!-- Load from file -->
       <v-tooltip :text="$t('Open')" location="top">
         <template v-slot:activator="{ props }">
-          <v-btn icon="mdi-open-in-app" variant="text" v-bind="props"></v-btn>
+          <v-btn
+            icon="mdi-open-in-app"
+            variant="text"
+            v-bind="props"
+            @click="openNewModule()"
+          ></v-btn>
         </template>
       </v-tooltip>
     </v-tabs>
@@ -76,17 +80,30 @@ import Editor from './Editor.vue'
         <Editor></Editor>
       </v-window-item>
     </v-window>
+
+    <v-dialog max-width="500" v-model="showErrorMessage">
+      <v-card :title="$t('Error')">
+        <v-card-text>{{ errorMessage }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="showErrorMessage = false">{{ $t('Ok') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </main>
 </template>
 
 <script lang="ts">
-import { mapGetters, mapMutations } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { CustomError } from '@renderer/utils/CustomError'
 
 export default {
   data() {
     return {
-      selectedModel: ''
+      errorMessage: '',
+      selectedModel: '',
+      showErrorMessage: false
     }
   },
   computed: {
@@ -94,8 +111,22 @@ export default {
   },
   methods: {
     ...mapMutations(['addNewModel', 'removeModel']),
+    ...mapActions(['openModel']),
     closeModel(model: ModelDAO) {
       this.removeModel(model)
+    },
+    async openNewModule() {
+      try {
+        const model: ModelDAO | null = await this.openModel()
+        if (model) {
+          this.selectedModel = model.id
+        }
+      } catch (e: any) {
+        if (e instanceof CustomError) {
+          this.errorMessage = e.message
+          this.showErrorMessage = true
+        }
+      }
     }
   }
 }
