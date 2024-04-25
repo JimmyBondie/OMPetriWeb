@@ -1,7 +1,12 @@
 <script setup lang="ts">
+import { ModelDAO } from '@renderer/dao/ModelDAO'
 import GraphPage from './GraphPage.vue'
 import InspectorPage from './InspectorPage.vue'
 import SimulationPage from './SimulationPage.vue'
+
+defineProps<{
+  dao: ModelDAO
+}>()
 </script>
 
 <template>
@@ -20,7 +25,7 @@ import SimulationPage from './SimulationPage.vue'
 
       <!-- Graph -->
       <v-window-item value="graph" class="h-100">
-        <GraphPage class="h-100"></GraphPage>
+        <GraphPage class="h-100" :dao="dao"></GraphPage>
       </v-window-item>
 
       <!-- Simulation -->

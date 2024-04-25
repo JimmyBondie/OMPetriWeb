@@ -77,7 +77,7 @@ import Editor from './Editor.vue'
 
     <v-window v-model="selectedModel" class="window-full">
       <v-window-item v-for="model in getModels" :value="model.id" class="h-100">
-        <Editor class="h-100"></Editor>
+        <Editor :dao="model" class="h-100"></Editor>
       </v-window-item>
     </v-window>
 
