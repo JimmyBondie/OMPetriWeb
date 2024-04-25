@@ -4,19 +4,29 @@ import { IModelXmlConverter } from '../intf/IModelXmlConverter'
 import i18n from '@renderer/main'
 import { Color } from '@renderer/core/Color'
 import { DateTime } from 'luxon'
-import { Place, PlaceType } from '@renderer/entity/impl/Place'
+import { PlaceType } from '@renderer/entity/impl/Place'
 import { ConflictResolutionStrategy } from '@renderer/core/ConflictResolutionStrategy'
 import { Token } from '@renderer/core/Token'
-import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
+import { TransitionType } from '@renderer/entity/impl/Transition'
 import { Function } from '@renderer/core/Function'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { IElement } from '@renderer/entity/intf/IElement'
 import { utils } from '@renderer/utils'
 import { CustomError } from '@renderer/utils/CustomError'
-import { Arc } from '@renderer/entity/impl/Arc'
 import { ArcType } from '@renderer/entity/intf/IArc'
 import { INode } from '@renderer/entity/intf/INode'
 import { Weight } from '@renderer/core/Weight'
+import { IDataArc } from '@renderer/data/intf/IDataArc'
+import { DataArc } from '@renderer/data/impl/DataArc'
+import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
+import { DataPlace } from '@renderer/data/impl/DataPlace'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
+import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
+import { DataType } from '@renderer/data/intf/DataType'
+import { GraphPlace } from '@renderer/graph/impl/GraphPlace'
+import { GraphTransition } from '@renderer/graph/impl/GraphTransition'
+import { GraphArc } from '@renderer/graph/impl/GraphArc'
 
 export class ModelXmlConverterError extends CustomError {}
 
@@ -37,40 +47,40 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly attrDisabled: string = 'disabled'
   // private readonly attrElementId: string = 'elementId'
   private readonly attrId: string = 'id'
-  // private readonly attrLabel: string = 'label'
+  private readonly attrLabel: string = 'label'
   private readonly attrMax: string = 'max'
   private readonly attrMin: string = 'min'
   private readonly attrName: string = 'name'
   // private readonly attrUnit: string = 'unit'
-  // private readonly attrPosX: string = 'posX'
-  // private readonly attrPosY: string = 'posY'
+  private readonly attrPosX: string = 'posX'
+  private readonly attrPosY: string = 'posY'
   private readonly attrSource: string = 'source'
   private readonly attrStart: string = 'start'
-  // private readonly attrSticky: string = 'sticky'
+  private readonly attrSticky: string = 'sticky'
   private readonly attrTarget: string = 'target'
   private readonly attrType: string = 'type'
   // private readonly attrValue: string = 'value'
 
   private readonly tagArc: string = 'Arc'
   private readonly tagArcs: string = 'Arcs'
-  // private readonly tagCluster: string = 'Cluster'
-  // private readonly tagClusters: string = 'Clusters'
+  private readonly tagCluster: string = 'Cluster'
+  private readonly tagClusters: string = 'Clusters'
   private readonly tagColor: string = 'Colour'
   private readonly tagColors: string = 'Colours'
-  // private readonly tagConnection: string = 'Connection'
+  private readonly tagConnection: string = 'Connection'
   private readonly tagFunction: string = 'Function'
-  // private readonly tagGraph: string = 'Graph'
+  private readonly tagGraph: string = 'Graph'
   // private readonly tagLabel: string = 'Label'
   private readonly tagModel: string = 'Model'
-  // private readonly tagNode: string = 'Node'
-  // private readonly tagNodes: string = 'Nodes'
+  private readonly tagNode: string = 'Node'
+  private readonly tagNodes: string = 'Nodes'
   // private readonly tagNodeShapes: string = 'Nodes'
   private readonly tagParameter: string = 'Parameter'
   private readonly tagParameters: string = 'Parameters'
   private readonly tagParametersLocal: string = 'LocalParameters'
   private readonly tagPlace: string = 'Place'
   private readonly tagPlaces: string = 'Places'
-  // private readonly tagShapes: string = 'Shapes'
+  private readonly tagShapes: string = 'Shapes'
   private readonly tagToken: string = 'Token'
   private readonly tagTokens: string = 'Tokens'
   private readonly tagTransition: string = 'Transition'
@@ -111,6 +121,9 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
       }
     })
 
+    // Graph
+    this.readGroup<ModelDAO>(dao, root, '', this.tagGraph, this.readGraph)
+
     dao = this.services.modelService.addModel(dao)
     return dao
   }
@@ -140,7 +153,13 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     groupTag: string,
     itemTag: string
   ): HTMLCollectionOf<Element> {
-    const group: Element = this.calcGroupNode(root, groupTag)
+    let group: Element
+    if (groupTag != '') {
+      group = this.calcGroupNode(root, groupTag)
+    } else {
+      group = root
+    }
+
     return group.getElementsByTagName(itemTag)
   }
 
@@ -155,7 +174,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     if (!source || !target) {
       return
     }
-    const arc: Arc = new Arc(
+    const arc: IDataArc = new DataArc(
       this.readId(node),
       source as INode,
       target as INode,
@@ -167,12 +186,24 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
       arc.addWeight(this.readWeight(dao, node))
     })
 
+    // Shapes
+    this.readGroup<ModelDAO>(dao, node, this.tagShapes, this.tagConnection, (dao, node) => {
+      const source: IGraphNode = dao.graph.getNode(node.getAttribute(this.attrSource) ?? '')
+      const target: IGraphNode = dao.graph.getNode(node.getAttribute(this.attrTarget) ?? '')
+      const graphArc: GraphArc = new GraphArc(this.readId(node), source, target, arc)
+      this.services.modelService.addArc(dao, graphArc)
+    })
+
     arc.disabled = node.hasAttribute(this.attrDisabled)
+
+    arc.labelText = node.getAttribute(this.attrLabel) ?? ''
 
     const attribute: string | null = node.getAttribute(this.attrConflictResolutionValue)
     if (attribute) {
       arc.conflictResolutionValue = Number.parseFloat(attribute)
     }
+
+    arc.description = node.getAttribute(this.attrDescription) ?? ''
 
     this.services.modelService.addElement(dao, arc)
   }
@@ -191,6 +222,34 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
       }
     }
     return utils.functionFactory.build('1')
+  }
+
+  private readGraph(dao: ModelDAO, node: Element): Array<IGraphElement> {
+    // Read recursive graphs
+    const nodes: Array<IGraphElement> = new Array<IGraphElement>()
+    this.readGroup<ModelDAO>(dao, node, this.tagClusters, this.tagCluster, (dao, node) => {
+      nodes.push(...this.readGraph(dao, node))
+    })
+
+    // Read the nodes
+    this.readGroup<ModelDAO>(dao, node, this.tagNodes, this.tagNode, (dao, node) => {
+      const graphNode: IGraphNode | undefined = dao.graph.getNode(this.readId(node))
+      if (graphNode) {
+        let attribute: string | null = node.getAttribute(this.attrPosX)
+        if (attribute) {
+          graphNode.xCoordinate = Number.parseFloat(attribute)
+        }
+
+        attribute = node.getAttribute(this.attrPosY)
+        if (attribute) {
+          graphNode.yCoordinate = Number.parseFloat(attribute)
+        }
+
+        nodes.push(graphNode)
+      }
+    })
+
+    return nodes
   }
 
   private readGroup<T>(
@@ -265,6 +324,31 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     return dao
   }
 
+  private readNodeShapes(dao: ModelDAO, data: IDataNode, node: Element) {
+    let shape: IGraphNode
+    this.readGroup<ModelDAO>(dao, node, this.tagShapes, this.tagNode, (dao, node) => {
+      switch (data.type) {
+        case DataType.PLACE: {
+          shape = new GraphPlace(this.readId(node), data as DataPlace)
+          break
+        }
+
+        case DataType.TRANSITION: {
+          shape = new GraphTransition(this.readId(node), data as DataTransition)
+          break
+        }
+
+        default:
+          throw new ModelXmlConverterError(
+            i18n.global.t('ImportFailedMalformedNodeType', { type: data.type })
+          )
+      }
+      this.services.modelService.addNode(dao, shape)
+    })
+
+    data.labelText = node.getAttribute(this.attrLabel) ?? ''
+  }
+
   private readParameter(element: IElement, node: Element): Parameter {
     const id: string = this.readId(node)
     const value: string = node.textContent ?? ''
@@ -285,7 +369,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   }
 
   private readPlace(dao: ModelDAO, node: Element) {
-    const place: Place = new Place(
+    const place: DataPlace = new DataPlace(
       this.readId(node),
       PlaceType[node.getAttribute(this.attrType) ?? 0],
       ConflictResolutionStrategy.PRIORITY
@@ -303,7 +387,11 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
 
     place.constant = node.hasAttribute(this.attrConstant)
 
-    this.services.modelService.addElement(dao, place)
+    place.isSticky = node.hasAttribute(this.attrSticky)
+
+    place.description = node.getAttribute(this.attrDescription) ?? ''
+
+    this.readNodeShapes(dao, place, node)
   }
 
   private readToken(node: Element): Token {
@@ -328,7 +416,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   }
 
   private readTransition(dao: ModelDAO, node: Element) {
-    const transition: Transition = new Transition(
+    const transition: DataTransition = new DataTransition(
       this.readId(node),
       TransitionType[node.getAttribute(this.attrType) ?? 0]
     )
@@ -340,9 +428,11 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
 
     transition.disabled = node.hasAttribute(this.attrDisabled)
 
+    transition.isSticky = node.hasAttribute(this.attrSticky)
+
     transition.function = this.readFunction(node)
 
-    this.services.modelService.addElement(dao, transition)
+    this.readNodeShapes(dao, transition, node)
   }
 
   private readWeight(dao: ModelDAO, node: Element): Weight {

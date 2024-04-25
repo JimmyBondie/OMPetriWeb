@@ -5,6 +5,9 @@ import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { IModelService } from '../intf/IModelService'
 import { CustomService } from '../intf'
 import { IElement } from '@renderer/entity/intf/IElement'
+import { DataType } from '@renderer/data/intf/DataType'
+import { GraphNode } from '@renderer/graph/impl/GraphNode'
+import { GraphArc } from '@renderer/graph/impl/GraphArc'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -13,6 +16,13 @@ export class ModelService extends CustomService implements IModelService {
 
   public get models(): Array<ModelDAO> {
     return this._models
+  }
+
+  addArc(dao: ModelDAO, arc: GraphArc) {
+    if (arc && arc.data && arc.data.type != DataType.CLUSTERARC) {
+      dao.model.addElement(arc.data)
+    }
+    dao.graph.addConnection(arc)
   }
 
   public addElement(dao: ModelDAO, element: IElement) {
@@ -30,6 +40,13 @@ export class ModelService extends CustomService implements IModelService {
       this._models.push(newModel)
       return newModel
     }
+  }
+
+  public addNode(dao: ModelDAO, node: GraphNode) {
+    if (node && node.data && node.data.type != DataType.CLUSTER) {
+      dao.model.addElement(node.data)
+    }
+    dao.graph.addNode(node)
   }
 
   public newModel(): ModelDAO {

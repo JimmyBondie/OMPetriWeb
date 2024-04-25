@@ -1,4 +1,5 @@
 import { Model } from '@renderer/core/Model'
+import { Graph } from '@renderer/graph/Graph'
 import { File } from 'buffer'
 
 export class ModelDAO extends Object {
@@ -6,6 +7,7 @@ export class ModelDAO extends Object {
   private _creationDateTime: Date = new Date()
   private _description: string = ''
   private _file: File | undefined
+  private _graph: Graph = new Graph()
   private _hasChanges: boolean = false
   private _id: string
   private _model: Model = new Model()
@@ -36,6 +38,10 @@ export class ModelDAO extends Object {
 
   public get file(): File | undefined {
     return this._file
+  }
+
+  public get graph(): Graph {
+    return this._graph
   }
 
   public get hasChanges(): boolean {
