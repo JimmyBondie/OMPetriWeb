@@ -5,7 +5,7 @@ import { mapGetters, mapMutations } from 'vuex'
 </script>
 
 <template>
-  <v-app>
+  <v-app class="fill-height">
     <v-locale-provider :locale="language">
       <v-theme-provider :theme="getTheme">
         <RouterView />

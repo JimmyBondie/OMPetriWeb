@@ -75,9 +75,9 @@ import Editor from './Editor.vue'
       </v-tooltip>
     </v-tabs>
 
-    <v-window v-model="selectedModel">
-      <v-window-item v-for="model in getModels" :value="model.id">
-        <Editor></Editor>
+    <v-window v-model="selectedModel" class="window-full">
+      <v-window-item v-for="model in getModels" :value="model.id" class="h-100">
+        <Editor class="h-100"></Editor>
       </v-window-item>
     </v-window>
 
@@ -132,4 +132,11 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.window-full {
+  height: calc(100% - 48px); // The height of the tabs is 48px
+  .v-window__container {
+    height: 100%;
+  }
+}
+</style>

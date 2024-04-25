@@ -31,21 +31,21 @@ import Settings from '../components/Settings.vue'
       </v-list>
     </v-navigation-drawer>
 
-    <v-main>
-      <v-window v-model="selectedTab" direction="vertical">
+    <v-main class="h-screen">
+      <v-window v-model="selectedTab" direction="vertical" class="h-100">
         <!-- Overview -->
-        <v-window-item value="overview">
-          <Overview></Overview>
+        <v-window-item value="overview" class="h-100">
+          <Overview class="h-100"></Overview>
         </v-window-item>
 
         <!-- Settings -->
-        <v-window-item value="settings">
-          <Settings></Settings>
+        <v-window-item value="settings" class="h-100">
+          <Settings class="h-100"></Settings>
         </v-window-item>
 
         <!-- About -->
-        <v-window-item value="about">
-          <About></About>
+        <v-window-item value="about" class="h-100">
+          <About class="h-100"></About>
         </v-window-item>
       </v-window>
     </v-main>

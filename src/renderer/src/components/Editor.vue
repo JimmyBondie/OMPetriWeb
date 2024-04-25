@@ -12,20 +12,20 @@ import SimulationPage from './SimulationPage.vue'
       <v-btn prepend-icon="mdi-calculator" value="simulation">{{ $t('Simulation') }}</v-btn>
     </v-bottom-navigation>
 
-    <v-window v-model="selectedPage">
+    <v-window v-model="selectedPage" class="h-100">
       <!-- Inspector -->
-      <v-window-item value="inspector">
-        <InspectorPage></InspectorPage>
+      <v-window-item value="inspector" class="h-100">
+        <InspectorPage class="h-100"></InspectorPage>
       </v-window-item>
 
       <!-- Graph -->
-      <v-window-item value="graph">
-        <GraphPage></GraphPage>
+      <v-window-item value="graph" class="h-100">
+        <GraphPage class="h-100"></GraphPage>
       </v-window-item>
 
       <!-- Simulation -->
-      <v-window-item value="simulation">
-        <SimulationPage></SimulationPage>
+      <v-window-item value="simulation" class="h-100">
+        <SimulationPage class="h-100"></SimulationPage>
       </v-window-item>
     </v-window>
   </main>
