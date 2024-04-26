@@ -31,7 +31,7 @@ import Settings from '../components/Settings.vue'
       </v-list>
     </v-navigation-drawer>
 
-    <v-main class="h-screen">
+    <v-main class="h-screen" :class="{ 'no-bottom-bar': !selectedTab.includes('overview') }">
       <v-window v-model="selectedTab" direction="vertical" class="h-100">
         <!-- Overview -->
         <v-window-item value="overview" class="h-100">
@@ -57,10 +57,14 @@ export default {
   data() {
     return {
       menuOpen: true,
-      selectedTab: []
+      selectedTab: [] as Array<string>
     }
   }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.no-bottom-bar {
+  --v-layout-bottom: 0 !important;
+}
+</style>
