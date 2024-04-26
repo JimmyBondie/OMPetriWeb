@@ -16,6 +16,7 @@ defineProps<{
 
 <template>
   <v-row no-gutters>
+    <!-- Graph -->
     <v-col cols="9">
       <VueFlow
         class="basicflow"
@@ -42,11 +43,43 @@ defineProps<{
       </VueFlow>
     </v-col>
 
+    <!-- Panels -->
     <v-col cols="3">
-      <v-expansion-panels multiple variant="accordion">
-        <v-expansion-panel :title="$t('Model')"></v-expansion-panel>
-        <v-expansion-panel :title="$t('Tools')"></v-expansion-panel>
-        <v-expansion-panel :title="$t('QuickView')"></v-expansion-panel>
+      <v-expansion-panels multiple v-model="openPanels">
+        <!-- Model -->
+        <v-expansion-panel :title="$t('Model')" value="model">
+          <v-expansion-panel-text>
+            <!-- Name -->
+            <v-text-field
+              :label="$t('Name')"
+              v-model="dao.name"
+              variant="underlined"
+              prepend-icon="mdi-rename-outline"
+            ></v-text-field>
+
+            <!-- Author -->
+            <v-text-field
+              :label="$t('Author')"
+              v-model="dao.author"
+              variant="underlined"
+              prepend-icon="mdi-account-outline"
+            ></v-text-field>
+
+            <!-- Description -->
+            <v-textarea
+              :label="$t('Description')"
+              v-model="dao.description"
+              variant="underlined"
+              prepend-icon="mdi-text"
+            ></v-textarea>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
+
+        <!-- Tools -->
+        <v-expansion-panel :title="$t('Tools')" value="tools"></v-expansion-panel>
+
+        <!-- QuickView -->
+        <v-expansion-panel :title="$t('QuickView')" value="quickview"></v-expansion-panel>
       </v-expansion-panels>
     </v-col>
   </v-row>
@@ -56,7 +89,8 @@ defineProps<{
 export default {
   data() {
     return {
-      dark: useTheme().global.name.value == 'dark'
+      dark: useTheme().global.name.value == 'dark',
+      openPanels: ['model', 'tools', 'quickview']
     }
   }
 }

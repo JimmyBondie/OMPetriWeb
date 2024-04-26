@@ -1,7 +1,9 @@
 {
   "About": "Über",
+  "Author": "Autor",
   "Cancel": "Abbrechen",
   "Close": "Schließen",
+  "Description": "Beschreibung",
   "Error": "Fehler",
   "Graph": "Graph",
   "ImportFailedElementNotFound": "Dateiimport fehlgeschlagen: \"{element}\" mit ID \"{id}\" nicht gefunden",
@@ -13,6 +15,7 @@
   "ImportFailedUnhandledParamType": "Dateiimport fehlgeschlagen: Fehlerhafter Parametertyp gefunden",
   "Inspector": "Inspektor",
   "Model": "Modell",
+  "Name": "Name",
   "New": "Neu",
   "No": "Nein",
   "NodeNotFound": "Knoten mit ID \"{id}\" nicht gefunden",

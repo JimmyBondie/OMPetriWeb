@@ -1,7 +1,9 @@
 {
   "About": "About",
+  "Author": "Author",
   "Cancel": "Cancel",
   "Close": "Close",
+  "Description": "Description",
   "Error": "Error",
   "Graph": "Graph",
   "ImportFailedElementNotFound": "File import failed: \"{element}\" with id \"{id}\" not found",
@@ -13,6 +15,7 @@
   "ImportFailedUnhandledParamType": "File import failed: Found incorrect parameter type",
   "Inspector": "Inspector",
   "Model": "Model",
+  "Name": "Name",
   "New": "New",
   "No": "No",
   "NodeNotFound": "Could not found node with id \"{id}\"",
