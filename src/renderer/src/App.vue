@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { useLocale } from 'vuetify'
-import { mapGetters, mapMutations } from 'vuex'
+import { useTheme } from 'vuetify'
 </script>
 
 <template>
   <v-app class="fill-height">
     <v-locale-provider :locale="language">
-      <v-theme-provider :theme="getTheme">
+      <v-theme-provider :theme="theme">
         <RouterView />
       </v-theme-provider>
     </v-locale-provider>
@@ -18,20 +17,22 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   data() {
     return {
-      language: useLocale().current.value
+      themeDark: 'dark',
+      themeLight: 'light',
+      theme: useTheme().global.name,
+      language: navigator.language
     }
   },
-  methods: {
-    ...mapMutations(['applyDarkMode', 'applyLightMode'])
-  },
-  computed: {
-    ...mapGetters(['getTheme'])
+  watch: {
+    language() {
+      this.$i18n.locale = this.language
+    }
   },
   mounted() {
-    if (window.matchMedia('(prefers-color-scheme: dark)')) {
-      this.applyDarkMode()
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.theme = this.themeDark
     } else {
-      this.applyLightMode()
+      this.theme = this.themeLight
     }
   }
 }

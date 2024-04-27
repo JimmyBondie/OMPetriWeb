@@ -1,4 +1,3 @@
-import { useTheme } from 'vuetify/lib/framework.mjs'
 import { UseFileDialogReturn, useFileDialog } from '@vueuse/core'
 import { Store, createStore } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
@@ -22,10 +21,6 @@ class StoreState extends Object {
 
   public get modelService(): IModelService {
     return services.modelService
-  }
-
-  public applyTheme(theme: string) {
-    useTheme().global.name.value = theme
   }
 
   public openModel(): Promise<ModelDAO> {
@@ -61,20 +56,11 @@ const store: Store<StoreState> = createStore({
   getters: {
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
-    },
-    getTheme: (): string => {
-      return useTheme().global.name.value
     }
   },
   mutations: {
     addNewModel(state: StoreState) {
       state.modelService.newModel()
-    },
-    applyDarkMode(state: StoreState) {
-      state.applyTheme('dark')
-    },
-    applyLightMode(state: StoreState) {
-      state.applyTheme('light')
     },
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)

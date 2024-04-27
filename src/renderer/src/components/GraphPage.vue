@@ -20,7 +20,7 @@ defineProps<{
     <v-col cols="9">
       <VueFlow
         class="basicflow"
-        :class="{ dark }"
+        :class="{ dark: useTheme().current.value.dark }"
         :nodes="dao.graph.nodes"
         :edges="dao.graph.connections"
         fit-view-on-init
@@ -89,7 +89,6 @@ defineProps<{
 export default {
   data() {
     return {
-      dark: useTheme().global.name.value == 'dark',
       openPanels: ['model', 'tools', 'quickview']
     }
   }
