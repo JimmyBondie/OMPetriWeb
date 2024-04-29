@@ -14,6 +14,7 @@ defineProps<{
     v-model="transition.transitionType"
     :label="$t('Type')"
     prepend-icon="mdi-alpha-t-box-outline"
+    density="compact"
   ></v-select>
 </template>
 

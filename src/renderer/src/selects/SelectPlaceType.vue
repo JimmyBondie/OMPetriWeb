@@ -14,6 +14,7 @@ defineProps<{
     v-model="place.placeType"
     :label="$t('Type')"
     prepend-icon="mdi-alpha-t-box-outline"
+    density="compact"
   ></v-select>
 </template>
 

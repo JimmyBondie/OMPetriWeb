@@ -24,6 +24,7 @@ defineProps<{
     item-title="id"
     item-value="description"
     prepend-icon="mdi-palette"
+    density="compact"
     disabled
   >
     <template v-slot:append
