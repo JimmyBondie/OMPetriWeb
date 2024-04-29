@@ -11,8 +11,9 @@ import { Color } from '@renderer/core/Color'
 import { Arc } from '@renderer/entity/impl/Arc'
 import { Weight } from '@renderer/core/Weight'
 import { Transition } from '@renderer/entity/impl/Transition'
+import { CustomError } from '@renderer/utils/CustomError'
 
-export class ParameterException extends Error {}
+export class ParameterException extends CustomError {}
 
 export class ParameterService extends CustomService implements IParameterService {
   public add(model: Model, param: Parameter): void {

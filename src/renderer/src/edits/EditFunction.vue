@@ -24,7 +24,7 @@ defineProps<{
 <script lang="ts">
 export default {
   methods: {
-    validateFunction(text: string): boolean {
+    validateFunction(text: string): boolean | string {
       let input: string
       if (text == '') {
         input = '1'
@@ -40,7 +40,11 @@ export default {
         )
         services.modelService.setElementFunction(this.dao, this.transition, func)
       } catch (e: any) {
-        return false
+        if (e instanceof Error) {
+          return e.message
+        } else {
+          return false
+        }
       }
       return true
     }
