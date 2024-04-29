@@ -14,7 +14,7 @@ export interface IArc extends IElement {
   conflictResolutionValue: number
   readonly source: INode
   readonly target: INode
-  readonly weights: IterableIterator<Weight>
+  readonly weights: Array<Weight>
 
   addWeight(weight: Weight)
 

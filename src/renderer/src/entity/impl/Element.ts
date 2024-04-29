@@ -29,8 +29,8 @@ export class Element extends Object implements IElement {
     return this._id
   }
 
-  public get localParameters(): IterableIterator<Parameter> {
-    return this._localParameters.values()
+  public get localParameters(): Array<Parameter> {
+    return Array.from(this._localParameters.values())
   }
 
   public get relatedParameters(): Set<Parameter> {

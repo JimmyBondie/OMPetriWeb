@@ -8,6 +8,8 @@ import { IElement } from '@renderer/entity/intf/IElement'
 import { DataType } from '@renderer/data/intf/DataType'
 import { GraphNode } from '@renderer/graph/impl/GraphNode'
 import { GraphArc } from '@renderer/graph/impl/GraphArc'
+import { ModelError } from '@renderer/core/Model'
+import { Function } from '@renderer/core/Function'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -62,6 +64,15 @@ export class ModelService extends CustomService implements IModelService {
     const index = this._models.indexOf(model)
     if (index >= 0) {
       this._models.splice(index, 1)
+    }
+  }
+
+  public setElementFunction(dao: ModelDAO, element: IElement, func: Function, color?: Color) {
+    try {
+      this.services.parameterService.setElementFunction(dao.model, element, func, color)
+      dao.hasChanges = true
+    } catch (e: any) {
+      throw new ModelError(e.message)
     }
   }
 }

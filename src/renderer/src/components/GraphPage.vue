@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueFlow, PanelPosition } from '@vue-flow/core'
+import { VueFlow, PanelPosition, NodeMouseEvent } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
@@ -8,6 +8,11 @@ import FlowTransition from './FlowTransition.vue'
 import FlowArc from './FlowArc.vue'
 import { MiniMap } from '@vue-flow/minimap'
 import { Controls } from '@vue-flow/controls'
+import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { DataPlace } from '@renderer/data/impl/DataPlace'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
+import QuickViewPlace from '@renderer/quickview/QuickViewPlace.vue'
+import QuickViewTransition from '@renderer/quickview/QuickViewTransition.vue'
 
 defineProps<{
   dao: ModelDAO
@@ -17,12 +22,13 @@ defineProps<{
 <template>
   <v-row no-gutters>
     <!-- Graph -->
-    <v-col cols="9">
+    <v-col class="h-100" cols="9">
       <VueFlow
         class="basicflow"
         :class="{ dark: useTheme().current.value.dark }"
         :nodes="dao.graph.nodes"
         :edges="dao.graph.connections"
+        @node-click="onSelectNode"
         fit-view-on-init
       >
         <Background />
@@ -44,7 +50,7 @@ defineProps<{
     </v-col>
 
     <!-- Panels -->
-    <v-col cols="3">
+    <v-col class="h-100 overflow-x-auto" cols="3">
       <v-expansion-panels multiple v-model="openPanels">
         <!-- Model -->
         <v-expansion-panel :title="$t('Model')" value="model">
@@ -69,6 +75,8 @@ defineProps<{
             <v-textarea
               :label="$t('Description')"
               v-model="dao.description"
+              persistent-placeholder
+              :placeholder="$t('EnterDescription')"
               variant="underlined"
               prepend-icon="mdi-text"
             ></v-textarea>
@@ -79,7 +87,17 @@ defineProps<{
         <v-expansion-panel :title="$t('Tools')" value="tools"></v-expansion-panel>
 
         <!-- QuickView -->
-        <v-expansion-panel :title="$t('QuickView')" value="quickview"></v-expansion-panel>
+        <v-expansion-panel :title="$t('QuickView')" value="quickview" v-if="selectedNode">
+          <!-- Places -->
+          <v-expansion-panel-text v-if="selectedNode instanceof DataPlace">
+            <QuickViewPlace :place="selectedNode"></QuickViewPlace>
+          </v-expansion-panel-text>
+
+          <!-- Transitions -->
+          <v-expansion-panel-text v-if="selectedNode instanceof DataTransition">
+            <QuickViewTransition :dao="dao" :transition="selectedNode"></QuickViewTransition>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
       </v-expansion-panels>
     </v-col>
   </v-row>
@@ -89,7 +107,20 @@ defineProps<{
 export default {
   data() {
     return {
-      openPanels: ['model', 'tools', 'quickview']
+      openPanels: ['model', 'tools'],
+      selectedNode: undefined as IDataNode | undefined
+    }
+  },
+  methods: {
+    onSelectNode(event: NodeMouseEvent) {
+      if (!event || !event.node) {
+        return
+      }
+
+      this.selectedNode = event.node.data
+      if (this.selectedNode && !this.openPanels.includes('quickview')) {
+        this.openPanels.push('quickview')
+      }
     }
   }
 }

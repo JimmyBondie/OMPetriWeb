@@ -1,3 +1,5 @@
+import { Color } from '@renderer/core/Color'
+import { Function } from '@renderer/core/Function'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { IElement } from '@renderer/entity/intf/IElement'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
@@ -11,5 +13,6 @@ export interface IModelService {
   addModel(newModel: ModelDAO): ModelDAO
   addNode(dao: ModelDAO, node: IGraphNode): void
   newModel(): ModelDAO
-  removeModel(model: ModelDAO)
+  removeModel(model: ModelDAO): void
+  setElementFunction(dao: ModelDAO, element: IElement, func: Function, color?: Color): void
 }

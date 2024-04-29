@@ -37,8 +37,8 @@ export class Arc extends Element implements IArc {
     return this._target
   }
 
-  public get weights(): IterableIterator<Weight> {
-    return this._weights.values()
+  public get weights(): Array<Weight> {
+    return Array.from(this._weights.values())
   }
 
   public set arcType(arcType: ArcType) {

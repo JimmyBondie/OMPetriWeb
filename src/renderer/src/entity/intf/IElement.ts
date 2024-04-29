@@ -10,7 +10,7 @@ export interface IElement {
   disabled: boolean
   elementType: ElementType
   id: string
-  readonly localParameters: IterableIterator<Parameter>
+  readonly localParameters: Array<Parameter>
   readonly relatedParameters: Set<Parameter>
 
   addLocalParameter(parameter: Parameter)

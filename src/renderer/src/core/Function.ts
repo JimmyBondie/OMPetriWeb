@@ -68,4 +68,16 @@ export class Function extends Object {
   public addElementFirst(element: Function) {
     this._elements.unshift(element)
   }
+
+  public formatString(): string {
+    if (this._type == FunctionType.FUNCTION) {
+      let functionString: string = ''
+      for (const element of this._elements) {
+        functionString += element.formatString() + ' '
+      }
+      return functionString.trim()
+    } else {
+      return this._value
+    }
+  }
 }

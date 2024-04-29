@@ -138,4 +138,8 @@ export class Model extends Object {
       return undefined
     }
   }
+
+  public getParameter(id: string): Parameter | undefined {
+    return this._parameters.get(id)
+  }
 }
