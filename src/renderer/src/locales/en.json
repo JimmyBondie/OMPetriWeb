@@ -31,6 +31,7 @@
   "ImportFailedNoElementId": "File import failed: No id for \"{element}\" element",
   "ImportFailedUnhandledParamType": "File import failed: Found incorrect parameter type",
   "Inspector": "Inspector",
+  "Label": "Label",
   "Language": "Language",
   "Light": "Light",
   "MalformedFunctionString": "Malformed function string!",

@@ -31,6 +31,7 @@
   "ImportFailedNoElementId": "Dateiimport fehlgeschlagen: Keine ID für \"{element}\" - Element",
   "ImportFailedUnhandledParamType": "Dateiimport fehlgeschlagen: Fehlerhafter Parametertyp gefunden",
   "Inspector": "Inspektor",
+  "Label": "Bezeichnung",
   "Language": "Sprache",
   "Light": "Hell",
   "MalformedFunctionString": "Fehlerhafte Funktionszeichenfolge!",
