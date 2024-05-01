@@ -17,24 +17,24 @@ export class Model extends Object {
   private _places: Map<string, Place> = new Map<string, Place>()
   private _transitions: Map<string, Transition> = new Map<string, Transition>()
 
-  public get arcs(): Map<string, Arc> {
-    return this._arcs
+  public get arcs(): Array<Arc> {
+    return Array.from(this._arcs.values())
   }
 
-  public get colors(): Map<string, Color> {
-    return this._colors
+  public get colors(): Array<Color> {
+    return Array.from(this._colors.values())
   }
 
-  public get parameters(): Map<string, Parameter> {
-    return this._parameters
+  public get parameters(): Array<Parameter> {
+    return Array.from(this._parameters.values())
   }
 
-  public get places(): Map<string, Place> {
-    return this._places
+  public get places(): Array<Place> {
+    return Array.from(this._places.values())
   }
 
-  public get transitions(): Map<string, Transition> {
-    return this._transitions
+  public get transitions(): Array<Transition> {
+    return Array.from(this._transitions.values())
   }
 
   private addArc(arc: IArc) {
