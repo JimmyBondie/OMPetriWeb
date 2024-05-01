@@ -160,8 +160,8 @@ export class ParameterService extends CustomService implements IParameterService
             if (weight) {
               weight.function = func
             }
-            break
           }
+          break
         }
 
         case ElementType.TRANSITION: {

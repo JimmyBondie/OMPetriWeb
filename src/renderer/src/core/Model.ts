@@ -55,12 +55,18 @@ export class Model extends Object {
     }
 
     switch (element.elementType) {
-      case ElementType.ARC:
+      case ElementType.ARC: {
         this.addArc(element as IArc)
-      case ElementType.PLACE:
+        break
+      }
+      case ElementType.PLACE: {
         this._places.set(element.id, element as Place)
-      case ElementType.TRANSITION:
+        break
+      }
+      case ElementType.TRANSITION: {
         this._transitions.set(element.id, element as Transition)
+        break
+      }
     }
   }
 
@@ -106,14 +112,20 @@ export class Model extends Object {
     let found: IElement | undefined
 
     switch (element.elementType) {
-      case ElementType.ARC:
+      case ElementType.ARC: {
         found = this._arcs.get(element.id)
+        break
+      }
 
-      case ElementType.PLACE:
+      case ElementType.PLACE: {
         found = this._places.get(element.id)
+        break
+      }
 
-      case ElementType.TRANSITION:
+      case ElementType.TRANSITION: {
         found = this._transitions.get(element.id)
+        break
+      }
     }
 
     return found ? found.equals(element) : false
