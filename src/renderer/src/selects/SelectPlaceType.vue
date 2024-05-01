@@ -15,6 +15,8 @@ defineProps<{
     :label="$t('Type')"
     prepend-icon="mdi-alpha-t-box-outline"
     density="compact"
+    :open-text="$t('Open')"
+    :close-text="$t('Close')"
   ></v-select>
 </template>
 

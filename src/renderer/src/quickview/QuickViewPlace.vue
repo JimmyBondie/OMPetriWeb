@@ -25,6 +25,8 @@ defineProps<{
     item-value="description"
     prepend-icon="mdi-palette"
     density="compact"
+    :open-text="$t('Open')"
+    :close-text="$t('Close')"
     disabled
   >
     <template v-slot:append
