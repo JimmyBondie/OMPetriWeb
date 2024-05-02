@@ -16,6 +16,7 @@ import QuickViewTransition from '@renderer/quickview/QuickViewTransition.vue'
 
 defineProps<{
   dao: ModelDAO
+  onOpenInspector: (node: IDataNode) => void
 }>()
 </script>
 
@@ -29,6 +30,7 @@ defineProps<{
         :nodes="dao.graph.nodes"
         :edges="dao.graph.connections"
         @node-click="onSelectNode"
+        @node-double-click="onDoubleClickNode"
         fit-view-on-init
       >
         <Background />
@@ -115,6 +117,11 @@ export default {
     }
   },
   methods: {
+    onDoubleClickNode(event: NodeMouseEvent) {
+      if (event && event.node && event.node.data) {
+        this.onOpenInspector(event.node.data)
+      }
+    },
     onSelectNode(event: NodeMouseEvent) {
       if (!event || !event.node) {
         return

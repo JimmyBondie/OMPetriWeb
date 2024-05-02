@@ -33,8 +33,16 @@ export class Model extends Object {
     return Array.from(this._places.values())
   }
 
+  public get placesSorted(): Array<Place> {
+    return this.places.sort((a: Place, b: Place): number => a.id.localeCompare(b.id))
+  }
+
   public get transitions(): Array<Transition> {
     return Array.from(this._transitions.values())
+  }
+
+  public get transitionsSorted(): Array<Transition> {
+    return this.transitions.sort((a: Transition, b: Transition): number => a.id.localeCompare(b.id))
   }
 
   private addArc(arc: IArc) {
