@@ -137,10 +137,10 @@ export default {
 @import '@vue-flow/core/dist/theme-default.css';
 
 // Minimap
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/minimap@latest/dist/style.css';
+@import '@vue-flow/minimap/dist/style.css';
 
 // Controls
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/controls@latest/dist/style.css';
+@import '@vue-flow/controls/dist/style.css';
 
 .basicflow {
   .vue-flow__controls {
