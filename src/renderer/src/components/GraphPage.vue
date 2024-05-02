@@ -61,6 +61,7 @@ defineProps<{
               v-model="dao.name"
               variant="underlined"
               prepend-icon="mdi-rename-outline"
+              density="compact"
             ></v-text-field>
 
             <!-- Author -->
@@ -69,6 +70,7 @@ defineProps<{
               v-model="dao.author"
               variant="underlined"
               prepend-icon="mdi-account-outline"
+              density="compact"
             ></v-text-field>
 
             <!-- Description -->
@@ -79,6 +81,7 @@ defineProps<{
               :placeholder="$t('EnterDescription')"
               variant="underlined"
               prepend-icon="mdi-text"
+              density="compact"
             ></v-textarea>
           </v-expansion-panel-text>
         </v-expansion-panel>

@@ -14,6 +14,7 @@ defineProps<{
     :model-value="DataType.toString(node.type)"
     variant="underlined"
     prepend-icon="mdi-alpha-t-box-outline"
+    density="compact"
     disabled
   ></v-text-field>
 
@@ -23,6 +24,7 @@ defineProps<{
     v-model="node.id"
     variant="underlined"
     prepend-icon="mdi-rename-outline"
+    density="compact"
   ></v-text-field>
 
   <!-- Label -->
@@ -31,6 +33,7 @@ defineProps<{
     v-model="node.labelText"
     variant="underlined"
     prepend-icon="mdi-label-outline"
+    density="compact"
   ></v-text-field>
 
   <!-- Disabled -->
@@ -38,6 +41,7 @@ defineProps<{
     :label="node.disabled ? $t('Disabled') : $t('Enabled')"
     v-model="node.disabled"
     prepend-icon="mdi-cancel"
+    density="compact"
   ></v-switch>
 
   <!-- Description -->
@@ -48,6 +52,7 @@ defineProps<{
     :placeholder="$t('EnterDescription')"
     variant="underlined"
     prepend-icon="mdi-text"
+    density="compact"
   ></v-textarea>
 </template>
 

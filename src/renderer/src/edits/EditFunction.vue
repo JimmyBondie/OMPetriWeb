@@ -18,6 +18,7 @@ defineProps<{
     :rules="[validateFunction]"
     persistent-placeholder
     prepend-icon="mdi-function"
+    density="compact"
   ></v-textarea>
 </template>
 

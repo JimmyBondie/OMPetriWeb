@@ -29,13 +29,18 @@ defineProps<{
     :close-text="$t('Close')"
     disabled
   >
-    <template v-slot:append
-      ><v-btn>{{ $t('New') }}</v-btn>
+    <template v-slot:append>
+      <v-btn>{{ $t('New') }}</v-btn>
     </template>
   </v-select>
 
   <!-- Constant -->
-  <v-checkbox :label="$t('Constant')" v-model="place.constant" prepend-icon="mdi-equal">
+  <v-checkbox
+    :label="$t('Constant')"
+    v-model="place.constant"
+    prepend-icon="mdi-equal"
+    density="compact"
+  >
   </v-checkbox>
 
   <!-- Token -->
@@ -45,6 +50,7 @@ defineProps<{
     variant="underlined"
     prepend-icon="mdi-dots-grid"
     type="number"
+    density="compact"
   ></v-text-field>
 
   <!-- Token min -->
@@ -54,6 +60,7 @@ defineProps<{
     variant="underlined"
     prepend-icon="mdi-speedometer-slow"
     type="number"
+    density="compact"
   ></v-text-field>
 
   <!-- Token max -->
@@ -63,6 +70,7 @@ defineProps<{
     variant="underlined"
     prepend-icon="mdi-speedometer"
     type="number"
+    density="compact"
   ></v-text-field>
 </template>
 
