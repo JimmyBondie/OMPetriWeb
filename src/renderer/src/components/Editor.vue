@@ -40,7 +40,7 @@ defineProps<{
 export default {
   data() {
     return {
-      selectedPage: ''
+      selectedPage: 'graph'
     }
   }
 }
