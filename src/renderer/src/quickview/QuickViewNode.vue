@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { DataType } from '@renderer/data/intf/DataType'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
+import DataElementDescriptionEdit from '@renderer/edits/DataElementDescriptionEdit.vue'
+import DataElementLabelEdit from '@renderer/edits/DataElementLabelEdit.vue'
+import DataElementTypeEdit from '@renderer/edits/DataElementTypeEdit.vue'
+import ElementDisabledEdit from '@renderer/edits/ElementDisabledEdit.vue'
+import ElementNameEdit from '@renderer/edits/ElementNameEdit.vue'
 
 defineProps<{
   node: IDataNode
@@ -9,51 +13,19 @@ defineProps<{
 
 <template>
   <!-- Type -->
-  <v-text-field
-    :label="$t('Type')"
-    :model-value="DataType.toString(node.type)"
-    variant="underlined"
-    prepend-icon="mdi-alpha-t-box-outline"
-    density="compact"
-    disabled
-  ></v-text-field>
+  <DataElementTypeEdit :data-element="node"></DataElementTypeEdit>
 
   <!-- Name -->
-  <v-text-field
-    :label="$t('Name')"
-    v-model="node.id"
-    variant="underlined"
-    prepend-icon="mdi-rename-outline"
-    density="compact"
-  ></v-text-field>
+  <ElementNameEdit :element="node"></ElementNameEdit>
 
   <!-- Label -->
-  <v-text-field
-    :label="$t('Label')"
-    v-model="node.labelText"
-    variant="underlined"
-    prepend-icon="mdi-label-outline"
-    density="compact"
-  ></v-text-field>
+  <DataElementLabelEdit :data-element="node"></DataElementLabelEdit>
 
   <!-- Disabled -->
-  <v-switch
-    :label="node.disabled ? $t('Disabled') : $t('Enabled')"
-    v-model="node.disabled"
-    prepend-icon="mdi-cancel"
-    density="compact"
-  ></v-switch>
+  <ElementDisabledEdit :element="node"></ElementDisabledEdit>
 
   <!-- Description -->
-  <v-textarea
-    :label="$t('Description')"
-    v-model="node.description"
-    persistent-placeholder
-    :placeholder="$t('EnterDescription')"
-    variant="underlined"
-    prepend-icon="mdi-text"
-    density="compact"
-  ></v-textarea>
+  <DataElementDescriptionEdit :data-element="node"></DataElementDescriptionEdit>
 </template>
 
 <script lang="ts"></script>

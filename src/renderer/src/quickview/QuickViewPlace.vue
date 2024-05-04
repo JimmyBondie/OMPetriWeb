@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import QuickViewNode from './QuickViewNode.vue'
-import SelectPlaceType from '@renderer/selects/SelectPlaceType.vue'
+import PlaceTypeSelect from '@renderer/selects/PlaceTypeSelect.vue'
+import PlaceColorSelect from '@renderer/selects/PlaceColorSelect.vue'
+import NodeConstantEdit from '@renderer/edits/NodeConstantEdit.vue'
+import PlaceTokenEdit from '@renderer/edits/PlaceTokenEdit.vue'
+import PlaceTokenMinEdit from '@renderer/edits/PlaceTokenMinEdit.vue'
+import PlaceTokenMaxEdit from '@renderer/edits/PlaceTokenMaxEdit.vue'
 
 defineProps<{
   place: DataPlace
@@ -15,63 +20,22 @@ defineProps<{
   <v-divider class="mb-5"></v-divider>
 
   <!-- Type -->
-  <SelectPlaceType :place="place"></SelectPlaceType>
+  <PlaceTypeSelect :place="place"></PlaceTypeSelect>
 
   <!-- Color -->
-  <v-select
-    :model-value="place.getColor()"
-    :items="place.getColors()"
-    item-title="id"
-    item-value="description"
-    prepend-icon="mdi-palette"
-    density="compact"
-    :open-text="$t('Open')"
-    :close-text="$t('Close')"
-    disabled
-  >
-    <template v-slot:append>
-      <v-btn>{{ $t('New') }}</v-btn>
-    </template>
-  </v-select>
+  <PlaceColorSelect :place="place"></PlaceColorSelect>
 
   <!-- Constant -->
-  <v-checkbox
-    :label="$t('Constant')"
-    v-model="place.constant"
-    prepend-icon="mdi-equal"
-    density="compact"
-  >
-  </v-checkbox>
+  <NodeConstantEdit :node="place"></NodeConstantEdit>
 
   <!-- Token -->
-  <v-text-field
-    :label="$t('Token')"
-    v-model="place.token"
-    variant="underlined"
-    prepend-icon="mdi-dots-grid"
-    type="number"
-    density="compact"
-  ></v-text-field>
+  <PlaceTokenEdit :place="place"></PlaceTokenEdit>
 
   <!-- Token min -->
-  <v-text-field
-    :label="$t('TokenMin')"
-    v-model="place.tokenMin"
-    variant="underlined"
-    prepend-icon="mdi-speedometer-slow"
-    type="number"
-    density="compact"
-  ></v-text-field>
+  <PlaceTokenMinEdit :place="place"></PlaceTokenMinEdit>
 
   <!-- Token max -->
-  <v-text-field
-    :label="$t('TokenMax')"
-    v-model="place.tokenMax"
-    variant="underlined"
-    prepend-icon="mdi-speedometer"
-    type="number"
-    density="compact"
-  ></v-text-field>
+  <PlaceTokenMaxEdit :place="place"></PlaceTokenMaxEdit>
 </template>
 
 <script lang="ts"></script>
