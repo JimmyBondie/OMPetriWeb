@@ -15,7 +15,7 @@ defineProps<{
   <v-row no-gutters class="h-100">
     <!-- Node list -->
     <v-col class="h-100 overflow-y-auto" cols="3">
-      <v-list density="compact" nav>
+      <v-list density="compact" nav v-model:selected="selectedNodes">
         <v-list-item density="compact">
           <v-text-field
             :placeholder="$t('FilterIdNameLabel')"
@@ -29,7 +29,7 @@ defineProps<{
         <v-divider></v-divider>
 
         <!-- Places -->
-        <v-list-group value="Places">
+        <v-list-group>
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
@@ -39,13 +39,13 @@ defineProps<{
             ></v-list-item>
           </template>
 
-          <v-list-item v-for="place in places" :value="place.id" density="compact">
+          <v-list-item v-for="place in places" :value="place" density="compact">
             {{ place.id }}
           </v-list-item>
         </v-list-group>
 
         <!-- Transitions -->
-        <v-list-group value="Transitions">
+        <v-list-group>
           <template v-slot:activator="{ props }">
             <v-list-item
               v-bind="props"
@@ -55,7 +55,7 @@ defineProps<{
             ></v-list-item>
           </template>
 
-          <v-list-item v-for="transition in transitions" :value="transition.id" density="compact">
+          <v-list-item v-for="transition in transitions" :value="transition" density="compact">
             {{ transition.id }}
           </v-list-item>
         </v-list-group>
@@ -63,7 +63,8 @@ defineProps<{
     </v-col>
 
     <!-- Inspector -->
-    <v-col class="h-100" cols="10"> </v-col>
+    <v-col class="h-100" cols="9">
+    </v-col>
   </v-row>
 </template>
 
@@ -73,7 +74,8 @@ export default {
     return {
       filter: '' as string,
       places: this.getPlaces() as Array<DataPlace>,
-      transitions: this.getTransitions() as Array<DataTransition>
+      transitions: this.getTransitions() as Array<DataTransition>,
+      selectedNodes: [] as Array<IDataNode>
     }
   },
   methods: {
@@ -102,9 +104,18 @@ export default {
       this.transitions = this.getTransitions()
     }
   },
+  beforeMount() {
+    if (this.activeNode) {
+      this.selectedNodes.push(this.activeNode)
+    }
+  },
   beforeUpdate() {
     this.places = this.getPlaces()
     this.transitions = this.getTransitions()
+    if (this.activeNode) {
+      this.selectedNodes = []
+      this.selectedNodes.push(this.activeNode)
+    }
   }
 }
 </script>

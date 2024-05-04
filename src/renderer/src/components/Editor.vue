@@ -23,7 +23,7 @@ defineProps<{
       <v-window-item value="inspector" class="h-100">
         <InspectorPage
           class="h-100"
-          :activeNode="selectedNode as IDataNode | undefined"
+          :activeNode="<IDataNode | undefined>selectedNode"
           :dao="dao"
         ></InspectorPage>
       </v-window-item>
