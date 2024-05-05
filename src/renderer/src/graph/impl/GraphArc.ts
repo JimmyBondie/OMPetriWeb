@@ -4,6 +4,7 @@ import { IGraphNode } from '../intf/IGraphNode'
 
 export class GraphArc extends Object implements IGraphArc {
   private _data: IDataArc
+  private _disabled: boolean = false
   private _id: string
   private _source: IGraphNode
   private _target: IGraphNode
@@ -11,6 +12,7 @@ export class GraphArc extends Object implements IGraphArc {
   public constructor(id: string, source: IGraphNode, target: IGraphNode, data: IDataArc) {
     super()
     this._data = data
+    this._data.shapes.add(this)
     this._id = id
     this._source = source
     this._target = target
@@ -21,7 +23,7 @@ export class GraphArc extends Object implements IGraphArc {
   }
 
   public get disabled(): boolean {
-    return this._data.disabled
+    return this._disabled
   }
 
   public get sourceNode(): IGraphNode {
@@ -49,6 +51,6 @@ export class GraphArc extends Object implements IGraphArc {
   }
 
   public set disabled(disabled: boolean) {
-    this._data.disabled = disabled
+    this._disabled = disabled
   }
 }

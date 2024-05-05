@@ -45,13 +45,12 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly attrCreationDateTime: string = 'creationDateTime'
   private readonly attrDescription: string = 'description'
   private readonly attrDisabled: string = 'disabled'
-  // private readonly attrElementId: string = 'elementId'
+  private readonly attrElementId: string = 'elementId'
   private readonly attrId: string = 'id'
   private readonly attrLabel: string = 'label'
   private readonly attrMax: string = 'max'
   private readonly attrMin: string = 'min'
   private readonly attrName: string = 'name'
-  // private readonly attrUnit: string = 'unit'
   private readonly attrPosX: string = 'posX'
   private readonly attrPosY: string = 'posY'
   private readonly attrSource: string = 'source'
@@ -59,7 +58,6 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly attrSticky: string = 'sticky'
   private readonly attrTarget: string = 'target'
   private readonly attrType: string = 'type'
-  // private readonly attrValue: string = 'value'
 
   private readonly tagArc: string = 'Arc'
   private readonly tagArcs: string = 'Arcs'
@@ -70,11 +68,9 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly tagConnection: string = 'Connection'
   private readonly tagFunction: string = 'Function'
   private readonly tagGraph: string = 'Graph'
-  // private readonly tagLabel: string = 'Label'
   private readonly tagModel: string = 'Model'
   private readonly tagNode: string = 'Node'
   private readonly tagNodes: string = 'Nodes'
-  // private readonly tagNodeShapes: string = 'Nodes'
   private readonly tagParameter: string = 'Parameter'
   private readonly tagParameters: string = 'Parameters'
   private readonly tagParametersLocal: string = 'LocalParameters'
@@ -115,7 +111,9 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
 
     // Parameters
     this.readGroup<ModelDAO>(dao, root, this.tagParameters, this.tagParameter, (dao, node) => {
-      const element: IElement | undefined = dao.model.getElement(this.readId(node))
+      const element: IElement | undefined = dao.model.getElement(
+        node.getAttribute(this.attrElementId) ?? ''
+      )
       if (element) {
         this.services.parameterService.add(dao.model, this.readParameter(element, node))
       }
@@ -347,6 +345,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     })
 
     data.labelText = node.getAttribute(this.attrLabel) ?? ''
+    data.disabled = data.disabled
   }
 
   private readParameter(element: IElement, node: Element): Parameter {

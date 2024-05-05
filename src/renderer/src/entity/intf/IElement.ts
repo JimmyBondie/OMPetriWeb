@@ -13,7 +13,7 @@ export interface IElement {
   readonly localParameters: Array<Parameter>
   readonly relatedParameters: Set<Parameter>
 
-  addLocalParameter(parameter: Parameter)
+  addLocalParameter(parameter: Parameter): void
 
   equals(element: IElement): boolean
 
