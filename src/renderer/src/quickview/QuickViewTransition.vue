@@ -15,7 +15,7 @@ defineProps<{
   <!-- General options -->
   <QuickViewNode :node="transition"></QuickViewNode>
 
-  <v-divider class="mb-5"></v-divider>
+  <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Type -->
   <TransitionTypeSelect :transition="transition"></TransitionTypeSelect>

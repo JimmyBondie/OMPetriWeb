@@ -15,6 +15,7 @@ defineProps<{
     variant="underlined"
     prepend-icon="mdi-text"
     density="compact"
+    hide-details
   ></v-textarea>
 </template>
 

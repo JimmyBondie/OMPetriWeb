@@ -17,7 +17,7 @@ defineProps<{
   <!-- General options -->
   <QuickViewNode :node="place"></QuickViewNode>
 
-  <v-divider class="mb-5"></v-divider>
+  <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Type -->
   <PlaceTypeSelect :place="place"></PlaceTypeSelect>
