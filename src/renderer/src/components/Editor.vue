@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import GraphPage from './GraphPage.vue'
-import InspectorPage from './InspectorPage.vue'
+import InspectorPage from '../inspector/InspectorPage.vue'
 import SimulationPage from './SimulationPage.vue'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 

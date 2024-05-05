@@ -4,6 +4,12 @@ import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { INode } from '@renderer/entity/intf/INode'
+import { Place } from '@renderer/entity/impl/Place'
+import { Transition } from '@renderer/entity/impl/Transition'
+import InspectorBasicProps from './InspectorBasicProps.vue'
+import InspectorConnections from './InspectorConnections.vue'
+import InspectorPlaceProps from './InspectorPlaceProps.vue'
+import InspectorTransitionProps from './InspectorTransitionProps.vue'
 
 defineProps<{
   activeNode: IDataNode | undefined
@@ -64,6 +70,34 @@ defineProps<{
 
     <!-- Inspector -->
     <v-col class="h-100" cols="9">
+      <v-container
+        v-if="selectedNodes.length > 0 && selectedNodes[0]"
+        class="h-100 overflow-y-auto"
+      >
+        <!-- Properties -->
+        <InspectorBasicProps :data-element="<IDataNode>selectedNodes[0]"></InspectorBasicProps>
+
+        <v-divider></v-divider>
+
+        <InspectorConnections :data-node="<IDataNode>selectedNodes[0]"></InspectorConnections>
+
+        <v-divider></v-divider>
+
+        <v-row class="pa-4">
+          <v-col>
+            <InspectorPlaceProps
+              v-if="selectedNodes[0] instanceof Place"
+              :place="selectedNodes[0]"
+            ></InspectorPlaceProps>
+
+            <InspectorTransitionProps
+              v-if="selectedNodes[0] instanceof Transition"
+              :dao="dao"
+              :transition="selectedNodes[0]"
+            ></InspectorTransitionProps>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-col>
   </v-row>
 </template>
