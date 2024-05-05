@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import VueMathjax from 'vue-mathjax-next'
 
 // Vuetify
 import 'vuetify/styles'
@@ -40,6 +41,7 @@ app.use(i18n)
 app.use(router)
 app.use(vuetify)
 app.use(store)
+app.use(VueMathjax)
 app.mount('#app')
 
 export default i18n
