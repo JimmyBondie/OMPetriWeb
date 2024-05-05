@@ -12,6 +12,8 @@ defineProps<{
     v-model="element.disabled"
     prepend-icon="mdi-cancel"
     density="compact"
+    :false-value="true"
+    :true-value="false"
   ></v-switch>
 </template>
 
