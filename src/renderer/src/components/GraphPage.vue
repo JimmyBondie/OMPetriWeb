@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { VueFlow, PanelPosition, NodeMouseEvent, VueFlowStore } from '@vue-flow/core'
+import {
+  VueFlow,
+  PanelPosition,
+  NodeMouseEvent,
+  VueFlowStore,
+  EdgeMouseEvent
+} from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { PerfectArrow } from '@vue-flow/pathfinding-edge'
 import { useTheme } from 'vuetify/lib/framework.mjs'
@@ -11,10 +17,12 @@ import { Controls } from '@vue-flow/controls'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
+import { DataArc } from '@renderer/data/impl/DataArc'
 import QuickViewPlace from '@renderer/quickview/QuickViewPlace.vue'
 import QuickViewTransition from '@renderer/quickview/QuickViewTransition.vue'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
-import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
+import QuickViewArc from '@renderer/quickview/QuickViewArc.vue'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -34,6 +42,7 @@ defineProps<{
         :edges="dao.graph.connections"
         @node-click="onSelectNode"
         @node-double-click="onDoubleClickNode"
+        @edge-click="onSelectEdge"
         @pane-ready="(instance: any) => (vueFlowInstance = instance)"
         fit-view-on-init
       >
@@ -96,15 +105,20 @@ defineProps<{
         <v-expansion-panel :title="$t('Tools')" value="tools"></v-expansion-panel>
 
         <!-- QuickView -->
-        <v-expansion-panel :title="$t('QuickView')" value="quickview" v-if="selectedNode">
+        <v-expansion-panel :title="$t('QuickView')" value="quickview" v-if="selectedElement">
           <!-- Places -->
-          <v-expansion-panel-text v-if="selectedNode instanceof DataPlace">
-            <QuickViewPlace :place="selectedNode"></QuickViewPlace>
+          <v-expansion-panel-text v-if="selectedElement instanceof DataPlace">
+            <QuickViewPlace :place="selectedElement"></QuickViewPlace>
           </v-expansion-panel-text>
 
           <!-- Transitions -->
-          <v-expansion-panel-text v-if="selectedNode instanceof DataTransition">
-            <QuickViewTransition :dao="dao" :transition="selectedNode"></QuickViewTransition>
+          <v-expansion-panel-text v-if="selectedElement instanceof DataTransition">
+            <QuickViewTransition :dao="dao" :transition="selectedElement"></QuickViewTransition>
+          </v-expansion-panel-text>
+
+          <!-- Arcs -->
+          <v-expansion-panel-text v-if="selectedElement instanceof DataArc">
+            <QuickViewArc :dao="dao" :arc="selectedElement"></QuickViewArc>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -117,7 +131,7 @@ export default {
   data() {
     return {
       openPanels: ['model', 'tools'],
-      selectedNode: undefined as IDataNode | undefined,
+      selectedElement: undefined as IDataElement | undefined,
       vueFlowInstance: undefined as VueFlowStore | undefined
     }
   },
@@ -127,15 +141,17 @@ export default {
         this.onOpenInspector(event.node.data)
       }
     },
-    onSelectNode(event: NodeMouseEvent) {
-      if (!event || !event.node) {
-        return
-      }
-
-      this.selectedNode = event.node.data
-      if (this.selectedNode && !this.openPanels.includes('quickview')) {
+    onSelectEdge(event: EdgeMouseEvent) {
+      this.onSelectElement(event.edge.data)
+    },
+    onSelectElement(element: IDataElement) {
+      this.selectedElement = element
+      if (this.selectedElement && !this.openPanels.includes('quickview')) {
         this.openPanels.push('quickview')
       }
+    },
+    onSelectNode(event: NodeMouseEvent) {
+      this.onSelectElement(event.node.data)
     }
   },
   watch: {

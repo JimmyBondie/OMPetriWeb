@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DataPlace } from '@renderer/data/impl/DataPlace'
-import QuickViewNode from './QuickViewNode.vue'
+import QuickViewElement from './QuickViewElement.vue'
 import PlaceTypeSelect from '@renderer/selects/PlaceTypeSelect.vue'
 import PlaceColorSelect from '@renderer/selects/PlaceColorSelect.vue'
 import NodeConstantEdit from '@renderer/edits/NodeConstantEdit.vue'
@@ -15,7 +15,7 @@ defineProps<{
 
 <template>
   <!-- General options -->
-  <QuickViewNode :node="place"></QuickViewNode>
+  <QuickViewElement :element="place"></QuickViewElement>
 
   <v-divider class="mt-6 mb-5"></v-divider>
 

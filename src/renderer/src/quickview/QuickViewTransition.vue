@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { DataTransition } from '@renderer/data/impl/DataTransition'
-import QuickViewNode from './QuickViewNode.vue'
+import QuickViewElement from './QuickViewElement.vue'
 import TransitionTypeSelect from '@renderer/selects/TransitionTypeSelect.vue'
 import TransitionFunctionEdit from '@renderer/edits/TransitionFunctionEdit.vue'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
@@ -13,7 +13,7 @@ defineProps<{
 
 <template>
   <!-- General options -->
-  <QuickViewNode :node="transition"></QuickViewNode>
+  <QuickViewElement :element="transition"></QuickViewElement>
 
   <v-divider class="mt-6 mb-5"></v-divider>
 

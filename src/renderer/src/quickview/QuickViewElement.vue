@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
 import DataElementDescriptionEdit from '@renderer/edits/DataElementDescriptionEdit.vue'
 import DataElementLabelEdit from '@renderer/edits/DataElementLabelEdit.vue'
 import DataElementTypeEdit from '@renderer/edits/DataElementTypeEdit.vue'
@@ -7,25 +7,25 @@ import ElementDisabledEdit from '@renderer/edits/ElementDisabledEdit.vue'
 import ElementNameEdit from '@renderer/edits/ElementNameEdit.vue'
 
 defineProps<{
-  node: IDataNode
+  element: IDataElement
 }>()
 </script>
 
 <template>
   <!-- Type -->
-  <DataElementTypeEdit :data-element="node"></DataElementTypeEdit>
+  <DataElementTypeEdit :data-element="element"></DataElementTypeEdit>
 
   <!-- Name -->
-  <ElementNameEdit :element="node"></ElementNameEdit>
+  <ElementNameEdit :element="element"></ElementNameEdit>
 
   <!-- Label -->
-  <DataElementLabelEdit :data-element="node"></DataElementLabelEdit>
+  <DataElementLabelEdit :data-element="element"></DataElementLabelEdit>
 
   <!-- Disabled -->
-  <ElementDisabledEdit :element="node"></ElementDisabledEdit>
+  <ElementDisabledEdit :element="element"></ElementDisabledEdit>
 
   <!-- Description -->
-  <DataElementDescriptionEdit :data-element="node"></DataElementDescriptionEdit>
+  <DataElementDescriptionEdit :data-element="element"></DataElementDescriptionEdit>
 </template>
 
 <script lang="ts"></script>
