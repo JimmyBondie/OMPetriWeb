@@ -1,6 +1,7 @@
 import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { IGraphArc } from '../intf/IGraphArc'
 import { IGraphNode } from '../intf/IGraphNode'
+import { EdgeMarkerType, MarkerType } from '@vue-flow/core'
 
 export class GraphArc extends Object implements IGraphArc {
   private _data: IDataArc
@@ -8,6 +9,12 @@ export class GraphArc extends Object implements IGraphArc {
   private _id: string
   private _source: IGraphNode
   private _target: IGraphNode
+
+  public markerEnd: EdgeMarkerType = {
+    type: MarkerType.ArrowClosed,
+    width: 25,
+    height: 25
+  }
 
   public constructor(id: string, source: IGraphNode, target: IGraphNode, data: IDataArc) {
     super()
@@ -47,7 +54,7 @@ export class GraphArc extends Object implements IGraphArc {
   }
 
   public get type(): string {
-    return 'graphArc'
+    return 'pathFinding'
   }
 
   public set disabled(disabled: boolean) {

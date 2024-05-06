@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
+import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { NodeProps } from '@vue-flow/core'
 
-defineProps<NodeProps<IGraphNode, any, string>>()
+defineProps<NodeProps<IDataNode, any, string>>()
 </script>
 
 <template>
-  <v-sheet color="info">{{ data.id }}</v-sheet>
+  <v-sheet class="pa-1 ma-2" color="info">{{ data.labelText }}</v-sheet>
 </template>
 
 <script lang="ts"></script>

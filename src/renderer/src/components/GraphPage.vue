@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { VueFlow, PanelPosition, NodeMouseEvent, VueFlowStore } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
+import { PerfectArrow } from '@vue-flow/pathfinding-edge'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import FlowPlace from './FlowPlace.vue'
 import FlowTransition from './FlowTransition.vue'
-import FlowArc from './FlowArc.vue'
 import { MiniMap } from '@vue-flow/minimap'
 import { Controls } from '@vue-flow/controls'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
@@ -49,8 +49,8 @@ defineProps<{
         <template #node-graphTransition="props">
           <FlowTransition v-bind="props" />
         </template>
-        <template #edge-graphArc="props">
-          <FlowArc v-bind="props" />
+        <template #edge-pathFinding="props">
+          <PerfectArrow v-bind="props" />
         </template>
       </VueFlow>
     </v-col>
