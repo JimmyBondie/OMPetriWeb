@@ -6,14 +6,17 @@ import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { INode } from '@renderer/entity/intf/INode'
 import { Place } from '@renderer/entity/impl/Place'
 import { Transition } from '@renderer/entity/impl/Transition'
+import { Arc } from '@renderer/entity/impl/Arc'
 import InspectorBasicProps from './InspectorBasicProps.vue'
 import InspectorConnections from './InspectorConnections.vue'
 import InspectorPlaceProps from './InspectorPlaceProps.vue'
 import InspectorTransitionProps from './InspectorTransitionProps.vue'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
+import InspectorArcProps from './InspectorArcProps.vue'
 
 defineProps<{
-  activeNode: IDataNode | undefined
+  activeElement: IDataElement | undefined
   dao: ModelDAO
   onShowElement?: (element: IGraphElement) => void
 }>()
@@ -23,7 +26,7 @@ defineProps<{
   <v-row no-gutters class="h-100">
     <!-- Node list -->
     <v-col class="h-100 overflow-y-auto" cols="3">
-      <v-list density="compact" nav v-model:selected="selectedNodes">
+      <v-list density="compact" nav v-model:selected="selectedElements">
         <v-list-item density="compact">
           <v-text-field
             :placeholder="$t('FilterIdNameLabel')"
@@ -73,16 +76,18 @@ defineProps<{
     <!-- Inspector -->
     <v-col class="h-100" cols="9">
       <v-container
-        v-if="selectedNodes.length > 0 && selectedNodes[0]"
+        v-if="selectedElements.length > 0 && selectedElements[0]"
         class="h-100 overflow-y-auto"
       >
         <!-- Properties -->
-        <InspectorBasicProps :data-element="<IDataNode>selectedNodes[0]"></InspectorBasicProps>
+        <InspectorBasicProps
+          :data-element="<IDataElement>selectedElements[0]"
+        ></InspectorBasicProps>
 
         <v-divider></v-divider>
 
         <InspectorConnections
-          :data-node="<IDataNode>selectedNodes[0]"
+          :data-element="<IDataElement>selectedElements[0]"
           :on-show-element="
             (element: IGraphElement) => {
               if (onShowElement) {
@@ -97,15 +102,21 @@ defineProps<{
         <v-row class="pa-4">
           <v-col>
             <InspectorPlaceProps
-              v-if="selectedNodes[0] instanceof Place"
-              :place="selectedNodes[0]"
+              v-if="selectedElements[0] instanceof Place"
+              :place="selectedElements[0]"
             ></InspectorPlaceProps>
 
             <InspectorTransitionProps
-              v-if="selectedNodes[0] instanceof Transition"
+              v-if="selectedElements[0] instanceof Transition"
               :dao="dao"
-              :transition="selectedNodes[0]"
+              :transition="selectedElements[0]"
             ></InspectorTransitionProps>
+
+            <InspectorArcProps
+              v-if="selectedElements[0] instanceof Arc"
+              :dao="dao"
+              :arc="selectedElements[0]"
+            ></InspectorArcProps>
           </v-col>
         </v-row>
       </v-container>
@@ -120,7 +131,7 @@ export default {
       filter: '' as string,
       places: this.getPlaces() as Array<DataPlace>,
       transitions: this.getTransitions() as Array<DataTransition>,
-      selectedNodes: [] as Array<IDataNode>
+      selectedElements: [] as Array<IDataElement>
     }
   },
   methods: {
@@ -150,16 +161,15 @@ export default {
     }
   },
   beforeMount() {
-    if (this.activeNode) {
-      this.selectedNodes.push(this.activeNode)
+    if (this.activeElement) {
+      this.selectedElements.push(this.activeElement)
     }
   },
   beforeUpdate() {
     this.places = this.getPlaces()
     this.transitions = this.getTransitions()
-    if (this.activeNode) {
-      this.selectedNodes = []
-      this.selectedNodes.push(this.activeNode)
+    if (this.activeElement) {
+      this.selectedElements = [this.activeElement]
     }
   }
 }

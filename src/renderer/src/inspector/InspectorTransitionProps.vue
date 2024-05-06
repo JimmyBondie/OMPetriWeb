@@ -17,7 +17,7 @@ defineProps<{
   />
 
   <!-- Function -->
-  <TransitionFunctionEdit :dao="dao" :transition="transition"></TransitionFunctionEdit>
+  <TransitionFunctionEdit class="mt-4" :dao="dao" :transition="transition"></TransitionFunctionEdit>
 </template>
 
 <script lang="ts"></script>

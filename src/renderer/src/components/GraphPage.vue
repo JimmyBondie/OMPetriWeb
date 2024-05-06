@@ -14,7 +14,6 @@ import FlowPlace from './FlowPlace.vue'
 import FlowTransition from './FlowTransition.vue'
 import { MiniMap } from '@vue-flow/minimap'
 import { Controls } from '@vue-flow/controls'
-import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { DataArc } from '@renderer/data/impl/DataArc'
@@ -23,11 +22,13 @@ import QuickViewTransition from '@renderer/quickview/QuickViewTransition.vue'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 import QuickViewArc from '@renderer/quickview/QuickViewArc.vue'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
+import { DataType } from '@renderer/data/intf/DataType'
+import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 
 defineProps<{
   activeElement?: IGraphElement
   dao: ModelDAO
-  onOpenInspector: (node: IDataNode) => void
+  onOpenInspector: (element: IDataElement) => void
 }>()
 </script>
 
@@ -43,6 +44,7 @@ defineProps<{
         @node-click="onSelectNode"
         @node-double-click="onDoubleClickNode"
         @edge-click="onSelectEdge"
+        @edge-double-click="onDoubleClickEdge"
         @pane-ready="(instance: any) => (vueFlowInstance = instance)"
         fit-view-on-init
       >
@@ -136,10 +138,11 @@ export default {
     }
   },
   methods: {
+    onDoubleClickEdge(event: EdgeMouseEvent) {
+      this.onOpenInspector(event.edge.data)
+    },
     onDoubleClickNode(event: NodeMouseEvent) {
-      if (event && event.node && event.node.data) {
-        this.onOpenInspector(event.node.data)
-      }
+      this.onOpenInspector(event.node.data)
     },
     onSelectEdge(event: EdgeMouseEvent) {
       this.onSelectElement(event.edge.data)
@@ -157,7 +160,12 @@ export default {
   watch: {
     activeElement() {
       if (this.vueFlowInstance && this.activeElement) {
-        this.vueFlowInstance.fitView({ nodes: [this.activeElement.id] })
+        if (this.activeElement.data.type == DataType.ARC) {
+          const arc: IGraphArc = this.activeElement as IGraphArc
+          this.vueFlowInstance.fitView({ nodes: [arc.sourceNode.id, arc.targetNode.id] })
+        } else {
+          this.vueFlowInstance.fitView({ nodes: [this.activeElement.id] })
+        }
       }
     }
   }

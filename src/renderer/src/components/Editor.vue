@@ -3,7 +3,7 @@ import { ModelDAO } from '@renderer/dao/ModelDAO'
 import GraphPage from './GraphPage.vue'
 import InspectorPage from '../inspector/InspectorPage.vue'
 import SimulationPage from './SimulationPage.vue'
-import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
@@ -24,12 +24,12 @@ defineProps<{
       <v-window-item value="inspector" class="h-100">
         <InspectorPage
           class="h-100"
-          :activeNode="<IDataNode | undefined>selectedNode"
+          :activeElement="<IDataElement | undefined>selectedElement"
           :dao="dao"
           :on-show-element="
             (element: IGraphElement) => {
-              selectedPage = 'graph'
               activeElement = element
+              selectedPage = 'graph'
             }
           "
         ></InspectorPage>
@@ -58,13 +58,13 @@ export default {
   data() {
     return {
       activeElement: undefined as IGraphElement | undefined,
-      selectedNode: undefined as IDataNode | undefined,
+      selectedElement: undefined as IDataElement | undefined,
       selectedPage: 'graph'
     }
   },
   methods: {
-    onOpenInspector(node: IDataNode) {
-      this.selectedNode = node
+    onOpenInspector(element: IDataElement) {
+      this.selectedElement = element
       this.selectedPage = 'inspector'
     }
   }
