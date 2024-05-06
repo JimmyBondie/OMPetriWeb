@@ -54,7 +54,7 @@ export default {
           this.arc,
           input
         )
-        services.modelService.setElementFunction(this.dao, this.arc, func)
+        services.modelService.setElementFunction(this.dao, this.arc, func, this.color)
       } catch (e: any) {
         if (e instanceof Error) {
           return e.message
