@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { VueFlow, PanelPosition, NodeMouseEvent } from '@vue-flow/core'
+import { VueFlow, PanelPosition, NodeMouseEvent, VueFlowStore } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
@@ -13,8 +13,11 @@ import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import QuickViewPlace from '@renderer/quickview/QuickViewPlace.vue'
 import QuickViewTransition from '@renderer/quickview/QuickViewTransition.vue'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
+import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
 
 defineProps<{
+  activeElement?: IGraphElement
   dao: ModelDAO
   onOpenInspector: (node: IDataNode) => void
 }>()
@@ -31,6 +34,7 @@ defineProps<{
         :edges="dao.graph.connections"
         @node-click="onSelectNode"
         @node-double-click="onDoubleClickNode"
+        @pane-ready="(instance: any) => (vueFlowInstance = instance)"
         fit-view-on-init
       >
         <Background />
@@ -113,7 +117,8 @@ export default {
   data() {
     return {
       openPanels: ['model', 'tools'],
-      selectedNode: undefined as IDataNode | undefined
+      selectedNode: undefined as IDataNode | undefined,
+      vueFlowInstance: undefined as VueFlowStore | undefined
     }
   },
   methods: {
@@ -130,6 +135,13 @@ export default {
       this.selectedNode = event.node.data
       if (this.selectedNode && !this.openPanels.includes('quickview')) {
         this.openPanels.push('quickview')
+      }
+    }
+  },
+  watch: {
+    activeElement() {
+      if (this.vueFlowInstance && this.activeElement) {
+        this.vueFlowInstance.fitView({ nodes: [this.activeElement.id] })
       }
     }
   }

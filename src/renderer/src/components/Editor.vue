@@ -4,6 +4,7 @@ import GraphPage from './GraphPage.vue'
 import InspectorPage from '../inspector/InspectorPage.vue'
 import SimulationPage from './SimulationPage.vue'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
   dao: ModelDAO
@@ -25,12 +26,23 @@ defineProps<{
           class="h-100"
           :activeNode="<IDataNode | undefined>selectedNode"
           :dao="dao"
+          :on-show-element="
+            (element: IGraphElement) => {
+              selectedPage = 'graph'
+              activeElement = element
+            }
+          "
         ></InspectorPage>
       </v-window-item>
 
       <!-- Graph -->
       <v-window-item value="graph" class="h-100">
-        <GraphPage class="h-100" :dao="dao" :on-open-inspector="onOpenInspector"></GraphPage>
+        <GraphPage
+          class="h-100"
+          :dao="dao"
+          :active-element="<IGraphElement | undefined>activeElement"
+          :on-open-inspector="onOpenInspector"
+        ></GraphPage>
       </v-window-item>
 
       <!-- Simulation -->
@@ -45,6 +57,7 @@ defineProps<{
 export default {
   data() {
     return {
+      activeElement: undefined as IGraphElement | undefined,
       selectedNode: undefined as IDataNode | undefined,
       selectedPage: 'graph'
     }

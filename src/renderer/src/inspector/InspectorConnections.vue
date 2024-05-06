@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
   dataNode: IDataNode
+  onShowElement?: (element: IGraphElement) => void
 }>()
 </script>
 
@@ -69,6 +71,13 @@ defineProps<{
           density="compact"
           :base-color="shape.disabled ? 'grey' : undefined"
           :title="shape.id"
+          @click.double="
+            () => {
+              if (onShowElement) {
+                onShowElement(shape)
+              }
+            }
+          "
         >
           <template v-slot:append>
             <v-tooltip :text="shape.disabled ? $t('Enable') : $t('Disable')" location="top">

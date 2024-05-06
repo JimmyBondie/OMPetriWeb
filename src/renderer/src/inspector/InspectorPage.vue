@@ -10,10 +10,12 @@ import InspectorBasicProps from './InspectorBasicProps.vue'
 import InspectorConnections from './InspectorConnections.vue'
 import InspectorPlaceProps from './InspectorPlaceProps.vue'
 import InspectorTransitionProps from './InspectorTransitionProps.vue'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
   activeNode: IDataNode | undefined
   dao: ModelDAO
+  onShowElement?: (element: IGraphElement) => void
 }>()
 </script>
 
@@ -79,7 +81,16 @@ defineProps<{
 
         <v-divider></v-divider>
 
-        <InspectorConnections :data-node="<IDataNode>selectedNodes[0]"></InspectorConnections>
+        <InspectorConnections
+          :data-node="<IDataNode>selectedNodes[0]"
+          :on-show-element="
+            (element: IGraphElement) => {
+              if (onShowElement) {
+                onShowElement(element)
+              }
+            }
+          "
+        ></InspectorConnections>
 
         <v-divider></v-divider>
 
