@@ -13,7 +13,7 @@ defineProps<{
   <!-- Function visualization -->
   <vue-mathjax
     class="d-flex justify-center"
-    :formula="'`' + transition.function.formatString() + '`'"
+    :formula="'`' + transition.function.formatString(true) + '`'"
   />
 
   <!-- Function -->

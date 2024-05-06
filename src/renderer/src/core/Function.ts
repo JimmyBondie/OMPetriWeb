@@ -69,13 +69,15 @@ export class Function extends Object {
     this._elements.unshift(element)
   }
 
-  public formatString(): string {
+  public formatString(quotedParams: boolean = false): string {
     if (this._type == FunctionType.FUNCTION) {
       let functionString: string = ''
       for (const element of this._elements) {
-        functionString += element.formatString() + ' '
+        functionString += element.formatString(quotedParams) + ' '
       }
       return functionString.trim()
+    } else if (this._type == FunctionType.PARAMETER && quotedParams) {
+      return '"' + this._value + '"'
     } else {
       return this._value
     }
