@@ -2,6 +2,7 @@ import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { IGraphArc } from '../intf/IGraphArc'
 import { IGraphNode } from '../intf/IGraphNode'
 import { EdgeMarkerType, MarkerType } from '@vue-flow/core'
+import { DataType } from '@renderer/data/intf/DataType'
 
 export class GraphArc extends Object implements IGraphArc {
   private _data: IDataArc
@@ -54,7 +55,11 @@ export class GraphArc extends Object implements IGraphArc {
   }
 
   public get type(): string {
-    return 'pathFinding'
+    if (this._source.data.type == DataType.PLACE) {
+      return 'placeToTransition'
+    } else {
+      return 'transitionToPlace'
+    }
   }
 
   public set disabled(disabled: boolean) {

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import {
   VueFlow,
+  StraightEdge,
   PanelPosition,
   NodeMouseEvent,
   VueFlowStore,
-  EdgeMouseEvent
+  EdgeMouseEvent,
+  XYPosition,
+  EdgeProps
 } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
-import { PerfectArrow } from '@vue-flow/pathfinding-edge'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import FlowPlace from './FlowPlace.vue'
@@ -60,8 +62,23 @@ defineProps<{
         <template #node-graphTransition="props">
           <FlowTransition v-bind="props" />
         </template>
-        <template #edge-pathFinding="props">
-          <PerfectArrow v-bind="props" />
+        <template #edge-placeToTransition="props">
+          <StraightEdge
+            v-bind="props"
+            :source-x="getSourcePlacePosition(props, 20, 40).x"
+            :source-y="getSourcePlacePosition(props, 20, 40).y"
+            :target-x="getTargetTransitionPosition(props, 40, 40, 15).x"
+            :target-y="getTargetTransitionPosition(props, 40, 40, 15).y"
+          />
+        </template>
+        <template #edge-transitionToPlace="props">
+          <StraightEdge
+            v-bind="props"
+            :source-x="getSourceTransitionPosition(props, 40, 15, 40).x"
+            :source-y="getSourceTransitionPosition(props, 40, 15, 40).y"
+            :target-x="getTargetPlacePosition(props, 20, 15).x"
+            :target-y="getTargetPlacePosition(props, 20, 15).y"
+          />
         </template>
       </VueFlow>
     </v-col>
@@ -138,6 +155,146 @@ export default {
     }
   },
   methods: {
+    getSourcePlacePosition(props: EdgeProps, radius: number, targetHeight: number): XYPosition {
+      // Calculate middle point
+      const source: XYPosition = {
+        x: props.sourceX,
+        y: props.sourceY - radius
+      }
+      const target: XYPosition = {
+        x: props.targetX,
+        y: props.targetY + targetHeight / 2
+      }
+
+      let connection: XYPosition = {
+        x: target.x - source.x,
+        y: target.y - source.y
+      }
+
+      const length: number = Math.sqrt(Math.pow(connection.x, 2) + Math.pow(connection.y, 2))
+      connection = {
+        x: (connection.x / length) * (radius + 5),
+        y: (connection.y / length) * (radius + 5)
+      }
+
+      return {
+        x: source.x + connection.x,
+        y: source.y + connection.y
+      }
+    },
+    getSourceTransitionPosition(
+      props: EdgeProps,
+      sourceHeight: number,
+      sourceWidth: number,
+      targetHeight: number
+    ): XYPosition {
+      // Calculate middle point
+      const source: XYPosition = {
+        x: props.sourceX,
+        y: props.sourceY - sourceHeight / 2
+      }
+      const target: XYPosition = {
+        x: props.targetX,
+        y: props.targetY + targetHeight / 2
+      }
+
+      let connection: XYPosition = {
+        x: target.x - source.x,
+        y: target.y - source.y
+      }
+
+      // Enlarge the target for a margin
+      sourceWidth = sourceWidth + 10
+      sourceHeight = sourceHeight + 10
+      if (Math.abs(connection.x / sourceWidth) <= Math.abs(connection.y / sourceHeight)) {
+        const y: number = Math.sign(connection.y) * (sourceHeight / 2)
+        connection = {
+          x: y * (connection.x / connection.y),
+          y: y
+        }
+      } else {
+        const x: number = Math.sign(connection.x) * (sourceWidth / 2)
+        connection = {
+          x: x,
+          y: x * (connection.y / connection.x)
+        }
+      }
+
+      return {
+        x: source.x + connection.x,
+        y: source.y + connection.y
+      }
+    },
+    getTargetPlacePosition(props: EdgeProps, radius: number, sourceHeight: number): XYPosition {
+      // Calculate middle point
+      const source: XYPosition = {
+        x: props.sourceX,
+        y: props.sourceY - sourceHeight / 2
+      }
+      const target: XYPosition = {
+        x: props.targetX,
+        y: props.targetY + radius
+      }
+
+      let connection: XYPosition = {
+        x: source.x - target.x,
+        y: source.y - target.y
+      }
+
+      const length: number = Math.sqrt(Math.pow(connection.x, 2) + Math.pow(connection.y, 2))
+      connection = {
+        x: (connection.x / length) * (radius + 5),
+        y: (connection.y / length) * (radius + 5)
+      }
+
+      return {
+        x: target.x + connection.x,
+        y: target.y + connection.y
+      }
+    },
+    getTargetTransitionPosition(
+      props: EdgeProps,
+      sourceHeight: number,
+      targetHeight: number,
+      targetWidth: number
+    ): XYPosition {
+      // Calculate middle point
+      const source: XYPosition = {
+        x: props.sourceX,
+        y: props.sourceY - sourceHeight / 2
+      }
+      const target: XYPosition = {
+        x: props.targetX,
+        y: props.targetY + targetHeight / 2
+      }
+
+      let connection: XYPosition = {
+        x: source.x - target.x,
+        y: source.y - target.y
+      }
+
+      // Enlarge the target for a margin
+      targetWidth = targetWidth + 10
+      targetHeight = targetHeight + 10
+      if (Math.abs(connection.x / targetWidth) <= Math.abs(connection.y / targetHeight)) {
+        const y: number = Math.sign(connection.y) * (targetHeight / 2)
+        connection = {
+          x: y * (connection.x / connection.y),
+          y: y
+        }
+      } else {
+        const x: number = Math.sign(connection.x) * (targetWidth / 2)
+        connection = {
+          x: x,
+          y: x * (connection.y / connection.x)
+        }
+      }
+
+      return {
+        x: target.x + connection.x,
+        y: target.y + connection.y
+      }
+    },
     onDoubleClickEdge(event: EdgeMouseEvent) {
       this.onOpenInspector(event.edge.data)
     },

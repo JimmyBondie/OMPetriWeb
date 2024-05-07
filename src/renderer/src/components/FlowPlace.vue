@@ -7,7 +7,13 @@ defineProps<NodeProps<IDataNode, any, string>>()
 </script>
 
 <template>
-  <v-sheet class="pa-1 ma-2 rounded-circle" color="success">
+  <v-sheet
+    style="line-height: 33px"
+    class="pa-1 rounded-circle"
+    height="40"
+    width="40"
+    color="success"
+  >
     {{ (data as DataPlace).token.toFixed(2) }}
   </v-sheet>
 </template>

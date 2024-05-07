@@ -29,7 +29,6 @@
     "@vue-flow/controls": "^1.1.1",
     "@vue-flow/core": "^1.33.5",
     "@vue-flow/minimap": "^1.4.0",
-    "@vue-flow/pathfinding-edge": "^1.0.6",
     "@vueuse/core": "^10.9.0",
     "custom-electron-titlebar": "^4.2.8",
     "guid-typescript": "^1.0.9",
