@@ -1,7 +1,7 @@
 import { Model } from '@renderer/core/Model'
 import { CustomService } from '../intf'
 import { IParameterService } from '../intf/IParameterService'
-import { Parameter } from '@renderer/core/Parameter'
+import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { ElementType, IElement } from '@renderer/entity/intf/IElement'
 import { Function } from '@renderer/core/Function'
 import i18n from '@renderer/main'
@@ -12,6 +12,9 @@ import { Arc } from '@renderer/entity/impl/Arc'
 import { Weight } from '@renderer/core/Weight'
 import { Transition } from '@renderer/entity/impl/Transition'
 import { CustomError } from '@renderer/utils/CustomError'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
+import { DataArc } from '@renderer/data/impl/DataArc'
 
 export class ParameterException extends CustomError {}
 
@@ -40,6 +43,14 @@ export class ParameterService extends CustomService implements IParameterService
   ): Parameter {
     const value: string = this.generateValueForReferencingParamter(element.id, type)
     return new ReferencingParameter(paramId, value, element, type)
+  }
+
+  private filter(param: Parameter, filter: string): boolean {
+    return (
+      param.id.toLowerCase().includes(filter) ||
+      param.relatedElement?.id.toLowerCase().includes(filter) ||
+      (param.relatedElement as IDataElement).labelText.toLowerCase().includes(filter)
+    )
   }
 
   private findParameter(model: Model, id: string, element: IElement): Parameter | undefined {
@@ -106,6 +117,82 @@ export class ParameterService extends CustomService implements IParameterService
       case ReferenceType.SPEED:
         return "'.+'.actualSpeed".replaceAll('.+', elementId)
     }
+  }
+
+  public getFilteredAndSortedParameterList(
+    model: Model,
+    element: IDataElement,
+    filter: string
+  ): Array<Parameter> {
+    const all: Array<Parameter> = new Array<Parameter>()
+    const locals: Array<Parameter> = new Array<Parameter>()
+    const others: Array<Parameter> = new Array<Parameter>()
+
+    for (const arc of model.arcs) {
+      if (arc.equals(element)) {
+        locals.push(...arc.localParameters)
+      } else {
+        others.push(...arc.localParameters)
+      }
+    }
+
+    for (const transition of model.transitions) {
+      if (transition.equals(element)) {
+        locals.push(...transition.localParameters)
+      } else {
+        others.push(...transition.localParameters)
+      }
+    }
+
+    all.push(
+      ...locals
+        .filter((param: Parameter) => this.filter(param, filter))
+        .sort((p1: Parameter, p2: Parameter) => p1.id.localeCompare(p2.id))
+    )
+
+    all.push(
+      ...model.parameters
+        .filter(
+          (param: Parameter) => param.type == ParameterType.GLOBAL && this.filter(param, filter)
+        )
+        .sort((p1: Parameter, p2: Parameter) => p1.id.localeCompare(p2.id))
+    )
+
+    all.push(
+      ...others
+        .filter((param: Parameter) => this.filter(param, filter))
+        .sort((p1: Parameter, p2: Parameter) => p1.id.localeCompare(p2.id))
+    )
+
+    return all
+  }
+
+  public getFilteredChoicesForLocalParameters(model: Model, filter: string): Array<IDataElement> {
+    const list: Array<IDataElement> = new Array<IDataElement>()
+
+    list.push(
+      ...(model.transitions
+        .filter(
+          (transition: Transition) =>
+            transition.id.toLowerCase().includes(filter) ||
+            (transition as DataTransition).labelText.toLowerCase().includes(filter)
+        )
+        .sort((e1: Transition, e2: Transition) =>
+          e1.id.localeCompare(e2.id)
+        ) as Array<DataTransition>)
+    )
+
+    list.push(
+      ...(model.arcs
+        .filter(
+          (arc: Arc) =>
+            arc.id.toLowerCase().includes(filter) ||
+            (arc as DataArc).labelText.toLowerCase().includes(filter)
+        )
+        .sort((e1: Arc, e2: Arc) => e1.id.localeCompare(e2.id)) as Array<DataArc>)
+    )
+
+    return list
   }
 
   private getIdsForUsedParameters(element: IElement): Set<string> {

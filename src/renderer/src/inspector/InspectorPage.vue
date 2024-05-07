@@ -14,6 +14,7 @@ import InspectorTransitionProps from './InspectorTransitionProps.vue'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import InspectorArcProps from './InspectorArcProps.vue'
+import InspectorParameters from './InspectorParameters.vue'
 
 defineProps<{
   activeElement: IDataElement | undefined
@@ -119,6 +120,13 @@ defineProps<{
             ></InspectorArcProps>
           </v-col>
         </v-row>
+
+        <v-divider></v-divider>
+
+        <InspectorParameters
+          :dao="dao"
+          :data-element="<IDataElement>selectedElements[0]"
+        ></InspectorParameters>
       </v-container>
     </v-col>
   </v-row>

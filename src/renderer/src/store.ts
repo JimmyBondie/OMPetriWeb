@@ -3,6 +3,10 @@ import { Store, createStore } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { services } from '@renderer/services'
 import { IModelService } from '@renderer/services/intf/IModelService'
+import { IDataElement } from './data/intf/IDataElement'
+import { Parameter } from './core/Parameter'
+import { IParameterService } from './services/intf/IParameterService'
+import { Model } from './core/Model'
 
 class StoreState extends Object {
   private _fileDialog: UseFileDialogReturn = useFileDialog({
@@ -21,6 +25,10 @@ class StoreState extends Object {
 
   public get modelService(): IModelService {
     return services.modelService
+  }
+
+  public get parameterService(): IParameterService {
+    return services.parameterService
   }
 
   public openModel(): Promise<ModelDAO> {
@@ -54,6 +62,14 @@ const store: Store<StoreState> = createStore({
     return new StoreState()
   },
   getters: {
+    getFilteredAndSortedParameterList:
+      (state: StoreState) =>
+      (model: Model, element: IDataElement, filter: string): Array<Parameter> => {
+        return state.parameterService.getFilteredAndSortedParameterList(model, element, filter)
+      },
+    getFilteredChoicesForLocalParameters: (state: StoreState) => (model: Model, filter: string) => {
+      return state.parameterService.getFilteredChoicesForLocalParameters(model, filter)
+    },
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     }
