@@ -54,7 +54,12 @@ export default {
 
       try {
         const func: Function = this.validateAndGetFunction(this.dao.model, this.arc, input)
-        this.setElementFunction(this.dao, this.arc, func, this.color)
+        this.setElementFunction({
+          model: this.dao.model,
+          element: this.arc,
+          func: func,
+          color: this.color
+        })
       } catch (e: any) {
         if (e instanceof Error) {
           return e.message

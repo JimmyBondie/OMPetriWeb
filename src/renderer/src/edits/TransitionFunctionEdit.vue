@@ -39,7 +39,7 @@ export default {
 
       try {
         const func: Function = this.validateAndGetFunction(this.dao.model, this.transition, input)
-        this.setElementFunction(this.dao, this.transition, func)
+        this.setElementFunction({ model: this.dao.model, element: this.transition, func: func })
       } catch (e: any) {
         if (e instanceof Error) {
           return e.message
