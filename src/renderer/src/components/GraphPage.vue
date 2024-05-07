@@ -319,9 +319,21 @@ export default {
       if (this.vueFlowInstance && this.activeElement) {
         if (this.activeElement.data.type == DataType.ARC) {
           const arc: IGraphArc = this.activeElement as IGraphArc
-          this.vueFlowInstance.fitView({ nodes: [arc.sourceNode.id, arc.targetNode.id] })
+          this.vueFlowInstance.fitView({
+            nodes: [arc.sourceNode.id, arc.targetNode.id],
+            offset: {
+              x: 320,
+              y: 75
+            }
+          })
         } else {
-          this.vueFlowInstance.fitView({ nodes: [this.activeElement.id] })
+          this.vueFlowInstance.fitView({
+            nodes: [this.activeElement.id],
+            offset: {
+              x: 295,
+              y: 85
+            }
+          })
         }
       }
     }
