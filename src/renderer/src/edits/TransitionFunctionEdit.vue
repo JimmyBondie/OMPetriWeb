@@ -2,7 +2,7 @@
 import { Function } from '@renderer/core/Function'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { Transition } from '@renderer/entity/impl/Transition'
-import { services } from '@renderer/services'
+import { mapGetters, mapMutations } from 'vuex'
 
 defineProps<{
   dao: ModelDAO
@@ -24,7 +24,11 @@ defineProps<{
 
 <script lang="ts">
 export default {
+  computed: {
+    ...mapGetters(['validateAndGetFunction'])
+  },
   methods: {
+    ...mapMutations(['setElementFunction']),
     validateFunction(text: string): boolean | string {
       let input: string
       if (text == '') {
@@ -34,12 +38,8 @@ export default {
       }
 
       try {
-        const func: Function = services.parameterService.validateAndGetFunction(
-          this.dao.model,
-          this.transition,
-          input
-        )
-        services.modelService.setElementFunction(this.dao, this.transition, func)
+        const func: Function = this.validateAndGetFunction(this.dao.model, this.transition, input)
+        this.setElementFunction(this.dao, this.transition, func)
       } catch (e: any) {
         if (e instanceof Error) {
           return e.message

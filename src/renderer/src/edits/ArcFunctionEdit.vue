@@ -4,7 +4,7 @@ import { Function } from '@renderer/core/Function'
 import { Weight } from '@renderer/core/Weight'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { Arc } from '@renderer/entity/impl/Arc'
-import { services } from '@renderer/services'
+import { mapGetters, mapMutations } from 'vuex'
 
 defineProps<{
   arc: Arc
@@ -27,7 +27,11 @@ defineProps<{
 
 <script lang="ts">
 export default {
+  computed: {
+    ...mapGetters(['validateAndGetFunction'])
+  },
   methods: {
+    ...mapMutations(['setElementFunction']),
     getFunction(): string {
       if (!this.color) {
         return ''
@@ -49,12 +53,8 @@ export default {
       }
 
       try {
-        const func: Function = services.parameterService.validateAndGetFunction(
-          this.dao.model,
-          this.arc,
-          input
-        )
-        services.modelService.setElementFunction(this.dao, this.arc, func, this.color)
+        const func: Function = this.validateAndGetFunction(this.dao.model, this.arc, input)
+        this.setElementFunction(this.dao, this.arc, func, this.color)
       } catch (e: any) {
         if (e instanceof Error) {
           return e.message

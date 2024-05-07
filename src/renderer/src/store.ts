@@ -7,6 +7,8 @@ import { IDataElement } from './data/intf/IDataElement'
 import { Parameter } from './core/Parameter'
 import { IParameterService } from './services/intf/IParameterService'
 import { Model } from './core/Model'
+import { IElement } from './entity/intf/IElement'
+import { Function } from './core/Function'
 
 class StoreState extends Object {
   private _fileDialog: UseFileDialogReturn = useFileDialog({
@@ -72,7 +74,12 @@ const store: Store<StoreState> = createStore({
     },
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
-    }
+    },
+    validateAndGetFunction:
+      (state: StoreState) =>
+      (model: Model, element: IElement, functionString: string): Function => {
+        return state.parameterService.validateAndGetFunction(model, element, functionString)
+      }
   },
   mutations: {
     addNewModel(state: StoreState) {
@@ -80,6 +87,9 @@ const store: Store<StoreState> = createStore({
     },
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)
+    },
+    setElementFunction(state: StoreState, { model, element, func, color }) {
+      state.parameterService.setElementFunction(model, element, func, color)
     }
   },
   actions: {
