@@ -47,6 +47,7 @@
   "Name": "Name",
   "New": "Neu",
   "No": "Nein",
+  "NoDataAvailable": "Keine Daten verfügbar",
   "NodeNotFound": "Knoten mit ID \"{id}\" nicht gefunden",
   "Normal": "Normal",
   "NotSupported": "Diese Aktion wird nicht unterstützt",

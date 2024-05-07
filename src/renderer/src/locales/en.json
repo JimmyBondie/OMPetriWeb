@@ -47,6 +47,7 @@
   "Name": "Name",
   "New": "New",
   "No": "No",
+  "NoDataAvailable": "No data available",
   "NodeNotFound": "Could not found node with id \"{id}\"",
   "Normal": "Normal",
   "NotSupported": "This action is not supported",
