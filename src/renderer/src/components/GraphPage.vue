@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
   VueFlow,
-  StraightEdge,
   PanelPosition,
   NodeMouseEvent,
   VueFlowStore,
@@ -26,6 +25,7 @@ import QuickViewArc from '@renderer/quickview/QuickViewArc.vue'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { DataType } from '@renderer/data/intf/DataType'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
+import FlowArc from './FlowArc.vue'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -63,8 +63,8 @@ defineProps<{
           <FlowTransition v-bind="props" />
         </template>
         <template #edge-placeToTransition="props">
-          <StraightEdge
-            v-bind="props"
+          <FlowArc
+            :data="props.data"
             :source-x="getSourcePlacePosition(props, 20, 40).x"
             :source-y="getSourcePlacePosition(props, 20, 40).y"
             :target-x="getTargetTransitionPosition(props, 40, 40, 15).x"
@@ -72,8 +72,8 @@ defineProps<{
           />
         </template>
         <template #edge-transitionToPlace="props">
-          <StraightEdge
-            v-bind="props"
+          <FlowArc
+            :data="props.data"
             :source-x="getSourceTransitionPosition(props, 40, 15, 40).x"
             :source-y="getSourceTransitionPosition(props, 40, 15, 40).y"
             :target-x="getTargetPlacePosition(props, 20, 15).x"
