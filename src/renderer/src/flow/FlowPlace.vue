@@ -8,27 +8,35 @@ defineProps<NodeProps<IDataNode, any, string>>()
 </script>
 
 <template>
-  <v-card
-    class="rounded-circle"
-    height="40"
-    width="40"
-    color="green-darken-2"
-    :border="calcBorder()"
-  >
-    <v-card-title
-      :style="'text-overflow: clip; ' + calcStyle()"
-      class="pa-0 text-center text-caption"
-    >
-      {{ place.token.toFixed(2) }}
-    </v-card-title>
-  </v-card>
+  <v-tooltip v-model="showTooltip" :text="data.id" location="top">
+    <template v-slot:activator="{ props: tooltip }">
+      <v-card
+        class="rounded-circle cursor-pointer"
+        height="40"
+        width="40"
+        color="green-darken-2"
+        :border="calcBorder()"
+        v-bind="tooltip"
+        @mousedown="showTooltip = false"
+        :ripple="false"
+      >
+        <v-card-title
+          :style="'text-overflow: clip; ' + calcStyle()"
+          class="pa-0 text-center text-caption"
+        >
+          {{ place.token.toFixed(2) }}
+        </v-card-title>
+      </v-card>
+    </template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">
 export default {
   data() {
     return {
-      place: this.data as DataPlace
+      place: this.data as DataPlace,
+      showTooltip: false
     }
   },
   methods: {

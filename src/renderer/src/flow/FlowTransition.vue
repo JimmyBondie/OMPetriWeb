@@ -8,13 +8,27 @@ defineProps<NodeProps<IDataNode, any, string>>()
 </script>
 
 <template>
-  <v-card class="pa-1" :color="calcColor()" width="15" height="40" :border="calcBorder()"></v-card>
+  <v-tooltip v-model="showTooltip" :text="data.id" location="top">
+    <template v-slot:activator="{ props: tooltip }">
+      <v-card
+        class="pa-1 cursor-pointer"
+        :color="calcColor()"
+        width="15"
+        height="40"
+        :border="calcBorder()"
+        v-bind="tooltip"
+        @mousedown="showTooltip = false"
+        :ripple="false"
+      ></v-card>
+    </template>
+  </v-tooltip>
 </template>
 
 <script lang="ts">
 export default {
   data() {
     return {
+      showTooltip: false,
       transition: this.data as DataTransition
     }
   },
