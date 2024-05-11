@@ -21,6 +21,7 @@ defineProps<{
     :rules="[validateFunction]"
     persistent-placeholder
     prepend-icon="mdi-function"
+    variant="underlined"
     density="compact"
   ></v-textarea>
 </template>

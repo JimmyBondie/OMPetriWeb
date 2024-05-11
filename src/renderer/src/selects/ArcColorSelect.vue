@@ -20,6 +20,7 @@ defineEmits(['update:color'])
     item-title="id"
     item-value="description"
     prepend-icon="mdi-palette"
+    variant="underlined"
     density="compact"
     :open-text="$t('Open')"
     :close-text="$t('Close')"
