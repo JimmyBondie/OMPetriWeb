@@ -11,8 +11,9 @@ import {
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import FlowPlace from './FlowPlace.vue'
-import FlowTransition from './FlowTransition.vue'
+import FlowArc from '../flow/FlowArc.vue'
+import FlowPlace from '../flow/FlowPlace.vue'
+import FlowTransition from '../flow/FlowTransition.vue'
 import { MiniMap } from '@vue-flow/minimap'
 import { Controls } from '@vue-flow/controls'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
@@ -25,7 +26,6 @@ import QuickViewArc from '@renderer/quickview/QuickViewArc.vue'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { DataType } from '@renderer/data/intf/DataType'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
-import FlowArc from './FlowArc.vue'
 
 defineProps<{
   activeElement?: IGraphElement
