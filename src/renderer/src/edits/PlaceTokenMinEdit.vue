@@ -7,16 +7,23 @@ defineProps<{
 </script>
 
 <template>
-  <v-text-field
+  <v-number-input
     :label="$t('TokenMin')"
+    control-variant="stacked"
     v-model="place.tokenMin"
     variant="underlined"
-    prepend-icon="mdi-speedometer-slow"
-    type="number"
     density="compact"
-  ></v-text-field>
+  >
+    <template v-slot:prepend>
+      <v-icon>mdi-speedometer-slow</v-icon>
+    </template>
+  </v-number-input>
 </template>
 
 <script lang="ts"></script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.v-field.v-field--variant-underlined .v-field__append-inner {
+  padding: 0;
+}
+</style>
