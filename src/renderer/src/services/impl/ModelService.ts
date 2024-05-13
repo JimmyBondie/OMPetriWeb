@@ -22,6 +22,8 @@ import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { ArcType } from '@renderer/entity/intf/IArc'
 import { TransitionType } from '@renderer/entity/impl/Transition'
 import { PlaceType } from '@renderer/entity/impl/Place'
+import { ReferenceType } from '@renderer/core/Parameter/ReferencingParameter'
+import { utils } from '@renderer/utils'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -61,6 +63,80 @@ export class ModelService extends CustomService implements IModelService {
       dao.model.addElement(node.data)
     }
     dao.graph.addNode(node)
+  }
+
+  public changeElementId(
+    dao: ModelDAO,
+    element: IDataElement,
+    elementIdNew: string,
+    reverse?: boolean
+  ) {
+    const elementIdOld: string = element.id
+    let arcIdNew: string
+
+    if (elementIdNew.localeCompare(elementIdOld) == 0) {
+      return
+    }
+
+    try {
+      // Validate ID
+      this.validateChangingElementId(dao, element, elementIdNew)
+
+      // Update ID
+      dao.model.changeId(element, elementIdNew)
+      this.services.parameterService.updateRelatedParameterIds(element, elementIdNew)
+
+      if (element instanceof DataPlace || element instanceof DataTransition) {
+        const node: IDataNode = element as IDataNode
+
+        // Validate IDs for related arcs
+        try {
+          for (const arc of node.arcsIn) {
+            arcIdNew = this.services.factoryService.getArcId(arc.source, arc.target)
+            this.validateChangingElementId(dao, arc, arcIdNew)
+          }
+
+          for (const arc of node.arcsOut) {
+            arcIdNew = this.services.factoryService.getArcId(arc.source, arc.target)
+            this.validateChangingElementId(dao, arc, arcIdNew)
+          }
+        } catch (e: any) {
+          if (e instanceof DataException) {
+            throw new DataException(i18n.global.t('RelatedIDAlreadyInUse'))
+          }
+        }
+
+        // Change IDs for related arcs
+        for (const arc of node.arcsIn) {
+          if (arc.id.match('.+_' + elementIdOld)) {
+            arcIdNew = this.services.factoryService.getArcId(arc.source, arc.target)
+
+            dao.model.changeId(arc, arcIdNew)
+            this.services.parameterService.updateRelatedParameterIds(arc, arcIdNew)
+          }
+        }
+
+        for (const arc of node.arcsOut) {
+          if (arc.id.match(elementIdOld + '_.+')) {
+            arcIdNew = this.services.factoryService.getArcId(arc.source, arc.target)
+
+            dao.model.changeId(arc, arcIdNew)
+            this.services.parameterService.updateRelatedParameterIds(arc, arcIdNew)
+          }
+        }
+      }
+    } catch (e: any) {
+      if (e instanceof Error) {
+        try {
+          if (!reverse) {
+            this.changeElementId(dao, element, elementIdOld, true)
+          }
+        } catch (exFatal: any) {
+          throw new DataException(i18n.global.t('ConflictChangingIDNoRevoke'), exFatal)
+        }
+        throw new DataException(e.message)
+      }
+    }
   }
 
   public connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc {
@@ -289,6 +365,31 @@ export class ModelService extends CustomService implements IModelService {
     }
   }
 
+  private validateChangingElementId(dao: ModelDAO, element: IElement, elementIdNew: string) {
+    let paramIdNew: string
+    let referenceType: ReferenceType | null
+
+    this.validateIdAvailable(dao, elementIdNew)
+
+    if (element.getLocalParameter(elementIdNew)) {
+      throw new DataException(i18n.global.t('IDAlreadyAssignedToParameter'))
+    }
+
+    for (const param of element.relatedParameters) {
+      referenceType = utils.parameterFactory.recoverReferenceTypeFromParameterValue(param.value)
+      if (!referenceType) {
+        continue
+      }
+
+      paramIdNew = utils.parameterFactory.generateIdForReferencingParameter(
+        elementIdNew,
+        referenceType
+      )
+
+      this.validateIdAvailable(dao, paramIdNew)
+    }
+  }
+
   private validateConnection(source: IGraphNode, target: IGraphNode) {
     const dataSource: IDataNode = source.data
     const dataTarget: IDataNode = target.data
@@ -313,6 +414,15 @@ export class ModelService extends CustomService implements IModelService {
           throw new DataException(i18n.global.t('NodesAlreadyConnectedByRelatedElement'))
         }
       }
+    }
+  }
+
+  private validateIdAvailable(dao: ModelDAO, id: string) {
+    if (dao.model.containsElement(id)) {
+      throw new DataException(i18n.global.t('IDAlreadyUsedByElement'))
+    }
+    if (dao.model.containsParameter(id)) {
+      throw new DataException(i18n.global.t('IDAlreadyUsedByParameter'))
     }
   }
 

@@ -85,6 +85,9 @@ const store: Store<StoreState> = createStore({
       }
   },
   mutations: {
+    changeElementId(state: StoreState, { dao, element, elementIdNew }) {
+      state.modelService.changeElementId(dao, element, elementIdNew)
+    },
     connect(state: StoreState, { dao, source, target }) {
       state.modelService.connect(dao, source, target)
     },

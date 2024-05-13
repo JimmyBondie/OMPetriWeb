@@ -82,6 +82,7 @@ defineProps<{
       >
         <!-- Properties -->
         <InspectorBasicProps
+          :dao="dao"
           :data-element="<IDataElement>selectedElements[0]"
         ></InspectorBasicProps>
 

@@ -21,7 +21,7 @@ defineProps<{
   <DataElementTypeEdit :data-element="element"></DataElementTypeEdit>
 
   <!-- Name -->
-  <ElementNameEdit :element="element"></ElementNameEdit>
+  <ElementNameEdit :dao="dao" :element="element"></ElementNameEdit>
 
   <!-- Label -->
   <DataElementLabelEdit :data-element="element"></DataElementLabelEdit>

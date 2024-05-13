@@ -3,7 +3,7 @@ import { CustomService } from '../intf'
 import { IParameterService } from '../intf/IParameterService'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { ElementType, IElement } from '@renderer/entity/intf/IElement'
-import { Function } from '@renderer/core/Function'
+import { Function, FunctionType } from '@renderer/core/Function'
 import i18n from '@renderer/main'
 import { utils } from '@renderer/utils'
 import { ReferenceType, ReferencingParameter } from '@renderer/core/Parameter/ReferencingParameter'
@@ -85,7 +85,7 @@ export class ParameterService extends CustomService implements IParameterService
 
     for (const par of element.relatedParameters) {
       // TODO use regex pattern to detect variations of referencing parameters for the same element
-      if (par.id.localeCompare(paramId)) {
+      if (par.id.localeCompare(paramId) == 0) {
         param = par
       }
     }
@@ -276,6 +276,57 @@ export class ParameterService extends CustomService implements IParameterService
       param.usingElements.add(element)
     }
   }
+
+  private updateParameterIdsInFunction(functionValue: Function, oldId: string, newId: string) {
+    for (const functionElement of functionValue.elements) {
+      if (functionElement.type == FunctionType.PARAMETER) {
+        if (functionElement.value.localeCompare(oldId) == 0) {
+          functionElement.value = newId
+        }
+      }
+    }
+  }
+
+  public updateRelatedParameterIds(element: IElement, elementIdNew: string) {
+    let paramIdOld: string
+    let paramIdNew: string
+    let referenceType: ReferenceType | null
+
+    let arc: DataArc
+    let transition: DataTransition
+
+    for (const param of element.relatedParameters) {
+      referenceType = utils.parameterFactory.recoverReferenceTypeFromParameterValue(param.value)
+      if (referenceType == null) {
+        continue
+      }
+
+      paramIdOld = param.id
+      paramIdNew = utils.parameterFactory.generateIdForReferencingParameter(
+        elementIdNew,
+        referenceType
+      )
+
+      for (const usingElement of param.usingElements) {
+        if (usingElement instanceof DataArc) {
+          arc = usingElement
+          for (const weight of arc.weights) {
+            this.updateParameterIdsInFunction(weight.function, paramIdOld, paramIdNew)
+          }
+        } else if (usingElement instanceof DataTransition) {
+          transition = usingElement
+          this.updateParameterIdsInFunction(transition.function, paramIdOld, paramIdNew)
+        }
+      }
+
+      param.id = paramIdNew
+      param.value = utils.parameterFactory.generateValueForReferencingParameter(
+        elementIdNew,
+        referenceType
+      )
+    }
+  }
+
   public validateAndGetFunction(model: Model, element: IElement, functionString: string): Function {
     let func: Function
     try {

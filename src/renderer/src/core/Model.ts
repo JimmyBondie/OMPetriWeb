@@ -110,6 +110,46 @@ export class Model extends Object {
     }
   }
 
+  public changeId(element: IElement, elementIdNew: string) {
+    switch (element.elementType) {
+      case ElementType.ARC: {
+        if (this._arcs.has(element.id)) {
+          this._arcs.delete(element.id)
+          this._arcs.set(elementIdNew, element as Arc)
+        } else {
+          throw new ModelError(i18n.global.t('ChangeIDOfNonExistingArc'))
+        }
+        break
+      }
+
+      case ElementType.PLACE: {
+        if (this._places.has(element.id)) {
+          this._places.delete(element.id)
+          this._places.set(elementIdNew, element as Place)
+        } else {
+          throw new ModelError(i18n.global.t('ChangeIDOfNonExistingPlace'))
+        }
+        break
+      }
+
+      case ElementType.TRANSITION: {
+        if (this._transitions.has(element.id)) {
+          this._transitions.delete(element.id)
+          this._transitions.set(elementIdNew, element as Transition)
+        } else {
+          throw new ModelError(i18n.global.t('ChangeIDOfNonExistingTransition'))
+        }
+        break
+      }
+
+      default: {
+        throw new ModelError(i18n.global.t('ChangeIDOfUnhandledType'))
+      }
+    }
+
+    element.id = elementIdNew
+  }
+
   public clear() {
     this._arcs.clear()
     this._colors.clear()
@@ -140,7 +180,17 @@ export class Model extends Object {
     return found ? found.equals(element) : false
   }
 
-  private containsParameter(id: string): boolean {
+  public containsElement(id: string): boolean {
+    if (this._arcs.has(id)) {
+      return true
+    } else if (this._places.has(id)) {
+      return true
+    } else {
+      return this._transitions.has(id)
+    }
+  }
+
+  public containsParameter(id: string): boolean {
     return this._parameters.has(id)
   }
 

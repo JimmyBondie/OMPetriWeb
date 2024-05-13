@@ -14,6 +14,7 @@ export interface IParameterService {
   ): Array<Parameter>
   getFilteredChoicesForLocalParameters(model: Model, filter: string): Array<IDataElement>
   setElementFunction(model: Model, element: IElement, func: Function, color?: Color): void
+  updateRelatedParameterIds(element: IElement, elementIdNew: string): void
   validateAndGetFunction(model: Model, element: IElement, functionString: string): Function
   validateElementRemoval(element: IDataElement): void
 }

@@ -10,8 +10,10 @@ import DataElementTypeEdit from '@renderer/edits/DataElementTypeEdit.vue'
 import ElementNameEdit from '@renderer/edits/ElementNameEdit.vue'
 import DataElementLabelEdit from '@renderer/edits/DataElementLabelEdit.vue'
 import ArcTypeSelect from '@renderer/selects/ArcTypeSelect.vue'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
 
 defineProps<{
+  dao: ModelDAO
   dataElement: IDataElement
 }>()
 </script>
@@ -38,7 +40,7 @@ defineProps<{
       </v-row>
 
       <!-- Name -->
-      <ElementNameEdit :element="dataElement"></ElementNameEdit>
+      <ElementNameEdit :dao="dao" :element="dataElement"></ElementNameEdit>
 
       <!-- Label -->
       <DataElementLabelEdit :data-element="dataElement"></DataElementLabelEdit>
