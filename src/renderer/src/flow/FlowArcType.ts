@@ -1,0 +1,4 @@
+export enum FlowArcType {
+  PLACE_TO_TRANSITION,
+  TRANSITION_TO_PLACE
+}
