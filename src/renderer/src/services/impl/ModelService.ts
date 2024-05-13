@@ -24,6 +24,7 @@ import { TransitionType } from '@renderer/entity/impl/Transition'
 import { PlaceType } from '@renderer/entity/impl/Place'
 import { ReferenceType } from '@renderer/core/Parameter/ReferencingParameter'
 import { utils } from '@renderer/utils'
+import { DataArc } from '@renderer/data/impl/DataArc'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -63,6 +64,20 @@ export class ModelService extends CustomService implements IModelService {
       dao.model.addElement(node.data)
     }
     dao.graph.addNode(node)
+  }
+
+  public changeArcType(dao: ModelDAO, arc: DataArc, type: ArcType) {
+    const typeOld: ArcType = arc.arcType
+    arc.arcType = type
+    try {
+      this.validateArc(arc)
+    } catch (e: any) {
+      if (e instanceof DataException) {
+        arc.arcType = typeOld
+      }
+      throw e
+    }
+    dao.hasChanges = true
   }
 
   public changeElementId(
@@ -137,6 +152,44 @@ export class ModelService extends CustomService implements IModelService {
         throw new DataException(e.message)
       }
     }
+  }
+
+  public changePlaceType(dao: ModelDAO, place: DataPlace, type: PlaceType) {
+    const typeOld: PlaceType = place.placeType
+    place.placeType = type
+    try {
+      for (const arc of place.arcsIn) {
+        this.validateArc(arc as IDataArc)
+      }
+      for (const arc of place.arcsOut) {
+        this.validateArc(arc as IDataArc)
+      }
+    } catch (e: any) {
+      if (e instanceof DataException) {
+        place.placeType = typeOld
+      }
+      throw e
+    }
+    dao.hasChanges = true
+  }
+
+  public changeTransitionType(dao: ModelDAO, transition: DataTransition, type: TransitionType) {
+    const typeOld: TransitionType = transition.transitionType
+    transition.transitionType = type
+    try {
+      for (const arc of transition.arcsIn) {
+        this.validateArc(arc as IDataArc)
+      }
+      for (const arc of transition.arcsOut) {
+        this.validateArc(arc as IDataArc)
+      }
+    } catch (e: any) {
+      if (e instanceof DataException) {
+        transition.transitionType = typeOld
+      }
+      throw e
+    }
+    dao.hasChanges = true
   }
 
   public connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc {

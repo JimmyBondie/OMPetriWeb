@@ -20,7 +20,7 @@ defineProps<{
   <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Type -->
-  <TransitionTypeSelect :transition="transition"></TransitionTypeSelect>
+  <TransitionTypeSelect :dao="dao" :transition="transition"></TransitionTypeSelect>
 
   <!-- Function -->
   <TransitionFunctionEdit :dao="dao" :transition="transition"></TransitionFunctionEdit>

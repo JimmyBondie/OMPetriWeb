@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { TransitionType, Transition } from '@renderer/entity/impl/Transition'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
+import { TransitionType } from '@renderer/entity/impl/Transition'
+import { mapMutations } from 'vuex'
 
 defineProps<{
-  transition: Transition
+  dao: ModelDAO
+  transition: DataTransition
 }>()
 </script>
 
@@ -11,7 +15,8 @@ defineProps<{
     :items="TransitionType.values()"
     item-title="name"
     item-value="type"
-    v-model="transition.transitionType"
+    :model-value="transition.transitionType"
+    :rules="[validateType]"
     :label="$t('Type')"
     prepend-icon="mdi-alpha-t-box-outline"
     variant="underlined"
@@ -22,6 +27,24 @@ defineProps<{
   ></v-select>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+export default {
+  methods: {
+    ...mapMutations(['changeTransitionType']),
+    validateType(type: TransitionType): boolean | string {
+      try {
+        this.changeTransitionType({ dao: this.dao, transition: this.transition, type: type })
+      } catch (e: any) {
+        if (e instanceof Error) {
+          return e.message
+        } else {
+          return false
+        }
+      }
+      return true
+    }
+  }
+}
+</script>
 
 <style lang="scss"></style>

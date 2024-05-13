@@ -24,7 +24,7 @@ defineProps<{
   <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Type -->
-  <PlaceTypeSelect :place="place"></PlaceTypeSelect>
+  <PlaceTypeSelect :dao="dao" :place="place"></PlaceTypeSelect>
 
   <!-- Color -->
   <PlaceColorSelect :place="place"></PlaceColorSelect>

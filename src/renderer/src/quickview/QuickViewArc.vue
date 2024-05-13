@@ -22,7 +22,7 @@ defineProps<{
   <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Type -->
-  <ArcTypeSelect :arc="arc"></ArcTypeSelect>
+  <ArcTypeSelect :arc="arc" :dao="dao"></ArcTypeSelect>
 
   <!-- Color -->
   <ArcColorSelect :arc="arc" v-model:color="<Color | undefined>color" :dao="dao"></ArcColorSelect>

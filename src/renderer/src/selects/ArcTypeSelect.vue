@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { Arc } from '@renderer/entity/impl/Arc'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { DataArc } from '@renderer/data/impl/DataArc'
 import { ArcType } from '@renderer/entity/intf/IArc'
+import { mapMutations } from 'vuex'
 
 defineProps<{
-  arc: Arc
+  arc: DataArc
+  dao: ModelDAO
 }>()
 </script>
 
@@ -12,7 +15,8 @@ defineProps<{
     :items="ArcType.values()"
     item-title="name"
     item-value="type"
-    v-model="arc.arcType"
+    :model-value="arc.arcType"
+    :rules="[validateType]"
     :label="$t('Type')"
     prepend-icon="mdi-alpha-t-box-outline"
     variant="underlined"
@@ -23,6 +27,24 @@ defineProps<{
   ></v-select>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+export default {
+  methods: {
+    ...mapMutations(['changeArcType']),
+    validateType(type: ArcType): boolean | string {
+      try {
+        this.changeArcType({ dao: this.dao, arc: this.arc, type: type })
+      } catch (e: any) {
+        if (e instanceof Error) {
+          return e.message
+        } else {
+          return false
+        }
+      }
+      return true
+    }
+  }
+}
+</script>
 
 <style lang="scss"></style>

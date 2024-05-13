@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Place } from '@renderer/entity/impl/Place'
-import { Transition } from '@renderer/entity/impl/Transition'
-import { Arc } from '@renderer/entity/impl/Arc'
+import { DataPlace } from '@renderer/data/impl/DataPlace'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
+import { DataArc } from '@renderer/data/impl/DataArc'
 import DataElementDescriptionEdit from '@renderer/edits/DataElementDescriptionEdit.vue'
 import PlaceTypeSelect from '@renderer/selects/PlaceTypeSelect.vue'
 import TransitionTypeSelect from '@renderer/selects/TransitionTypeSelect.vue'
@@ -25,14 +25,20 @@ defineProps<{
       <v-row>
         <v-col>
           <PlaceTypeSelect
-            v-if="dataElement instanceof Place"
+            v-if="dataElement instanceof DataPlace"
+            :dao="dao"
             :place="dataElement"
           ></PlaceTypeSelect>
           <TransitionTypeSelect
-            v-if="dataElement instanceof Transition"
+            v-if="dataElement instanceof DataTransition"
+            :dao="dao"
             :transition="dataElement"
           ></TransitionTypeSelect>
-          <ArcTypeSelect v-if="dataElement instanceof Arc" :arc="dataElement"></ArcTypeSelect>
+          <ArcTypeSelect
+            v-if="dataElement instanceof DataArc"
+            :arc="dataElement"
+            :dao="dao"
+          ></ArcTypeSelect>
         </v-col>
         <v-col>
           <DataElementTypeEdit :data-element="dataElement"></DataElementTypeEdit>

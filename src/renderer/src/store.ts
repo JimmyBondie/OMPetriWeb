@@ -85,8 +85,17 @@ const store: Store<StoreState> = createStore({
       }
   },
   mutations: {
+    changeArcType(state: StoreState, { dao, arc, type }) {
+      state.modelService.changeArcType(dao, arc, type)
+    },
     changeElementId(state: StoreState, { dao, element, elementIdNew }) {
       state.modelService.changeElementId(dao, element, elementIdNew)
+    },
+    changePlaceType(state: StoreState, { dao, place, type }) {
+      state.modelService.changePlaceType(dao, place, type)
+    },
+    changeTransitionType(state: StoreState, { dao, transition, type }) {
+      state.modelService.changeTransitionType(dao, transition, type)
     },
     connect(state: StoreState, { dao, source, target }) {
       state.modelService.connect(dao, source, target)
