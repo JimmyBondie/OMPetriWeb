@@ -24,6 +24,6 @@ defineProps<{
 
 <style lang="scss">
 .v-field.v-field--variant-underlined .v-field__append-inner {
-  padding: 0;
+  padding: 0 !important;
 }
 </style>
