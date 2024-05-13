@@ -2,7 +2,7 @@
 import { PlaceType } from '@renderer/entity/impl/Place'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
-import { NodeProps } from '@vue-flow/core'
+import { Handle, NodeProps } from '@vue-flow/core'
 
 defineProps<NodeProps<IDataNode, any, string>>()
 </script>
@@ -10,6 +10,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
 <template>
   <v-tooltip v-model="showTooltip" :text="data.id" location="top">
     <template v-slot:activator="{ props: tooltip }">
+      <Handle></Handle>
       <v-card
         class="rounded-circle cursor-pointer"
         height="40"

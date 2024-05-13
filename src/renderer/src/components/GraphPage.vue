@@ -239,11 +239,11 @@ export default {
       // Calculate middle point
       const source: XYPosition = {
         x: props.sourceX,
-        y: props.sourceY - radius
+        y: props.sourceY + radius + 3
       }
       const target: XYPosition = {
         x: props.targetX,
-        y: props.targetY + targetHeight / 2
+        y: props.targetY + targetHeight / 2 + 3
       }
 
       let connection: XYPosition = {
@@ -271,11 +271,11 @@ export default {
       // Calculate middle point
       const source: XYPosition = {
         x: props.sourceX,
-        y: props.sourceY - sourceHeight / 2
+        y: props.sourceY + sourceHeight / 2 + 3
       }
       const target: XYPosition = {
         x: props.targetX,
-        y: props.targetY + targetHeight / 2
+        y: props.targetY + targetHeight / 2 + 3
       }
 
       let connection: XYPosition = {
@@ -309,11 +309,11 @@ export default {
       // Calculate middle point
       const source: XYPosition = {
         x: props.sourceX,
-        y: props.sourceY - sourceHeight / 2
+        y: props.sourceY + sourceHeight / 2 + 3
       }
       const target: XYPosition = {
         x: props.targetX,
-        y: props.targetY + radius
+        y: props.targetY + radius + 3
       }
 
       let connection: XYPosition = {
@@ -341,11 +341,11 @@ export default {
       // Calculate middle point
       const source: XYPosition = {
         x: props.sourceX,
-        y: props.sourceY - sourceHeight / 2
+        y: props.sourceY + sourceHeight / 2 + 3
       }
       const target: XYPosition = {
         x: props.targetX,
-        y: props.targetY + targetHeight / 2
+        y: props.targetY + targetHeight / 2 + 3
       }
 
       let connection: XYPosition = {

@@ -2,7 +2,7 @@
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { TransitionType } from '@renderer/entity/impl/Transition'
-import { NodeProps } from '@vue-flow/core'
+import { Handle, NodeProps } from '@vue-flow/core'
 
 defineProps<NodeProps<IDataNode, any, string>>()
 </script>
@@ -10,6 +10,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
 <template>
   <v-tooltip v-model="showTooltip" :text="data.id" location="top">
     <template v-slot:activator="{ props: tooltip }">
+      <Handle></Handle>
       <v-card
         class="pa-1 cursor-pointer"
         :color="calcColor()"
