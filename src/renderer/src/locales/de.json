@@ -8,6 +8,7 @@
   "CannotConnectSameType": "Knoten desselben Typs können nicht verbunden werden.",
   "CannotCreateElement": "Element von undefiniertem Typ kann nicht erstellt werden!",
   "CannotCreateParameterInvalidName": "Parameter mit ungültigem Namen kann nicht erstellt werden!",
+  "CannotCreateParameterInvalidValue": "Parameter mit ungültigem Wert kann nicht erstellt werden!",
   "CannotDeleteCluster": "Eine Gruppe kann nicht gelöscht werden! Stellen Sie sie erst wieder her oder löschen Sie Knoten darin.",
   "CannotDeleteClusterArc": "Eine Kante, die mit einer Gruppe verbunden ist, kann nicht gelöscht werden!",
   "CannotGenerateReferencingParam": "Ausnahme bei der Erzeugung von Referenzierungsparametern: \"{msg}\"",

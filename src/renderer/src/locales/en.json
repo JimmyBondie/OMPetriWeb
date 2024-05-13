@@ -8,6 +8,7 @@
   "CannotConnectSameType": "Nodes of the same type cannot be connected.",
   "CannotCreateElement": "Cannot create element of undefined type!",
   "CannotCreateParameterInvalidName": "Cannot create parameter using invalid name!",
+  "CannotCreateParameterInvalidValue": "Cannot create parameter using invalid value!",
   "CannotDeleteCluster": "Cannot delete a cluster! Restore it first or delete nodes within.",
   "CannotDeleteClusterArc": "Cannot delete an arc that connects to a cluster!",
   "CannotGenerateReferencingParam": "Exception in generating referencing parameter: \"{msg}\"",
