@@ -1,8 +1,10 @@
 import { XYPosition } from '@vue-flow/core'
 import { IGraphNode } from '../intf/IGraphNode'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
+import { IGraphArc } from '../intf/IGraphArc'
 
 export class GraphNode extends Object implements IGraphNode {
+  private _connections: Set<IGraphArc> = new Set<IGraphArc>()
   private _data: IDataNode
   private _disabled: boolean = false
   private _id: string
@@ -15,6 +17,10 @@ export class GraphNode extends Object implements IGraphNode {
     this._data = data
     this._data.shapes.add(this)
     this._id = id
+  }
+
+  public get connections(): Set<IGraphArc> {
+    return this._connections
   }
 
   public get data(): IDataNode {
@@ -43,6 +49,9 @@ export class GraphNode extends Object implements IGraphNode {
 
   public set disabled(disabled: boolean) {
     this._disabled = disabled
+    for (const connection of this._connections) {
+      ;(connection as IGraphArc).data.disabled = disabled
+    }
   }
 
   public set labelText(labelText: string) {

@@ -57,5 +57,49 @@ export class GraphArc extends Object implements IGraphArc {
 
   public set disabled(disabled: boolean) {
     this._disabled = disabled
+
+    let active: boolean
+    if (disabled) {
+      // arc disabled
+
+      if (!this._source.disabled) {
+        // source not disabled
+        // for all related connections
+        active = Array.from(this._source.connections).some((conn: IGraphArc) => !conn.disabled) // check if there is any enabled connection
+
+        if (!active) {
+          // no active connection found, indicate that node is disabled
+          this._source.disabled = disabled
+        }
+      }
+
+      if (!this._target.disabled) {
+        // target not disabled
+        // for all related connections
+        active = Array.from(this._target.connections).some((conn: IGraphArc) => !conn.disabled) // check if there is any enabled connection
+
+        if (!active) {
+          // no active connection found, indicate that node is disabled
+          this._target.disabled = disabled
+        }
+      }
+    } else {
+      // arc enabled
+
+      if (
+        !this._source.data.disabled && // source data enabled
+        this._source.disabled
+      ) {
+        // node disabled
+        this._source.disabled = false
+      }
+      if (
+        !this._target.data.disabled && // target data enabled
+        this._target.disabled
+      ) {
+        // node disabled
+        this._target.disabled = false
+      }
+    }
   }
 }
