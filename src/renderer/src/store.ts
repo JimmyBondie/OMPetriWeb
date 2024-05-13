@@ -67,6 +67,11 @@ const store: Store<StoreState> = createStore({
     addNewModel: (state: StoreState): ModelDAO => {
       return state.modelService.newModel()
     },
+    findParameter:
+      (state: StoreState) =>
+      (model: Model, id: string, element: IElement): Parameter | undefined => {
+        return state.parameterService.findParameter(model, id, element)
+      },
     getFilteredAndSortedParameterList:
       (state: StoreState) =>
       (model: Model, element: IDataElement, filter: string): Array<Parameter> => {
@@ -111,6 +116,9 @@ const store: Store<StoreState> = createStore({
     },
     setElementFunction(state: StoreState, { model, element, func, color }) {
       state.parameterService.setElementFunction(model, element, func, color)
+    },
+    updateParameter(state: StoreState, { parameter, value, unit }) {
+      state.parameterService.updateParameter(parameter, value, unit)
     }
   },
   actions: {

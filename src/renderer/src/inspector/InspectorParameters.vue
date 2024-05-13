@@ -55,7 +55,11 @@ defineProps<{
 
     <v-col v-if="selectedParameters.length > 0">
       <!-- Name -->
-      <ParameterNameEdit :parameter="<Parameter>selectedParameters[0]"></ParameterNameEdit>
+      <ParameterNameEdit
+        :dao="dao"
+        :data-element="dataElement"
+        :parameter="<Parameter>selectedParameters[0]"
+      ></ParameterNameEdit>
 
       <!-- Value -->
       <ParameterValueEdit :parameter="<Parameter>selectedParameters[0]"></ParameterValueEdit>

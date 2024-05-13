@@ -53,7 +53,7 @@ export class ParameterService extends CustomService implements IParameterService
     )
   }
 
-  private findParameter(model: Model, id: string, element: IElement): Parameter | undefined {
+  public findParameter(model: Model, id: string, element: IElement): Parameter | undefined {
     let param: Parameter | undefined = undefined
 
     // highest priority - LOCAL param
@@ -275,6 +275,24 @@ export class ParameterService extends CustomService implements IParameterService
 
       param.usingElements.add(element)
     }
+  }
+
+  public updateParameter(param: Parameter, value: string, unit: string) {
+    switch (param.type) {
+      case ParameterType.GLOBAL: {
+        break
+      }
+
+      case ParameterType.LOCAL: {
+        break
+      }
+
+      default: {
+        throw new ParameterException(i18n.global.t('CannotUpdateParameterNonLocalGlobal'))
+      }
+    }
+    param.value = value
+    param.unit = unit
   }
 
   private updateParameterIdsInFunction(functionValue: Function, oldId: string, newId: string) {
