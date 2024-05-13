@@ -6,7 +6,8 @@ import {
   VueFlowStore,
   EdgeMouseEvent,
   XYPosition,
-  EdgeProps
+  EdgeProps,
+  NodeChange
 } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
@@ -47,6 +48,7 @@ defineProps<{
         :edges="dao.graph.connections"
         @node-click="onSelectNode"
         @node-double-click="onDoubleClickNode"
+        @nodes-change="(changes: any) => onNodesChange(changes)"
         @edge-click="onSelectEdge"
         @edge-double-click="onDoubleClickEdge"
         @pane-ready="(instance: any) => (vueFlowInstance = instance)"
@@ -399,6 +401,25 @@ export default {
       })
 
       this.createNode({ dao: this.dao, type: this.draggedType, posX: position.x, posY: position.y })
+    },
+    onNodesChange(changes: NodeChange[]) {
+      if (!this.vueFlowInstance) {
+        return
+      }
+
+      for (const change of changes) {
+        if (change.type != 'position' || !change.dragging || !change.position) {
+          continue
+        }
+
+        const node: IGraphNode | undefined = this.dao.graph.nodes.find(
+          (value: IGraphNode) => value.id == change.id
+        )
+
+        if (node) {
+          node.position = change.position
+        }
+      }
     },
     onSelectEdge(event: EdgeMouseEvent) {
       this.onSelectElement(event.edge.data)
