@@ -85,6 +85,9 @@ const store: Store<StoreState> = createStore({
     addNewModel(state: StoreState) {
       state.modelService.newModel()
     },
+    connect(state: StoreState, { dao, source, target }) {
+      state.modelService.connect(dao, source, target)
+    },
     createNode(state: StoreState, { dao, type, posX, posY }) {
       state.modelService.create(dao, type, posX, posY)
     },

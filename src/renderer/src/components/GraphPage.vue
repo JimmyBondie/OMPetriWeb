@@ -7,7 +7,9 @@ import {
   EdgeMouseEvent,
   XYPosition,
   EdgeProps,
-  NodeChange
+  NodeChange,
+  Connection,
+  GraphNode as FlowGraphNode
 } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
@@ -29,6 +31,7 @@ import { DataType } from '@renderer/data/intf/DataType'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { mapMutations } from 'vuex'
 import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
+import { IDataNode } from '@renderer/data/intf/IDataNode'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -55,6 +58,7 @@ defineProps<{
         @dragover="(e: any) => onDragOver(e)"
         @dragleave="onDragLeave"
         @drop="(e: any) => onDrop(e)"
+        @connect="(params: any) => onConnect(params)"
         fit-view-on-init
       >
         <Background
@@ -234,7 +238,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['createNode']),
+    ...mapMutations(['connect', 'createNode']),
     getSourcePlacePosition(props: EdgeProps, radius: number, targetHeight: number): XYPosition {
       // Calculate middle point
       const source: XYPosition = {
@@ -374,6 +378,47 @@ export default {
         x: target.x + connection.x,
         y: target.y + connection.y
       }
+    },
+    onConnect(params: Connection) {
+      if (!this.vueFlowInstance) {
+        return
+      }
+
+      const source: FlowGraphNode<IDataNode, any, string> | undefined =
+        this.vueFlowInstance.findNode(params.source)
+      if (!source) {
+        return
+      }
+
+      let sourceShape: IGraphElement | undefined = undefined
+      for (const shape of source.data.shapes) {
+        if (shape.id == params.source) {
+          sourceShape = shape
+          break
+        }
+      }
+      if (!sourceShape) {
+        return
+      }
+
+      const target: FlowGraphNode<IDataNode, any, string> | undefined =
+        this.vueFlowInstance.findNode(params.target)
+      if (!target) {
+        return
+      }
+
+      let targetShape: IGraphElement | undefined = undefined
+      for (const shape of target.data.shapes) {
+        if (shape.id == params.target) {
+          targetShape = shape
+          break
+        }
+      }
+      if (!targetShape) {
+        return
+      }
+
+      this.connect({ dao: this.dao, source: sourceShape, target: targetShape })
     },
     onDoubleClickEdge(event: EdgeMouseEvent) {
       this.onOpenInspector(event.edge.data)

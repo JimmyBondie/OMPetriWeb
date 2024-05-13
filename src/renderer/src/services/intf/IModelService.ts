@@ -14,6 +14,7 @@ export interface IModelService {
   addElement(dao: ModelDAO, element: IElement): void
   addModel(newModel: ModelDAO): ModelDAO
   addNode(dao: ModelDAO, node: IGraphNode): void
+  connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc
   create(dao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode
   newModel(): ModelDAO
   removeElement(dao: ModelDAO, element: IGraphElement): void

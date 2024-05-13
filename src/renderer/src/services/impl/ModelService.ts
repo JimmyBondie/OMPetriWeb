@@ -17,6 +17,11 @@ import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { ParameterException } from './ParameterService'
 import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
+import { DataPlace } from '@renderer/data/impl/DataPlace'
+import { DataTransition } from '@renderer/data/impl/DataTransition'
+import { ArcType } from '@renderer/entity/intf/IArc'
+import { TransitionType } from '@renderer/entity/impl/Transition'
+import { PlaceType } from '@renderer/entity/impl/Place'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -27,7 +32,7 @@ export class ModelService extends CustomService implements IModelService {
     return this._models
   }
 
-  addArc(dao: ModelDAO, arc: GraphArc) {
+  public addArc(dao: ModelDAO, arc: IGraphArc) {
     if (arc && arc.data && arc.data.type != DataType.CLUSTERARC) {
       dao.model.addElement(arc.data)
     }
@@ -56,6 +61,15 @@ export class ModelService extends CustomService implements IModelService {
       dao.model.addElement(node.data)
     }
     dao.graph.addNode(node)
+  }
+
+  public connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc {
+    const arc: IGraphArc = this.services.factoryService.createConnection(source, target)
+    this.validateConnection(source, target)
+    this.validateArc(arc.data)
+    this.addArc(dao, arc)
+    dao.hasChanges = true
+    return arc
   }
 
   public create(dao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {
@@ -143,6 +157,122 @@ export class ModelService extends CustomService implements IModelService {
     }
   }
 
+  private validateArc(arc: IDataArc) {
+    let place: DataPlace
+    let transition: DataTransition
+
+    if (DataType.PLACE == arc.target.type) {
+      switch (arc.arcType) {
+        case ArcType.NORMAL: {
+          break
+        }
+        case ArcType.INHIBITORY: {
+          throw new DataException(i18n.global.t('TransitionCannotInhibitPlace'))
+        }
+        case ArcType.TEST: {
+          throw new DataException(i18n.global.t('TransitionCannotTestPlace'))
+        }
+        default: {
+          throw new DataException(
+            i18n.global.t('ValidationForArcTypeUndefined', { type: ArcType.toString(arc.arcType) })
+          )
+        }
+      }
+
+      transition = arc.source as DataTransition
+      place = arc.target as DataPlace
+
+      switch (
+        transition.transitionType // source
+      ) {
+        case TransitionType.CONTINUOUS:
+          {
+            switch (
+              place.placeType // target
+            ) {
+              case PlaceType.CONTINUOUS: {
+                break
+              }
+              case PlaceType.DISCRETE: {
+                throw new DataException(
+                  i18n.global.t('CannotConnectContinuousTransitionAndDiscretePlace')
+                )
+              }
+              default: {
+                throw new DataException(
+                  i18n.global.t('ValidationForPlaceTypeUndefined', {
+                    type: PlaceType.toString(place.placeType)
+                  })
+                )
+              }
+            }
+          }
+          break
+
+        case TransitionType.DISCRETE: {
+          break
+        }
+
+        case TransitionType.STOCHASTIC: {
+          break
+        }
+
+        default: {
+          throw new DataException(
+            i18n.global.t('ValidationForTransitionTypeUndefined', {
+              type: TransitionType.toString(transition.transitionType)
+            })
+          )
+        }
+      }
+    } else {
+      place = arc.source as DataPlace
+      transition = arc.target as DataTransition
+
+      switch (
+        place.placeType // source
+      ) {
+        case PlaceType.CONTINUOUS: {
+          break
+        }
+
+        case PlaceType.DISCRETE: {
+          switch (
+            transition.transitionType // target
+          ) {
+            case TransitionType.CONTINUOUS: {
+              throw new DataException(
+                i18n.global.t('CannotConnectDiscretePlaceAndContinuousTransition')
+              )
+            }
+            case TransitionType.DISCRETE: {
+              break
+            }
+            case TransitionType.STOCHASTIC: {
+              break
+            }
+            default: {
+              throw new DataException(
+                i18n.global.t('ValidationForTransitionTypeUndefined', {
+                  type: TransitionType.toString(transition.transitionType)
+                })
+              )
+            }
+          }
+          break
+        }
+
+        default: {
+          throw new DataException(
+            i18n.global.t('ValidationForPlaceTypeUndefined', {
+              type: PlaceType.toString(place.placeType)
+            })
+          )
+        }
+      }
+    }
+  }
+
   private validateArcRemoval(arc: IGraphArc) {
     const data: IDataArc = arc.data
     if (data.type == DataType.CLUSTER) {
@@ -154,6 +284,33 @@ export class ModelService extends CustomService implements IModelService {
       } catch (e: any) {
         if (e instanceof ParameterException) {
           throw new DataException(e.message)
+        }
+      }
+    }
+  }
+
+  private validateConnection(source: IGraphNode, target: IGraphNode) {
+    const dataSource: IDataNode = source.data
+    const dataTarget: IDataNode = target.data
+
+    let relatedSourceShape: IGraphNode
+    let relatedSourceShapeChild: IGraphNode
+
+    /**
+     * Ensuring the connection to be valid.
+     */
+    if (source.data.type == target.data.type) {
+      throw new DataException(i18n.global.t('CannotConnectSameType'))
+    }
+    if (source.children.has(target) || target.parents.has(source)) {
+      throw new DataException(i18n.global.t('NodesAlreadyConnected'))
+    }
+    for (const relatedSourceElement of dataSource.shapes) {
+      relatedSourceShape = relatedSourceElement as IGraphNode
+      for (const shape of relatedSourceShape.children) {
+        relatedSourceShapeChild = shape as IGraphNode
+        if (dataTarget == relatedSourceShapeChild.data) {
+          throw new DataException(i18n.global.t('NodesAlreadyConnectedByRelatedElement'))
         }
       }
     }

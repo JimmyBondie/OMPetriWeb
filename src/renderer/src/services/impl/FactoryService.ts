@@ -13,6 +13,13 @@ import { PlaceType } from '@renderer/entity/impl/Place'
 import { TransitionType } from '@renderer/entity/impl/Transition'
 import { Color } from '@renderer/core/Color'
 import { DataException } from './Exceptions'
+import { IDataArc } from '@renderer/data/intf/IDataArc'
+import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
+import { DataArc } from '@renderer/data/impl/DataArc'
+import { Weight } from '@renderer/core/Weight'
+import { GraphArc } from '@renderer/graph/impl/GraphArc'
+import { ArcType } from '@renderer/entity/intf/IArc'
+import { INode } from '@renderer/entity/intf/INode'
 
 export class FactoryService extends CustomService implements IFactoryService {
   private DEFAULT_COLOUR: Color = new Color('WHITE', 'Default colour')
@@ -21,8 +28,26 @@ export class FactoryService extends CustomService implements IFactoryService {
   private PREFIX_ID_PLACE: string = 'P'
   private PREFIX_ID_TRANSITION: string = 'T'
 
+  private defaultArcType: ArcType = ArcType.NORMAL
   private defaultPlaceType: PlaceType = PlaceType.CONTINUOUS
   private defaultTransitionType: TransitionType = TransitionType.CONTINUOUS
+
+  public createConnection(source: IGraphNode, target: IGraphNode, dataArc?: IDataArc): IGraphArc {
+    /**
+     * Create data.
+     */
+    let id: string = this.getArcId(source.data, target.data)
+    if (!dataArc) {
+      dataArc = new DataArc(id, source.data, target.data, this.defaultArcType)
+      dataArc.addWeight(new Weight(this.DEFAULT_COLOUR))
+    }
+
+    /**
+     * Creating shape.
+     */
+    id = this.getConnectionId(source, target)
+    return new GraphArc(id, source, target, dataArc)
+  }
 
   public createNode(modelDao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {
     let shape: IGraphNode
@@ -52,6 +77,14 @@ export class FactoryService extends CustomService implements IFactoryService {
     shape.yCoordinate = posY
 
     return shape
+  }
+
+  public getArcId(source: INode, target: INode): string {
+    return source.id + '_' + target.id
+  }
+
+  public getConnectionId(source: IGraphNode, target: IGraphNode): string {
+    return source.id + '_' + target.id
   }
 
   public getGraphNodeId(dao: ModelDAO): string {
