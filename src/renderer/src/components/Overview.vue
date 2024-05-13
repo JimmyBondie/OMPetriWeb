@@ -14,13 +14,20 @@ import Editor from './Editor.vue'
           <template v-slot:activator="{ props: dialog }">
             <v-tooltip :text="$t('Close')" location="bottom">
               <template v-slot:activator="{ props: tooltip }">
-                <v-btn
-                  v-bind="mergeProps(dialog, tooltip)"
-                  icon="mdi-close"
-                  variant="text"
-                  size="x-small"
-                  density="comfortable"
-                ></v-btn>
+                <v-hover>
+                  <template v-slot:default="{ isHovering, props: hover }">
+                    <v-btn
+                      class="ml-2"
+                      v-bind="mergeProps(dialog, tooltip, hover)"
+                      :icon="
+                        model.hasChanges ? (isHovering ? 'mdi-close' : 'mdi-circle') : 'mdi-close'
+                      "
+                      variant="text"
+                      size="x-small"
+                      density="comfortable"
+                    ></v-btn>
+                  </template>
+                </v-hover>
               </template>
             </v-tooltip>
           </template>
