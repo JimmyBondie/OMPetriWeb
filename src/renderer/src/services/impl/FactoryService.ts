@@ -3,7 +3,6 @@ import { CustomService } from '../intf'
 import { IFactoryService } from '../intf/IFactoryService'
 import { DataType } from '@renderer/data/intf/DataType'
 import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
-import { CustomError } from '@renderer/utils/CustomError'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { Token } from '@renderer/core/Token'
 import { GraphPlace } from '@renderer/graph/impl/GraphPlace'
@@ -13,8 +12,7 @@ import i18n from '@renderer/main'
 import { PlaceType } from '@renderer/entity/impl/Place'
 import { TransitionType } from '@renderer/entity/impl/Transition'
 import { Color } from '@renderer/core/Color'
-
-export class DataException extends CustomError {}
+import { DataException } from './Exceptions'
 
 export class FactoryService extends CustomService implements IFactoryService {
   private DEFAULT_COLOUR: Color = new Color('WHITE', 'Default colour')

@@ -183,20 +183,36 @@ defineProps<{
         </v-expansion-panel>
 
         <!-- QuickView -->
-        <v-expansion-panel :title="$t('QuickView')" value="quickview" v-if="selectedElement">
+        <v-expansion-panel
+          :title="$t('QuickView')"
+          value="quickview"
+          v-if="selectedDataElement && selectedGraphElement"
+        >
           <!-- Places -->
-          <v-expansion-panel-text v-if="selectedElement instanceof DataPlace">
-            <QuickViewPlace :place="selectedElement"></QuickViewPlace>
+          <v-expansion-panel-text v-if="selectedDataElement instanceof DataPlace">
+            <QuickViewPlace
+              :dao="dao"
+              :place="selectedDataElement"
+              :shape="<IGraphElement>selectedGraphElement"
+            ></QuickViewPlace>
           </v-expansion-panel-text>
 
           <!-- Transitions -->
-          <v-expansion-panel-text v-if="selectedElement instanceof DataTransition">
-            <QuickViewTransition :dao="dao" :transition="selectedElement"></QuickViewTransition>
+          <v-expansion-panel-text v-if="selectedDataElement instanceof DataTransition">
+            <QuickViewTransition
+              :dao="dao"
+              :transition="selectedDataElement"
+              :shape="<IGraphElement>selectedGraphElement"
+            ></QuickViewTransition>
           </v-expansion-panel-text>
 
           <!-- Arcs -->
-          <v-expansion-panel-text v-if="selectedElement instanceof DataArc">
-            <QuickViewArc :dao="dao" :arc="selectedElement"></QuickViewArc>
+          <v-expansion-panel-text v-if="selectedDataElement instanceof DataArc">
+            <QuickViewArc
+              :dao="dao"
+              :arc="selectedDataElement"
+              :shape="<IGraphElement>selectedGraphElement"
+            ></QuickViewArc>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -212,7 +228,8 @@ export default {
       isDragging: false,
       isDragOver: false,
       openPanels: ['model', 'tools'],
-      selectedElement: undefined as IDataElement | undefined,
+      selectedDataElement: undefined as IDataElement | undefined,
+      selectedGraphElement: undefined as IGraphElement | undefined,
       vueFlowInstance: undefined as VueFlowStore | undefined
     }
   },
@@ -424,16 +441,28 @@ export default {
       }
     },
     onSelectEdge(event: EdgeMouseEvent) {
-      this.onSelectElement(event.edge.data)
+      this.onSelectElement(event.edge.data, event.edge.id)
     },
-    onSelectElement(element: IDataElement) {
-      this.selectedElement = element
-      if (this.selectedElement && !this.openPanels.includes('quickview')) {
+    onSelectElement(element: IDataElement, shapeId: string) {
+      this.selectedDataElement = element
+      this.selectedGraphElement = undefined
+      for (const shape of element.shapes) {
+        if (shape.id == shapeId) {
+          this.selectedGraphElement = shape
+          break
+        }
+      }
+
+      if (
+        this.selectedDataElement &&
+        this.selectedGraphElement &&
+        !this.openPanels.includes('quickview')
+      ) {
         this.openPanels.push('quickview')
       }
     },
     onSelectNode(event: NodeMouseEvent) {
-      this.onSelectElement(event.node.data)
+      this.onSelectElement(event.node.data, event.node.id)
     }
   },
   watch: {

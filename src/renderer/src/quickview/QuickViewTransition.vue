@@ -4,16 +4,18 @@ import QuickViewElement from './QuickViewElement.vue'
 import TransitionTypeSelect from '@renderer/selects/TransitionTypeSelect.vue'
 import TransitionFunctionEdit from '@renderer/edits/TransitionFunctionEdit.vue'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
   dao: ModelDAO
   transition: DataTransition
+  shape: IGraphElement
 }>()
 </script>
 
 <template>
   <!-- General options -->
-  <QuickViewElement :element="transition"></QuickViewElement>
+  <QuickViewElement :dao="dao" :element="transition" :shape="shape"></QuickViewElement>
 
   <v-divider class="mt-6 mb-5"></v-divider>
 

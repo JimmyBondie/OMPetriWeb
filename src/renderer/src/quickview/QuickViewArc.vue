@@ -6,16 +6,18 @@ import { DataArc } from '@renderer/data/impl/DataArc'
 import ArcColorSelect from '@renderer/selects/ArcColorSelect.vue'
 import ArcFunctionEdit from '@renderer/edits/ArcFunctionEdit.vue'
 import { Color } from '@renderer/core/Color'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
   dao: ModelDAO
   arc: DataArc
+  shape: IGraphElement
 }>()
 </script>
 
 <template>
   <!-- General options -->
-  <QuickViewElement :element="arc"></QuickViewElement>
+  <QuickViewElement :dao="dao" :element="arc" :shape="shape"></QuickViewElement>
 
   <v-divider class="mt-6 mb-5"></v-divider>
 

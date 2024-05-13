@@ -7,15 +7,19 @@ import NodeConstantEdit from '@renderer/edits/NodeConstantEdit.vue'
 import PlaceTokenEdit from '@renderer/edits/PlaceTokenEdit.vue'
 import PlaceTokenMinEdit from '@renderer/edits/PlaceTokenMinEdit.vue'
 import PlaceTokenMaxEdit from '@renderer/edits/PlaceTokenMaxEdit.vue'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 
 defineProps<{
+  dao: ModelDAO
   place: DataPlace
+  shape: IGraphElement
 }>()
 </script>
 
 <template>
   <!-- General options -->
-  <QuickViewElement :element="place"></QuickViewElement>
+  <QuickViewElement :dao="dao" :element="place" :shape="shape"></QuickViewElement>
 
   <v-divider class="mt-6 mb-5"></v-divider>
 

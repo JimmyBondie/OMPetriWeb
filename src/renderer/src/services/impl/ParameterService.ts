@@ -296,4 +296,27 @@ export class ParameterService extends CustomService implements IParameterService
 
     return func
   }
+
+  public validateElementRemoval(element: IDataElement) {
+    for (const param of element.relatedParameters) {
+      this.validateParamRemoval(param)
+    }
+  }
+
+  private validateParamRemoval(param: Parameter) {
+    if (param.usingElements.size > 1) {
+      throw new ParameterException(
+        i18n.global.t('ParameterReferencedByElement', { param: param.id })
+      )
+    } else if (param.usingElements.size == 1) {
+      if (!param.relatedElement || !param.usingElements.has(param.relatedElement)) {
+        throw new ParameterException(
+          i18n.global.t('ElementParameterReferencedByElement', {
+            element: param.relatedElement ? param.relatedElement.id : 'Null',
+            param: param.id
+          })
+        )
+      }
+    }
+  }
 }

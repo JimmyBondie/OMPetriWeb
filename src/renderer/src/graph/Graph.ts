@@ -41,4 +41,17 @@ export class Graph extends Object {
       throw new GraphError(i18n.global.t('NodeNotFound', { id: id }))
     }
   }
+
+  public removeConnection(connection: IGraphArc) {
+    this._connections.delete(connection.id)
+    connection.sourceNode.connections.delete(connection)
+    connection.targetNode.connections.delete(connection)
+  }
+
+  public removeNode(node: IGraphNode) {
+    while (node.connections.size > 0) {
+      this.removeConnection(node.connections.values().next().value) // while to prevent concurrent modification exception
+    }
+    this._nodes.delete(node.id)
+  }
 }

@@ -51,6 +51,7 @@ defineProps<{
       <DataElementDescriptionEdit
         class="h-100"
         :data-element="dataElement"
+        hide-details
       ></DataElementDescriptionEdit>
     </v-col>
   </v-row>

@@ -7,6 +7,7 @@ import { IArc } from '@renderer/entity/intf/IArc'
 import { ElementType, IElement } from '@renderer/entity/intf/IElement'
 import i18n from '@renderer/main'
 import { CustomError } from '@renderer/utils/CustomError'
+import { INode } from '@renderer/entity/intf/INode'
 
 export class ModelError extends CustomError {}
 
@@ -161,5 +162,81 @@ export class Model extends Object {
 
   public getParameter(id: string): Parameter | undefined {
     return this._parameters.get(id)
+  }
+
+  private removeArc(arc: IArc) {
+    for (const param of arc.relatedParameters) {
+      if (param.usingElements.size > 0) {
+        if (param.usingElements.values().next().value != arc) {
+          throw new ModelError(
+            i18n.global.t('RelatedParamCannotBeDeleted', { element: arc.id, param: param.id })
+          )
+        }
+      }
+    }
+    let index: number = arc.source.arcsOut.indexOf(arc)
+    if (index >= 0) {
+      arc.source.arcsOut.slice(index, 1)
+    }
+
+    index = arc.target.arcsIn.indexOf(arc)
+    if (index >= 0) {
+      arc.target.arcsIn.slice(index, 1)
+    }
+
+    this._arcs.delete(arc.id)
+  }
+
+  public removeElement(element: IElement) {
+    switch (element.elementType) {
+      case ElementType.ARC: {
+        this.removeArc(element as IArc)
+        break
+      }
+      case ElementType.PLACE: {
+        this.removeNode(element as INode)
+        break
+      }
+      case ElementType.TRANSITION: {
+        this.removeNode(element as INode)
+        break
+      }
+      default:
+        throw new ModelError(i18n.global.t('UnhandledElementType'))
+    }
+  }
+
+  private removeNode(node: INode) {
+    for (const param of node.relatedParameters) {
+      if (param.usingElements.size > 0) {
+        if (param.usingElements.values().next().value != node) {
+          throw new ModelError(
+            i18n.global.t('RelatedParamCannotBeDeleted', { element: node.id, param: param.id })
+          )
+        }
+      }
+    }
+    while (node.arcsIn.length > 0) {
+      this.removeArc(node.arcsIn[0])
+      node.arcsIn.slice(0, 1)
+    }
+
+    while (node.arcsOut.length > 0) {
+      this.removeArc(node.arcsOut[0])
+      node.arcsOut.slice(0, 1)
+    }
+
+    if (node instanceof Place) {
+      this._places.delete(node.id)
+    } else {
+      this.removeTransition(node as Transition)
+    }
+  }
+
+  private removeTransition(transition: Transition) {
+    for (const id of transition.function.elementIds) {
+      this._parameters.get(id)?.usingElements.delete(transition)
+    }
+    this._transitions.delete(transition.id)
   }
 }

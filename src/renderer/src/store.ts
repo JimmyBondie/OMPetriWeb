@@ -88,6 +88,9 @@ const store: Store<StoreState> = createStore({
     createNode(state: StoreState, { dao, type, posX, posY }) {
       state.modelService.create(dao, type, posX, posY)
     },
+    removeElement(state: StoreState, { dao, element }) {
+      state.modelService.removeElement(dao, element)
+    },
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)
     },
