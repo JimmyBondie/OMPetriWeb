@@ -6,10 +6,10 @@ import { IModelService } from '../intf/IModelService'
 import { CustomService } from '../intf'
 import { IElement } from '@renderer/entity/intf/IElement'
 import { DataType } from '@renderer/data/intf/DataType'
-import { GraphNode } from '@renderer/graph/impl/GraphNode'
 import { GraphArc } from '@renderer/graph/impl/GraphArc'
 import { ModelError } from '@renderer/core/Model'
 import { Function } from '@renderer/core/Function'
+import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
 
 export class ModelService extends CustomService implements IModelService {
   private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
@@ -44,11 +44,18 @@ export class ModelService extends CustomService implements IModelService {
     }
   }
 
-  public addNode(dao: ModelDAO, node: GraphNode) {
+  public addNode(dao: ModelDAO, node: IGraphNode) {
     if (node && node.data && node.data.type != DataType.CLUSTER) {
       dao.model.addElement(node.data)
     }
     dao.graph.addNode(node)
+  }
+
+  public create(dao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {
+    const node: IGraphNode = this.services.factoryService.createNode(dao, type, posX, posY)
+    this.addNode(dao, node)
+    dao.hasChanges = true
+    return node
   }
 
   public newModel(): ModelDAO {

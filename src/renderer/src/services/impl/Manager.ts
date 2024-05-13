@@ -5,11 +5,18 @@ import { ParameterService } from './ParameterService'
 import { IModelService } from '../intf/IModelService'
 import { IParameterService } from '../intf/IParameterService'
 import { IModelXmlConverter } from '../intf/IModelXmlConverter'
+import { FactoryService } from './FactoryService'
+import { IFactoryService } from '../intf/IFactoryService'
 
 export class ServiceManager extends Object implements IServiceManager {
+  private _factoryService: FactoryService = new FactoryService(this)
   private _modelService: ModelService = new ModelService(this)
   private _parameterService: ParameterService = new ParameterService(this)
   private _xmlConverter: ModelXmlConverter = new ModelXmlConverter(this)
+
+  public get factoryService(): IFactoryService {
+    return this._factoryService
+  }
 
   public get modelService(): IModelService {
     return this._modelService

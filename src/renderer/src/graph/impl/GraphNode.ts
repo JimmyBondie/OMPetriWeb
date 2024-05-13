@@ -1,8 +1,8 @@
-import { Node, XYPosition } from '@vue-flow/core'
+import { XYPosition } from '@vue-flow/core'
 import { IGraphNode } from '../intf/IGraphNode'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 
-export class GraphNode extends Object implements IGraphNode, Node<IDataNode, any, string> {
+export class GraphNode extends Object implements IGraphNode {
   private _data: IDataNode
   private _disabled: boolean = false
   private _id: string

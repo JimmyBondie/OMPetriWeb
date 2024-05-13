@@ -26,6 +26,8 @@ import QuickViewArc from '@renderer/quickview/QuickViewArc.vue'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { DataType } from '@renderer/data/intf/DataType'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
+import { mapMutations } from 'vuex'
+import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -48,9 +50,17 @@ defineProps<{
         @edge-click="onSelectEdge"
         @edge-double-click="onDoubleClickEdge"
         @pane-ready="(instance: any) => (vueFlowInstance = instance)"
+        @dragover="(e: any) => onDragOver(e)"
+        @dragleave="onDragLeave"
+        @drop="(e: any) => onDrop(e)"
         fit-view-on-init
       >
-        <Background />
+        <Background
+          :style="{
+            backgroundColor: isDragOver ? 'grey' : 'transparent',
+            transition: 'background-color 0.2s ease'
+          }"
+        />
 
         <MiniMap pannable zoomable />
 
@@ -121,7 +131,52 @@ defineProps<{
         </v-expansion-panel>
 
         <!-- Tools -->
-        <v-expansion-panel :title="$t('Tools')" value="tools"></v-expansion-panel>
+        <v-expansion-panel :title="$t('Tools')" value="tools">
+          <v-expansion-panel-text>
+            <v-row>
+              <v-col class="d-flex justify-center">
+                <!-- New place -->
+                <v-tooltip :text="$t('NewPlace')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="rounded-circle cursor-grab"
+                      height="40"
+                      width="40"
+                      color="green-darken-2"
+                      v-bind="tooltip"
+                      draggable="true"
+                      @dragstart="(e: DragEvent) => onDragStart(e, DataType.PLACE)"
+                    >
+                      <v-card-title
+                        style="line-height: 40px; user-select: none"
+                        class="pa-0 text-center text-caption user-select-none"
+                      >
+                        1.00
+                      </v-card-title>
+                    </v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
+
+              <v-col class="d-flex justify-center">
+                <!-- New transition -->
+                <v-tooltip :text="$t('NewTransition')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="pa-1 cursor-grab"
+                      color="blue-darken-2"
+                      width="15"
+                      height="40"
+                      v-bind="tooltip"
+                      draggable="true"
+                      @dragstart="(e: DragEvent) => onDragStart(e, DataType.TRANSITION)"
+                    ></v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
+            </v-row>
+          </v-expansion-panel-text>
+        </v-expansion-panel>
 
         <!-- QuickView -->
         <v-expansion-panel :title="$t('QuickView')" value="quickview" v-if="selectedElement">
@@ -149,12 +204,16 @@ defineProps<{
 export default {
   data() {
     return {
+      draggedType: undefined as DataType | undefined,
+      isDragging: false,
+      isDragOver: false,
       openPanels: ['model', 'tools'],
       selectedElement: undefined as IDataElement | undefined,
       vueFlowInstance: undefined as VueFlowStore | undefined
     }
   },
   methods: {
+    ...mapMutations(['createNode']),
     getSourcePlacePosition(props: EdgeProps, radius: number, targetHeight: number): XYPosition {
       // Calculate middle point
       const source: XYPosition = {
@@ -300,6 +359,46 @@ export default {
     },
     onDoubleClickNode(event: NodeMouseEvent) {
       this.onOpenInspector(event.node.data)
+    },
+    onDragEnd() {
+      this.isDragging = false
+      this.isDragOver = false
+      this.draggedType = undefined
+      document.removeEventListener('drop', this.onDragEnd)
+    },
+    onDragLeave() {
+      this.isDragOver = false
+    },
+    onDragOver(event: DragEvent) {
+      event.preventDefault()
+      if (this.draggedType) {
+        this.isDragOver = true
+        if (event.dataTransfer) {
+          event.dataTransfer.dropEffect = 'move'
+        }
+      }
+    },
+    onDragStart(event: DragEvent, type: DataType) {
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move'
+      }
+
+      this.draggedType = type
+      this.isDragging = true
+
+      document.addEventListener('drop', this.onDragEnd)
+    },
+    onDrop(event: DragEvent) {
+      if (!this.vueFlowInstance) {
+        return
+      }
+
+      const position = this.vueFlowInstance.screenToFlowCoordinate({
+        x: event.clientX,
+        y: event.clientY
+      })
+
+      this.createNode({ dao: this.dao, type: this.draggedType, posX: position.x, posY: position.y })
     },
     onSelectEdge(event: EdgeMouseEvent) {
       this.onSelectElement(event.edge.data)

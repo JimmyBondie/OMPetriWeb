@@ -1,14 +1,19 @@
-import { Place } from '@renderer/entity/impl/Place'
+import { Place, PlaceType } from '@renderer/entity/impl/Place'
 import { DataType } from '../intf/DataType'
 import { IDataNode } from '../intf/IDataNode'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
+import { ConflictResolutionStrategy } from '@renderer/core/ConflictResolutionStrategy'
 
 export class DataPlace extends Place implements IDataNode {
   private _description: string = ''
   private _isSticky: boolean = false
   private _shapes: Set<IGraphElement> = new Set<IGraphElement>()
   private _type: DataType = DataType.PLACE
+
+  public constructor(id: string, placeType: PlaceType) {
+    super(id, placeType, ConflictResolutionStrategy.PRIORITY)
+  }
 
   public get description(): string {
     return this._description
