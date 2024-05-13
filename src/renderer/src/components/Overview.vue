@@ -58,7 +58,7 @@ import Editor from './Editor.vue'
       <!-- Create new -->
       <v-tooltip :text="$t('New')" location="top">
         <template v-slot:activator="{ props }">
-          <v-btn icon="mdi-plus" variant="text" v-bind="props" @click="addNewModel"></v-btn>
+          <v-btn icon="mdi-plus" variant="text" v-bind="props" @click="addModel"></v-btn>
         </template>
       </v-tooltip>
 
@@ -97,8 +97,13 @@ export default {
     ...mapGetters(['getModels'])
   },
   methods: {
-    ...mapMutations(['addNewModel', 'removeModel']),
+    ...mapGetters(['addNewModel']),
+    ...mapMutations(['removeModel']),
     ...mapActions(['openModel']),
+    addModel() {
+      const model: ModelDAO = this.addNewModel()
+      this.selectedModel = model.id
+    },
     closeModel(model: ModelDAO) {
       this.removeModel(model)
     },

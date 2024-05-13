@@ -64,6 +64,9 @@ const store: Store<StoreState> = createStore({
     return new StoreState()
   },
   getters: {
+    addNewModel: (state: StoreState): ModelDAO => {
+      return state.modelService.newModel()
+    },
     getFilteredAndSortedParameterList:
       (state: StoreState) =>
       (model: Model, element: IDataElement, filter: string): Array<Parameter> => {
@@ -82,9 +85,6 @@ const store: Store<StoreState> = createStore({
       }
   },
   mutations: {
-    addNewModel(state: StoreState) {
-      state.modelService.newModel()
-    },
     connect(state: StoreState, { dao, source, target }) {
       state.modelService.connect(dao, source, target)
     },
