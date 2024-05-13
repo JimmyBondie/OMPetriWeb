@@ -145,12 +145,13 @@ defineProps<{
                       height="40"
                       width="40"
                       color="green-darken-2"
+                      border="opacity-50 double lg"
                       v-bind="tooltip"
                       draggable="true"
                       @dragstart="(e: DragEvent) => onDragStart(e, DataType.PLACE)"
                     >
                       <v-card-title
-                        style="line-height: 40px; user-select: none"
+                        style="line-height: 32px; user-select: none"
                         class="pa-0 text-center text-caption user-select-none"
                       >
                         1.00
@@ -169,6 +170,7 @@ defineProps<{
                       color="blue-darken-2"
                       width="15"
                       height="40"
+                      border="opacity-50 double lg"
                       v-bind="tooltip"
                       draggable="true"
                       @dragstart="(e: DragEvent) => onDragStart(e, DataType.TRANSITION)"
