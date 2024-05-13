@@ -80,30 +80,17 @@ import Editor from './Editor.vue'
         <Editor :dao="model" class="h-100"></Editor>
       </v-window-item>
     </v-window>
-
-    <v-dialog max-width="500" v-model="showErrorMessage">
-      <v-card :title="$t('Error')">
-        <v-card-text>{{ errorMessage }}</v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="showErrorMessage = false">{{ $t('Ok') }}</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </main>
 </template>
 
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { CustomError } from '@renderer/utils/CustomError'
 
 export default {
   data() {
     return {
-      errorMessage: '',
-      selectedModel: '',
-      showErrorMessage: false
+      selectedModel: ''
     }
   },
   computed: {
@@ -116,16 +103,9 @@ export default {
       this.removeModel(model)
     },
     async openNewModule() {
-      try {
-        const model: ModelDAO | null = await this.openModel()
-        if (model) {
-          this.selectedModel = model.id
-        }
-      } catch (e: any) {
-        if (e instanceof CustomError) {
-          this.errorMessage = e.message
-          this.showErrorMessage = true
-        }
+      const model: ModelDAO | null = await this.openModel()
+      if (model) {
+        this.selectedModel = model.id
       }
     }
   }

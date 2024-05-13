@@ -1,13 +1,26 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
 import { useTheme } from 'vuetify'
+import { CustomError } from './utils/CustomError'
 </script>
 
 <template>
   <v-app class="fill-height">
     <v-locale-provider :locale="language">
       <v-theme-provider :theme="theme">
+        <!-- Pages -->
         <RouterView />
+
+        <!-- Error handling -->
+        <v-dialog max-width="500" v-model="showErrorMessage">
+          <v-card :title="$t('Error')">
+            <v-card-text>{{ errorMessage }}</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="showErrorMessage = false">{{ $t('Ok') }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-theme-provider>
     </v-locale-provider>
   </v-app>
@@ -17,10 +30,12 @@ import { useTheme } from 'vuetify'
 export default {
   data() {
     return {
+      errorMessage: '',
       themeDark: 'dark',
       themeLight: 'light',
       theme: useTheme().global.name,
-      language: navigator.language
+      language: navigator.language,
+      showErrorMessage: false
     }
   },
   watch: {
@@ -34,6 +49,15 @@ export default {
     } else {
       this.theme = this.themeLight
     }
+  },
+  errorCaptured(e: any): boolean {
+    if (!(e instanceof CustomError)) {
+      return true
+    }
+
+    this.errorMessage = e.message
+    this.showErrorMessage = true
+    return false
   }
 }
 </script>
