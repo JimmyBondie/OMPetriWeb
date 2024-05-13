@@ -27,7 +27,9 @@ export class Graph extends Object {
     if (!this._connections.has(connection.id) && this._nodes.has(connection.sourceNode.id)) {
       this._connections.set(connection.id, connection)
       if (this._nodes.has(connection.targetNode.id)) {
+        connection.sourceNode.children.add(connection.targetNode)
         connection.sourceNode.connections.add(connection)
+        connection.targetNode.parents.add(connection.sourceNode)
         connection.targetNode.connections.add(connection)
       }
     }
@@ -44,6 +46,8 @@ export class Graph extends Object {
 
   public removeConnection(connection: IGraphArc) {
     this._connections.delete(connection.id)
+    connection.sourceNode.children.delete(connection.targetNode)
+    connection.targetNode.parents.delete(connection.sourceNode)
     connection.sourceNode.connections.delete(connection)
     connection.targetNode.connections.delete(connection)
   }

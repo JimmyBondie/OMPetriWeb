@@ -4,11 +4,13 @@ import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { IGraphArc } from '../intf/IGraphArc'
 
 export class GraphNode extends Object implements IGraphNode {
+  private _children: Set<IGraphNode> = new Set<IGraphNode>()
   private _connections: Set<IGraphArc> = new Set<IGraphArc>()
   private _data: IDataNode
   private _disabled: boolean = false
   private _id: string
   private _labelText: string = ''
+  private _parents: Set<IGraphNode> = new Set<IGraphNode>()
 
   public position: XYPosition = { x: 0, y: 0 }
 
@@ -17,6 +19,10 @@ export class GraphNode extends Object implements IGraphNode {
     this._data = data
     this._data.shapes.add(this)
     this._id = id
+  }
+
+  public get children(): Set<IGraphNode> {
+    return this._children
   }
 
   public get connections(): Set<IGraphArc> {
@@ -37,6 +43,10 @@ export class GraphNode extends Object implements IGraphNode {
 
   public get labelText(): string {
     return this._labelText
+  }
+
+  public get parents(): Set<IGraphNode> {
+    return this._parents
   }
 
   public get xCoordinate(): number {
