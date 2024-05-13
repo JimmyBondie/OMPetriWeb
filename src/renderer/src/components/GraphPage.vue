@@ -88,8 +88,8 @@ defineProps<{
             :data="props.data"
             :source-x="getSourceTransitionPosition(props, 40, 15, 40).x"
             :source-y="getSourceTransitionPosition(props, 40, 15, 40).y"
-            :target-x="getTargetPlacePosition(props, 20, 15).x"
-            :target-y="getTargetPlacePosition(props, 20, 15).y"
+            :target-x="getTargetPlacePosition(props, 20, 40).x"
+            :target-y="getTargetPlacePosition(props, 20, 40).y"
           />
         </template>
       </VueFlow>
