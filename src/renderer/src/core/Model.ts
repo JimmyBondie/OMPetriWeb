@@ -82,7 +82,7 @@ export class Model extends Object {
     switch (param.type) {
       case ParameterType.GLOBAL: {
         if (this.containsParameter(param.id)) {
-          throw new ModelError('ParameterHasSameId')
+          throw new ModelError(i18n.global.t('ParameterHasSameId'))
         }
         this._parameters.set(param.id, param)
         break
