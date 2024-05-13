@@ -32,6 +32,9 @@ import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { mapMutations } from 'vuex'
 import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
+import DAONameEdit from '@renderer/edits/DAONameEdit.vue'
+import DAOAuthorEdit from '@renderer/edits/DAOAuthorEdit.vue'
+import DAODescriptionEdit from '@renderer/edits/DAODescriptionEdit.vue'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -106,33 +109,13 @@ defineProps<{
         <v-expansion-panel :title="$t('Model')" value="model">
           <v-expansion-panel-text>
             <!-- Name -->
-            <v-text-field
-              :label="$t('Name')"
-              v-model="dao.name"
-              variant="underlined"
-              prepend-icon="mdi-rename-outline"
-              density="compact"
-            ></v-text-field>
+            <DAONameEdit :dao="dao"></DAONameEdit>
 
             <!-- Author -->
-            <v-text-field
-              :label="$t('Author')"
-              v-model="dao.author"
-              variant="underlined"
-              prepend-icon="mdi-account-outline"
-              density="compact"
-            ></v-text-field>
+            <DAOAuthorEdit :dao="dao"></DAOAuthorEdit>
 
             <!-- Description -->
-            <v-textarea
-              :label="$t('Description')"
-              v-model="dao.description"
-              persistent-placeholder
-              :placeholder="$t('EnterDescription')"
-              variant="underlined"
-              prepend-icon="mdi-text"
-              density="compact"
-            ></v-textarea>
+            <DAODescriptionEdit :dao="dao"></DAODescriptionEdit>
           </v-expansion-panel-text>
         </v-expansion-panel>
 
