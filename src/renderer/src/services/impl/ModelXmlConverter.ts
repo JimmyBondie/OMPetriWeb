@@ -370,8 +370,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readPlace(dao: ModelDAO, node: Element) {
     const place: DataPlace = new DataPlace(
       this.readId(node),
-      PlaceType[node.getAttribute(this.attrType) ?? 0],
-      ConflictResolutionStrategy.PRIORITY
+      PlaceType[node.getAttribute(this.attrType) ?? 0]
     )
 
     // Token
