@@ -19,9 +19,7 @@ import Editor from './Editor.vue'
                     <v-btn
                       class="ml-2"
                       v-bind="mergeProps(dialog, tooltip, hover)"
-                      :icon="
-                        model.hasChanges ? (isHovering ? 'mdi-close' : 'mdi-circle') : 'mdi-close'
-                      "
+                      :icon="model.hasChanges && !isHovering ? 'mdi-circle' : 'mdi-close'"
                       variant="text"
                       size="x-small"
                       density="comfortable"
