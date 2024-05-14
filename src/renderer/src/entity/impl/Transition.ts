@@ -10,7 +10,31 @@ export enum TransitionType {
 }
 
 export namespace TransitionType {
-  export function toString(transitionType: TransitionType): string {
+  export function fromString(value: string | null): TransitionType {
+    switch (value) {
+      case 'CONTINUOUS':
+        return TransitionType.CONTINUOUS
+      case 'DISCRETE':
+        return TransitionType.DISCRETE
+      case 'STOCHASTIC':
+        return TransitionType.STOCHASTIC
+      default:
+        return TransitionType.CONTINUOUS
+    }
+  }
+
+  export function toString(placeType: TransitionType): string {
+    switch (placeType) {
+      case TransitionType.CONTINUOUS:
+        return 'CONTINUOUS'
+      case TransitionType.DISCRETE:
+        return 'DISCRETE'
+      case TransitionType.STOCHASTIC:
+        return 'STOCHASTIC'
+    }
+  }
+
+  export function toText(transitionType: TransitionType): string {
     switch (transitionType) {
       case TransitionType.CONTINUOUS:
         return i18n.global.t('Continuous')
@@ -25,15 +49,15 @@ export namespace TransitionType {
     return [
       {
         type: TransitionType.CONTINUOUS,
-        name: TransitionType.toString(TransitionType.CONTINUOUS)
+        name: TransitionType.toText(TransitionType.CONTINUOUS)
       },
       {
         type: TransitionType.DISCRETE,
-        name: TransitionType.toString(TransitionType.DISCRETE)
+        name: TransitionType.toText(TransitionType.DISCRETE)
       },
       {
         type: TransitionType.STOCHASTIC,
-        name: TransitionType.toString(TransitionType.STOCHASTIC)
+        name: TransitionType.toText(TransitionType.STOCHASTIC)
       }
     ]
   }

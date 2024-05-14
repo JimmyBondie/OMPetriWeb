@@ -6,12 +6,32 @@ import { Token } from '@renderer/core/Token'
 import i18n from '@renderer/main'
 
 export enum PlaceType {
-  CONTINUOUS = 'CONTINUOUS',
-  DISCRETE = 'DISCRETE'
+  CONTINUOUS,
+  DISCRETE
 }
 
 export namespace PlaceType {
+  export function fromString(value: string | null): PlaceType {
+    switch (value) {
+      case 'CONTINUOUS':
+        return PlaceType.CONTINUOUS
+      case 'DISCRETE':
+        return PlaceType.DISCRETE
+      default:
+        return PlaceType.CONTINUOUS
+    }
+  }
+
   export function toString(placeType: PlaceType): string {
+    switch (placeType) {
+      case PlaceType.CONTINUOUS:
+        return 'CONTINUOUS'
+      case PlaceType.DISCRETE:
+        return 'DISCRETE'
+    }
+  }
+
+  export function toText(placeType: PlaceType): string {
     switch (placeType) {
       case PlaceType.CONTINUOUS:
         return i18n.global.t('Continuous')
@@ -24,11 +44,11 @@ export namespace PlaceType {
     return [
       {
         type: PlaceType.CONTINUOUS,
-        name: PlaceType.toString(PlaceType.CONTINUOUS)
+        name: PlaceType.toText(PlaceType.CONTINUOUS)
       },
       {
         type: PlaceType.DISCRETE,
-        name: PlaceType.toString(PlaceType.DISCRETE)
+        name: PlaceType.toText(PlaceType.DISCRETE)
       }
     ]
   }

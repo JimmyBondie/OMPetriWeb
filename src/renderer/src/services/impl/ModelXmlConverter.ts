@@ -176,7 +176,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
       this.readId(node),
       source as INode,
       target as INode,
-      ArcType[node.getAttribute(this.attrType) ?? 0]
+      ArcType.fromString(node.getAttribute(this.attrType))
     )
 
     // Weights
@@ -352,7 +352,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     const id: string = this.readId(node)
     const value: string = node.textContent ?? ''
 
-    switch (ParameterType[node.getAttribute(this.attrType) ?? 0]) {
+    switch (ParameterType.fromString(node.getAttribute(this.attrType))) {
       case ParameterType.GLOBAL: {
         return utils.parameterFactory.createGlobalParameter(id, value)
       }
@@ -370,7 +370,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readPlace(dao: ModelDAO, node: Element) {
     const place: DataPlace = new DataPlace(
       this.readId(node),
-      PlaceType[node.getAttribute(this.attrType) ?? 0]
+      PlaceType.fromString(node.getAttribute(this.attrType))
     )
 
     // Token
@@ -378,8 +378,9 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
       place.addToken(this.readToken(node))
     })
 
-    place.conflictResolutionType =
-      ConflictResolutionStrategy[node.getAttribute(this.attrConflictResolutionStrategy) ?? 0]
+    place.conflictResolutionType = ConflictResolutionStrategy.fromString(
+      node.getAttribute(this.attrConflictResolutionStrategy)
+    )
 
     place.disabled = node.hasAttribute(this.attrDisabled)
 
@@ -416,7 +417,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readTransition(dao: ModelDAO, node: Element) {
     const transition: DataTransition = new DataTransition(
       this.readId(node),
-      TransitionType[node.getAttribute(this.attrType) ?? 0]
+      TransitionType.fromString(node.getAttribute(this.attrType))
     )
 
     // Local parameters

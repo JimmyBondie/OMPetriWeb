@@ -10,7 +10,39 @@ export enum DataType {
 }
 
 export namespace DataType {
-  export function toString(dataType: DataType): string {
+  export function fromString(value: string | null): DataType {
+    switch (value) {
+      case 'ARC':
+        return DataType.ARC
+      case 'CLUSTER':
+        return DataType.CLUSTER
+      case 'CLUSTERARC':
+        return DataType.CLUSTERARC
+      case 'PLACE':
+        return DataType.PLACE
+      case 'TRANSITION':
+        return DataType.TRANSITION
+      default:
+        return DataType.ARC
+    }
+  }
+
+  export function toString(placeType: DataType): string {
+    switch (placeType) {
+      case DataType.ARC:
+        return 'ARC'
+      case DataType.CLUSTER:
+        return 'CLUSTER'
+      case DataType.CLUSTERARC:
+        return 'CLUSTERARC'
+      case DataType.PLACE:
+        return 'PLACE'
+      case DataType.TRANSITION:
+        return 'TRANSITION'
+    }
+  }
+
+  export function toText(dataType: DataType): string {
     switch (dataType) {
       case DataType.ARC:
         return i18n.global.t('Arc')

@@ -8,7 +8,31 @@ export enum ParameterType {
 }
 
 export namespace ParameterType {
-  export function toString(arcType: ParameterType): string {
+  export function fromString(value: string | null): ParameterType {
+    switch (value) {
+      case 'LOCAL':
+        return ParameterType.LOCAL
+      case 'GLOBAL':
+        return ParameterType.GLOBAL
+      case 'REFERENCE':
+        return ParameterType.REFERENCE
+      default:
+        return ParameterType.LOCAL
+    }
+  }
+
+  export function toString(placeType: ParameterType): string {
+    switch (placeType) {
+      case ParameterType.LOCAL:
+        return 'LOCAL'
+      case ParameterType.GLOBAL:
+        return 'GLOBAL'
+      case ParameterType.REFERENCE:
+        return 'REFERENCE'
+    }
+  }
+
+  export function toText(arcType: ParameterType): string {
     switch (arcType) {
       case ParameterType.LOCAL:
         return i18n.global.t('Local')
@@ -23,11 +47,11 @@ export namespace ParameterType {
     return [
       {
         type: ParameterType.LOCAL,
-        name: ParameterType.toString(ParameterType.LOCAL)
+        name: ParameterType.toText(ParameterType.LOCAL)
       },
       {
         type: ParameterType.GLOBAL,
-        name: ParameterType.toString(ParameterType.GLOBAL)
+        name: ParameterType.toText(ParameterType.GLOBAL)
       }
     ]
   }

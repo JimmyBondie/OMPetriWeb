@@ -303,7 +303,7 @@ export class ModelService extends CustomService implements IModelService {
         }
         default: {
           throw new DataException(
-            i18n.global.t('ValidationForArcTypeUndefined', { type: ArcType.toString(arc.arcType) })
+            i18n.global.t('ValidationForArcTypeUndefined', { type: ArcType.toText(arc.arcType) })
           )
         }
       }
@@ -330,7 +330,7 @@ export class ModelService extends CustomService implements IModelService {
               default: {
                 throw new DataException(
                   i18n.global.t('ValidationForPlaceTypeUndefined', {
-                    type: PlaceType.toString(place.placeType)
+                    type: PlaceType.toText(place.placeType)
                   })
                 )
               }
@@ -349,7 +349,7 @@ export class ModelService extends CustomService implements IModelService {
         default: {
           throw new DataException(
             i18n.global.t('ValidationForTransitionTypeUndefined', {
-              type: TransitionType.toString(transition.transitionType)
+              type: TransitionType.toText(transition.transitionType)
             })
           )
         }
@@ -383,7 +383,7 @@ export class ModelService extends CustomService implements IModelService {
             default: {
               throw new DataException(
                 i18n.global.t('ValidationForTransitionTypeUndefined', {
-                  type: TransitionType.toString(transition.transitionType)
+                  type: TransitionType.toText(transition.transitionType)
                 })
               )
             }
@@ -394,7 +394,7 @@ export class ModelService extends CustomService implements IModelService {
         default: {
           throw new DataException(
             i18n.global.t('ValidationForPlaceTypeUndefined', {
-              type: PlaceType.toString(place.placeType)
+              type: PlaceType.toText(place.placeType)
             })
           )
         }

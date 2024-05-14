@@ -10,7 +10,7 @@ defineProps<{
 <template>
   <v-text-field
     :label="$t('Type')"
-    :model-value="DataType.toString(dataElement.type)"
+    :model-value="DataType.toText(dataElement.type)"
     variant="underlined"
     prepend-icon="mdi-alpha-t-box-outline"
     density="compact"

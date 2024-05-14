@@ -11,7 +11,31 @@ export enum ArcType {
 }
 
 export namespace ArcType {
-  export function toString(arcType: ArcType): string {
+  export function fromString(value: string | null): ArcType {
+    switch (value) {
+      case 'NORMAL':
+        return ArcType.NORMAL
+      case 'DISCRETE':
+        return ArcType.INHIBITORY
+      case 'TEST':
+        return ArcType.TEST
+      default:
+        return ArcType.NORMAL
+    }
+  }
+
+  export function toString(placeType: ArcType): string {
+    switch (placeType) {
+      case ArcType.NORMAL:
+        return 'NORMAL'
+      case ArcType.INHIBITORY:
+        return 'INHIBITORY'
+      case ArcType.TEST:
+        return 'TEST'
+    }
+  }
+
+  export function toText(arcType: ArcType): string {
     switch (arcType) {
       case ArcType.NORMAL:
         return i18n.global.t('Normal')
@@ -26,15 +50,15 @@ export namespace ArcType {
     return [
       {
         type: ArcType.NORMAL,
-        name: ArcType.toString(ArcType.NORMAL)
+        name: ArcType.toText(ArcType.NORMAL)
       },
       {
         type: ArcType.INHIBITORY,
-        name: ArcType.toString(ArcType.INHIBITORY)
+        name: ArcType.toText(ArcType.INHIBITORY)
       },
       {
         type: ArcType.TEST,
-        name: ArcType.toString(ArcType.TEST)
+        name: ArcType.toText(ArcType.TEST)
       }
     ]
   }
