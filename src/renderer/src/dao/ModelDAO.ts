@@ -1,12 +1,10 @@
 import { Model } from '@renderer/core/Model'
 import { Graph } from '@renderer/graph/Graph'
-import { File } from 'buffer'
 
 export class ModelDAO extends Object {
   private _author: string = ''
   private _creationDateTime: Date = new Date()
   private _description: string = ''
-  private _file: File | undefined
   private _graph: Graph = new Graph()
   private _hasChanges: boolean = false
   private _id: string
@@ -34,10 +32,6 @@ export class ModelDAO extends Object {
 
   public get description(): string {
     return this._description
-  }
-
-  public get file(): File | undefined {
-    return this._file
   }
 
   public get graph(): Graph {
@@ -90,10 +84,6 @@ export class ModelDAO extends Object {
 
   public set description(description: string) {
     this._description = description
-  }
-
-  public set file(file: File | undefined) {
-    this._file = file
   }
 
   public set hasChanges(hasChanges: boolean) {
