@@ -39,6 +39,7 @@ import Editor from './Editor.vue'
                   @click="
                     () => {
                       isActive.value = false
+                      saveModel(model)
                       closeModel(model)
                     }
                   "
@@ -103,7 +104,7 @@ export default {
   },
   methods: {
     ...mapGetters(['addNewModel']),
-    ...mapMutations(['removeModel']),
+    ...mapMutations(['removeModel', 'saveModel']),
     ...mapActions(['openModel']),
     addModel() {
       const model: ModelDAO = this.addNewModel()

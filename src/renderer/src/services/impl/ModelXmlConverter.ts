@@ -4,10 +4,10 @@ import { IModelXmlConverter } from '../intf/IModelXmlConverter'
 import i18n from '@renderer/main'
 import { Color } from '@renderer/core/Color'
 import { DateTime } from 'luxon'
-import { PlaceType } from '@renderer/entity/impl/Place'
+import { Place, PlaceType } from '@renderer/entity/impl/Place'
 import { ConflictResolutionStrategy } from '@renderer/core/ConflictResolutionStrategy'
 import { Token } from '@renderer/core/Token'
-import { TransitionType } from '@renderer/entity/impl/Transition'
+import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
 import { Function } from '@renderer/core/Function'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { IElement } from '@renderer/entity/intf/IElement'
@@ -27,6 +27,10 @@ import { DataType } from '@renderer/data/intf/DataType'
 import { GraphPlace } from '@renderer/graph/impl/GraphPlace'
 import { GraphTransition } from '@renderer/graph/impl/GraphTransition'
 import { GraphArc } from '@renderer/graph/impl/GraphArc'
+import { Arc } from '@renderer/entity/impl/Arc'
+import { IDataElement } from '@renderer/data/intf/IDataElement'
+import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
+import { Graph } from '@renderer/graph/Graph'
 
 export class ModelXmlConverterError extends CustomError {}
 
@@ -51,6 +55,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly attrMax: string = 'max'
   private readonly attrMin: string = 'min'
   private readonly attrName: string = 'name'
+  private readonly attrUnit: string = 'unit'
   private readonly attrPosX: string = 'posX'
   private readonly attrPosY: string = 'posY'
   private readonly attrSource: string = 'source'
@@ -71,6 +76,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly tagModel: string = 'Model'
   private readonly tagNode: string = 'Node'
   private readonly tagNodes: string = 'Nodes'
+  private readonly tagNodeShapes: string = 'Nodes'
   private readonly tagParameter: string = 'Parameter'
   private readonly tagParameters: string = 'Parameters'
   private readonly tagParametersLocal: string = 'LocalParameters'
@@ -446,5 +452,316 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     const weight: Weight = new Weight(color)
     weight.function = this.readFunction(node)
     return weight
+  }
+
+  private writeArcs(dom: Document, arcs: Array<Arc>): Element {
+    const elements: Element = dom.createElement(this.tagArcs)
+
+    for (const arc of arcs) {
+      const data: DataArc = arc as DataArc
+
+      const a: Element = dom.createElement(this.tagArc)
+      a.setAttribute(this.attrId, data.id)
+      a.setAttribute(this.attrType, ArcType.toString(data.arcType))
+      a.setAttribute(this.attrSource, data.source.id)
+      a.setAttribute(this.attrTarget, data.target.id)
+      a.setAttribute(this.attrConflictResolutionValue, data.conflictResolutionValue.toString())
+      if (data.disabled) {
+        a.setAttribute(this.attrDisabled, data.disabled.toString())
+      }
+      if (data.description != '') {
+        a.setAttribute(this.attrDescription, data.description)
+      }
+
+      // Shapes
+      if (data.shapes.size != 0) {
+        a.appendChild(this.writeConnections(dom, data))
+      } else {
+        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToArcData'))
+      }
+
+      // Weights
+      a.appendChild(this.writeWeights(dom, data))
+
+      elements.appendChild(a)
+    }
+    return elements
+  }
+
+  private writeColors(dom: Document, colors: Array<Color>): Element {
+    const elements: Element = dom.createElement(this.tagColors)
+    for (const color of colors) {
+      const c: Element = dom.createElement(this.tagColor)
+      c.setAttribute(this.attrId, color.id)
+      if (color.description != '') {
+        c.setAttribute(this.attrDescription, color.description)
+      }
+      elements.appendChild(c)
+    }
+    return elements
+  }
+
+  private writeConnection(dom: Document, connection: IGraphArc): Element {
+    const c: Element = dom.createElement(this.tagConnection)
+    c.setAttribute(this.attrId, connection.id)
+    c.setAttribute(this.attrSource, connection.sourceNode.id)
+    c.setAttribute(this.attrTarget, connection.targetNode.id)
+    return c
+  }
+
+  private writeConnections(dom: Document, arc: DataArc): Element {
+    const shapes: Element = dom.createElement(this.tagShapes)
+    let conn: Element
+
+    for (const shape of arc.shapes) {
+      const data: IDataElement = shape.data
+
+      if (data.equals(arc)) {
+        conn = this.writeConnection(dom, shape as GraphArc)
+        shapes.appendChild(conn)
+      } else {
+        throw new ModelXmlConverterError(i18n.global.t('InvalidShapeAssociatedToArcData'))
+      }
+    }
+
+    return shapes
+  }
+
+  private writeGraph(dom: Document, graph: Graph): Element {
+    const elements: Element = dom.createElement(this.tagGraph)
+    elements.appendChild(dom.createElement(this.tagClusters))
+    elements.appendChild(this.writeNodes(dom, graph.nodes))
+    return elements
+  }
+
+  private writeNode(dom: Document, node: IDataNode): Element {
+    const elements: Element = dom.createElement(this.tagShapes)
+    for (const shape of node.shapes) {
+      const n: Element = dom.createElement(this.tagNode)
+      n.setAttribute(this.attrId, shape.id)
+      elements.appendChild(n)
+    }
+    return elements
+  }
+
+  private writeNodes(dom: Document, nodes: Array<IGraphNode>): Element {
+    const elements: Element = dom.createElement(this.tagNodeShapes)
+    let n: Element
+
+    for (const node of nodes) {
+      n = dom.createElement(this.tagNode)
+      n.setAttribute(this.attrId, node.id)
+      n.setAttribute(this.attrPosX, node.xCoordinate.toString())
+      n.setAttribute(this.attrPosY, node.yCoordinate.toString())
+      elements.appendChild(n)
+    }
+
+    return elements
+  }
+
+  private writeParameter(dom: Document, param: Parameter): Element {
+    const p: Element = dom.createElement(this.tagParameter)
+    p.setAttribute(this.attrId, param.id)
+    p.textContent = param.value
+    if (param.unit != '') {
+      p.setAttribute(this.attrUnit, param.unit)
+    }
+    p.setAttribute(this.attrType, ParameterType.toString(param.type))
+    if (param.relatedElement) {
+      p.setAttribute(this.attrElementId, param.relatedElement.id)
+    }
+    return p
+  }
+
+  private writePlaces(dom: Document, places: Array<Place>): Element {
+    const elements: Element = dom.createElement(this.tagPlaces)
+
+    for (const place of places) {
+      const data: DataPlace = place as DataPlace
+
+      const p: Element = dom.createElement(this.tagPlace)
+      p.setAttribute(this.attrId, data.id)
+      p.setAttribute(this.attrType, PlaceType.toString(data.placeType))
+      p.setAttribute(
+        this.attrConflictResolutionStrategy,
+        ConflictResolutionStrategy.toString(data.conflictResolutionType)
+      )
+      if (data.disabled) {
+        p.setAttribute(this.attrDisabled, data.disabled.toString())
+      }
+      if (data.constant) {
+        p.setAttribute(this.attrConstant, data.constant.toString())
+      }
+      if (data.isSticky) {
+        p.setAttribute(this.attrSticky, data.isSticky.toString())
+      }
+      if (data.labelText != '') {
+        p.setAttribute(this.attrLabel, data.labelText)
+      }
+      if (data.description != '') {
+        p.setAttribute(this.attrDescription, data.description)
+      }
+
+      // Shapes
+      if (data.shapes.size != 0) {
+        p.appendChild(this.writeNode(dom, data))
+      } else {
+        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToPlaceData'))
+      }
+
+      // Tokens
+      p.appendChild(this.writeTokens(dom, data))
+
+      elements.appendChild(p)
+    }
+
+    return elements
+  }
+
+  private writeTokens(dom: Document, data: DataPlace): Element {
+    const elements: Element = dom.createElement(this.tagTokens)
+    for (const token of data.tokens) {
+      const t: Element = dom.createElement(this.tagToken)
+      t.setAttribute(this.attrColorId, token.color.id)
+      t.setAttribute(this.attrStart, token.valueStart.toString())
+      t.setAttribute(this.attrMin, token.valueMin.toString())
+      t.setAttribute(this.attrMax, token.valueMax.toString())
+      elements.appendChild(t)
+    }
+    return elements
+  }
+
+  private writeTransitions(dom: Document, transitions: Array<Transition>): Element {
+    const elements: Element = dom.createElement(this.tagTransitions)
+
+    for (const transition of transitions) {
+      const data: DataTransition = transition as DataTransition
+      const t: Element = dom.createElement(this.tagTransition)
+
+      t.setAttribute(this.attrId, data.id)
+      t.setAttribute(this.attrType, TransitionType.toString(data.transitionType))
+      if (data.disabled) {
+        t.setAttribute(this.attrDisabled, data.disabled.toString())
+      }
+      if (data.isSticky) {
+        t.setAttribute(this.attrSticky, data.isSticky.toString())
+      }
+      if (data.labelText != '') {
+        t.setAttribute(this.attrLabel, data.labelText)
+      }
+      if (data.description != '') {
+        t.setAttribute(this.attrDescription, data.description)
+      }
+
+      // Shapes
+      if (data.shapes.size != 0) {
+        t.appendChild(this.writeNode(dom, data))
+      } else {
+        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToTransitionData'))
+      }
+
+      // Local Parameters
+      const p: Element = dom.createElement(this.tagParametersLocal)
+      for (const param of data.localParameters) {
+        p.appendChild(this.writeParameter(dom, param))
+      }
+      t.appendChild(p)
+
+      // Function
+      const f: Element = dom.createElement(this.tagFunction)
+      if (data.function.unit != '') {
+        f.setAttribute(this.attrUnit, data.function.unit)
+      }
+      f.textContent = data.function.formatString()
+      t.appendChild(f)
+
+      elements.appendChild(t)
+    }
+
+    return elements
+  }
+
+  private writeWeights(dom: Document, data: IDataArc): Element {
+    const weights: Element = dom.createElement(this.tagWeights)
+    for (const weight of data.weights) {
+      const w: Element = dom.createElement(this.tagWeight)
+      w.setAttribute(this.attrColorId, weight.color.id)
+
+      const f: Element = dom.createElement(this.tagFunction)
+      if (weight.function.unit != '') {
+        f.setAttribute(this.attrUnit, weight.function.unit)
+      }
+      f.textContent = weight.function.formatString()
+      w.appendChild(f)
+
+      weights.appendChild(w)
+    }
+    return weights
+  }
+
+  public writeXml(dao: ModelDAO): string {
+    const dom: XMLDocument = document.implementation.createDocument('', '')
+
+    const model: Element = dom.createElement(this.tagModel) // create the root element
+
+    model.setAttribute(this.attrAuthor, dao.author)
+    model.setAttribute(
+      this.attrCreationDateTime,
+      DateTime.fromJSDate(dao.creationDateTime).toFormat(this.formatDateTime)
+    )
+    model.setAttribute(this.attrDescription, dao.description)
+    model.setAttribute(this.attrId, dao.id)
+    model.setAttribute(this.attrName, dao.name)
+
+    model.setAttribute(this.attrCurrentClusterId, dao.nextClusterId.toString())
+    model.setAttribute(this.attrCurrentNodeId, dao.nextNodeId.toString())
+    model.setAttribute(this.attrCurrentPlaceId, dao.nextPlaceId.toString())
+    model.setAttribute(this.attrCurrentTransitionId, dao.nextTransitionId.toString())
+    dao.nextClusterId = dao.nextClusterId - 1 // revoke iteration
+    dao.nextNodeId = dao.nextNodeId - 1
+    dao.nextPlaceId = dao.nextPlaceId - 1
+    dao.nextTransitionId = dao.nextTransitionId - 1
+
+    model.appendChild(this.writeArcs(dom, dao.model.arcs))
+    model.appendChild(this.writePlaces(dom, dao.model.places))
+    model.appendChild(this.writeTransitions(dom, dao.model.transitions))
+    model.appendChild(this.writeColors(dom, dao.model.colors))
+    model.appendChild(this.writeGraph(dom, dao.graph))
+
+    const params: Element = dom.createElement(this.tagParameters)
+    for (const param of dao.model.parameters) {
+      if (param.type == ParameterType.GLOBAL) {
+        // store global only, references are generated on import
+        params.appendChild(this.writeParameter(dom, param))
+      }
+    }
+    model.appendChild(params)
+
+    dom.appendChild(model)
+    dom.normalize()
+
+    const transformer: XSLTProcessor = new XSLTProcessor()
+    transformer.importStylesheet(
+      new DOMParser().parseFromString(
+        `<xsl:transform
+          version="1.0"
+          xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+        >
+          <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
+          <xsl:template match="@*|node()">
+            <xsl:copy>
+              <xsl:apply-templates select="@*|node()"/>
+            </xsl:copy>
+          </xsl:template>
+        </xsl:transform>`,
+        'text/xml'
+      )
+    )
+
+    const result: Document = transformer.transformToDocument(dom)
+    return (
+      '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
+      new XMLSerializer().serializeToString(result)
+    )
   }
 }

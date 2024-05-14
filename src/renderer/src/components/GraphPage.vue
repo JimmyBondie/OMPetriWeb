@@ -117,6 +117,15 @@ defineProps<{
 
             <!-- Description -->
             <DAODescriptionEdit :dao="dao"></DAODescriptionEdit>
+
+            <v-btn
+              block
+              prepend-icon="mdi-content-save-edit-outline"
+              color="info"
+              @click="saveModel(dao)"
+            >
+              {{ $t('Save') }}
+            </v-btn>
           </v-expansion-panel-text>
         </v-expansion-panel>
 
@@ -222,7 +231,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['connect', 'createNode']),
+    ...mapMutations(['connect', 'createNode', 'saveModel']),
     onConnect(params: Connection) {
       if (!this.vueFlowInstance) {
         return

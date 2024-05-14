@@ -9,6 +9,7 @@ import { IParameterService } from './services/intf/IParameterService'
 import { Model } from './core/Model'
 import { IElement } from './entity/intf/IElement'
 import { Function } from './core/Function'
+import { saveAs } from 'file-saver'
 
 class StoreState extends Object {
   private _fileDialog: UseFileDialogReturn = useFileDialog({
@@ -56,6 +57,16 @@ class StoreState extends Object {
       this._fileDialog.reset()
       this._fileDialog.open()
     })
+  }
+
+  public saveModel(dao: ModelDAO) {
+    const file: File = new File([services.xmlConverter.writeXml(dao)], `${dao.name}.xml`, {
+      type: 'text/xml;charset=utf-8',
+      endings: 'native'
+    })
+
+    saveAs(file)
+    dao.hasChanges = false
   }
 }
 
@@ -113,6 +124,9 @@ const store: Store<StoreState> = createStore({
     },
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)
+    },
+    saveModel(state: StoreState, dao: ModelDAO) {
+      state.saveModel(dao)
     },
     setElementFunction(state: StoreState, { model, element, func, color }) {
       state.parameterService.setElementFunction(model, element, func, color)
