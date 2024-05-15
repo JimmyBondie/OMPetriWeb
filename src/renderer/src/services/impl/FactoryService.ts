@@ -20,6 +20,8 @@ import { Weight } from '@renderer/core/Weight'
 import { GraphArc } from '@renderer/graph/impl/GraphArc'
 import { ArcType } from '@renderer/entity/intf/IArc'
 import { INode } from '@renderer/entity/intf/INode'
+import { DateTime } from 'luxon'
+import { Guid } from 'guid-typescript'
 
 export class FactoryService extends CustomService implements IFactoryService {
   private DEFAULT_COLOUR: Color = new Color('WHITE', 'Default colour')
@@ -31,6 +33,10 @@ export class FactoryService extends CustomService implements IFactoryService {
   private defaultArcType: ArcType = ArcType.NORMAL
   private defaultPlaceType: PlaceType = PlaceType.CONTINUOUS
   private defaultTransitionType: TransitionType = TransitionType.CONTINUOUS
+
+  public get colorDefault(): Color {
+    return this.DEFAULT_COLOUR
+  }
 
   public createConnection(source: IGraphNode, target: IGraphNode, dataArc?: IDataArc): IGraphArc {
     /**
@@ -47,6 +53,16 @@ export class FactoryService extends CustomService implements IFactoryService {
      */
     id = this.getConnectionId(source, target)
     return new GraphArc(id, source, target, dataArc)
+  }
+
+  public createDao(): ModelDAO {
+    const dao: ModelDAO = new ModelDAO(Guid.create().toString())
+    dao.author = i18n.global.t('Guest')
+    dao.creationDateTime = DateTime.now().toJSDate()
+    dao.name = i18n.global.t('Untitled')
+    dao.model.addColor(this.DEFAULT_COLOUR)
+    dao.hasChanges = false
+    return dao
   }
 
   public createNode(modelDao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {

@@ -35,6 +35,10 @@ export class Graph extends Object {
     }
   }
 
+  public contains(id: string): boolean {
+    return this._connections.has(id) || this._nodes.has(id)
+  }
+
   public getNode(id: string): IGraphNode {
     const node: IGraphNode | undefined = this._nodes.get(id)
     if (node) {

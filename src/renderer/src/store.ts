@@ -13,7 +13,7 @@ import { saveAs } from 'file-saver'
 
 class StoreState extends Object {
   private _fileDialog: UseFileDialogReturn = useFileDialog({
-    accept: 'text/xml'
+    accept: 'text/xml,.sbml'
   })
   private _onLoadFile: ((fileList: FileList | null) => Promise<void>) | null = null
 
@@ -42,7 +42,12 @@ class StoreState extends Object {
           for (const file of fileList) {
             const text = await file.text()
             try {
-              model = services.xmlConverter.importXML(text)
+              const extension: string | undefined = file.name.split('.').pop()
+              if (extension && extension.localeCompare('sbml') == 0) {
+                model = services.sbmlConverter.importSbml(text)
+              } else {
+                model = services.xmlConverter.importXML(text)
+              }
             } catch (e: any) {
               reject(e)
             }

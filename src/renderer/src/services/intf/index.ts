@@ -1,4 +1,5 @@
 import { IFactoryService } from './IFactoryService'
+import { IModelSbmlConverter } from './IModelSbmlConverter'
 import { IModelService } from './IModelService'
 import { IModelXmlConverter } from './IModelXmlConverter'
 import { IParameterService } from './IParameterService'
@@ -7,6 +8,7 @@ export interface IServiceManager {
   readonly factoryService: IFactoryService
   readonly modelService: IModelService
   readonly parameterService: IParameterService
+  readonly sbmlConverter: IModelSbmlConverter
   readonly xmlConverter: IModelXmlConverter
 }
 

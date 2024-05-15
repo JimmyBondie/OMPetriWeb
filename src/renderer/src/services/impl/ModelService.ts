@@ -1,4 +1,3 @@
-import { Guid } from 'guid-typescript'
 import i18n from '@renderer/main'
 import { Color } from '@renderer/core/Color'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
@@ -27,8 +26,6 @@ import { utils } from '@renderer/utils'
 import { DataArc } from '@renderer/data/impl/DataArc'
 
 export class ModelService extends CustomService implements IModelService {
-  private readonly DEFAULT_COLOR: Color = new Color('WHITE', 'Default color')
-
   private _models: Array<ModelDAO> = new Array<ModelDAO>()
 
   public get models(): Array<ModelDAO> {
@@ -209,9 +206,7 @@ export class ModelService extends CustomService implements IModelService {
   }
 
   public newModel(): ModelDAO {
-    const dao: ModelDAO = new ModelDAO(Guid.create().toString())
-    dao.name = i18n.global.t('Untitled')
-    dao.model.addColor(this.DEFAULT_COLOR)
+    const dao: ModelDAO = this.services.factoryService.createDao()
     dao.hasChanges = true
     this._models.push(dao)
     return dao

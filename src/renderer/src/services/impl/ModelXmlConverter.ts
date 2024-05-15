@@ -1,5 +1,4 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { CustomService } from '../intf'
 import { IModelXmlConverter } from '../intf/IModelXmlConverter'
 import i18n from '@renderer/main'
 import { Color } from '@renderer/core/Color'
@@ -31,10 +30,11 @@ import { Arc } from '@renderer/entity/impl/Arc'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { Graph } from '@renderer/graph/Graph'
+import { BaseXmlConverter } from './BaseXmlConverter'
 
 export class ModelXmlConverterError extends CustomError {}
 
-export class ModelXmlConverter extends CustomService implements IModelXmlConverter {
+export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConverter {
   private readonly formatDateTime: string = 'yy-MM-dd HH:mm:ss'
 
   private readonly attrAuthor: string = 'author'
@@ -90,11 +90,9 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
   private readonly tagWeight: string = 'Weight'
   private readonly tagWeights: string = 'Weights'
 
-  private _parser: DOMParser = new DOMParser()
-
   public importXML(content: string): ModelDAO {
-    const xmlDoc: XMLDocument = this._parser.parseFromString(content, 'text/xml')
-    const root: Element = this.calcGroupNode(xmlDoc, this.tagModel)
+    const xmlDoc: XMLDocument = this.parser.parseFromString(content, 'text/xml')
+    const root: Element = this.calcRequiredGroupNode(xmlDoc, this.tagModel)
     let dao: ModelDAO = this.readModelData(root)
 
     // Colors
@@ -130,41 +128,6 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
 
     dao = this.services.modelService.addModel(dao)
     return dao
-  }
-
-  private calcGroupNode(root: Document | Element, tagName: string): Element {
-    const nodes: HTMLCollectionOf<Element> = root.getElementsByTagName(tagName)
-    if (nodes.length <= 0) {
-      throw new ModelXmlConverterError(i18n.global.t('ImportFailedNoElement', { element: tagName }))
-    } else if (nodes.length > 1) {
-      throw new ModelXmlConverterError(
-        i18n.global.t('ImportFailedMoreThanOneElement', { element: tagName })
-      )
-    }
-
-    const node: Element = nodes[0]
-    if (node.nodeType == Node.ELEMENT_NODE) {
-      return node
-    } else {
-      throw new ModelXmlConverterError(
-        i18n.global.t('ImportFailedMalformedElement', { tag: tagName })
-      )
-    }
-  }
-
-  private calcGroupNodeList(
-    root: Element,
-    groupTag: string,
-    itemTag: string
-  ): HTMLCollectionOf<Element> {
-    let group: Element
-    if (groupTag != '') {
-      group = this.calcGroupNode(root, groupTag)
-    } else {
-      group = root
-    }
-
-    return group.getElementsByTagName(itemTag)
   }
 
   private readArc(dao: ModelDAO, node: Element) {
@@ -221,7 +184,7 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     if (nodes.length != 0) {
       for (const node of nodes) {
         if (node.nodeType == Node.ELEMENT_NODE) {
-          return utils.functionFactory.build(node.textContent ?? '')
+          return utils.functionFactory.build(node.textContent ?? '1')
         }
       }
     }
@@ -254,22 +217,6 @@ export class ModelXmlConverter extends CustomService implements IModelXmlConvert
     })
 
     return nodes
-  }
-
-  private readGroup<T>(
-    item: T,
-    root: Element,
-    groupTag: string,
-    itemTag: string,
-    readNode: (item: T, node: Element) => void
-  ) {
-    const nodes: HTMLCollectionOf<Element> = this.calcGroupNodeList(root, groupTag, itemTag)
-
-    for (const node of nodes) {
-      if (node.nodeType == Node.ELEMENT_NODE) {
-        readNode.call(this, item, node)
-      }
-    }
   }
 
   private readId(node: Element): string {
