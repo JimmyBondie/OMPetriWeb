@@ -155,8 +155,8 @@ export class FunctionFactory extends Object {
 
       subFunctionId = '#' + this._subFunctionsCount++
       this._subFunctions.set(subFunctionId, subFunction)
-      subFunctionString = subFunctionString.replaceAll('(', '\\(') // avoid regex clash
-      subFunctionString = subFunctionString.replaceAll(')', '\\)')
+      // subFunctionString = subFunctionString.replaceAll('(', '\\(') // avoid regex clash
+      // subFunctionString = subFunctionString.replaceAll(')', '\\)')
       functionString = functionString.replace(subFunctionString, subFunctionId)
     }
 
