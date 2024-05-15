@@ -17,7 +17,7 @@ defineProps<{
 <template>
   <defs>
     <marker
-      id="arrow"
+      :id="`arrow_${data.id}`"
       viewBox="-10 -10 20 20"
       refX="0"
       refY="0"
@@ -33,7 +33,7 @@ defineProps<{
       ></polyline>
     </marker>
     <marker
-      id="circle"
+      :id="`circle_${data.id}`"
       viewBox="-10 -10 20 20"
       refX="0"
       refY="0"
@@ -75,9 +75,9 @@ export default {
     getMarkerEnd(): string {
       switch (this.data.arcType) {
         case ArcType.INHIBITORY:
-          return 'circle'
+          return `circle_${this.data.id}`
         default:
-          return 'arrow'
+          return `arrow_${this.data.id}`
       }
     },
     getSourcePlacePosition(radius: number, targetHeight: number): XYPosition {
