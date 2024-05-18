@@ -67,8 +67,21 @@ html {
   overflow-y: auto !important;
 }
 
+:root {
+  --toolbar-height: 0px;
+  --app-bar-height: 56px;
+}
+
+#app {
+  height: calc(100dvh - var(--toolbar-height));
+}
+
 .cet-menubar {
   display: none !important;
+}
+
+.cet-container {
+  --toolbar-height: 30px;
 }
 
 .v-application__wrap {

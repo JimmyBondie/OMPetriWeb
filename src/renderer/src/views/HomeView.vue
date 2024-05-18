@@ -5,8 +5,8 @@ import Settings from '../components/Settings.vue'
 </script>
 
 <template>
-  <main>
-    <v-app-bar density="comfortable" color="blue">
+  <main class="h-100">
+    <v-app-bar style="position: unset" density="comfortable" color="blue">
       <template v-slot:prepend>
         <v-app-bar-nav-icon variant="text" @click.stop="menuOpen = !menuOpen"></v-app-bar-nav-icon>
       </template>
@@ -32,7 +32,7 @@ import Settings from '../components/Settings.vue'
     </v-navigation-drawer>
 
     <v-main
-      class="h-screen"
+      style="height: calc(100% - var(--app-bar-height))"
       :class="selectedTab.includes('overview') ? 'single-bottom-bar' : 'no-bottom-bar'"
     >
       <v-window v-model="selectedTab[0]" direction="vertical" class="h-100">
@@ -67,6 +67,15 @@ export default {
 </script>
 
 <style lang="scss">
+.v-navigation-drawer--left {
+  top: calc(var(--app-bar-height) + var(--toolbar-height)) !important;
+  height: calc(100% - var(--app-bar-height) - var(--toolbar-height)) !important;
+}
+
+.v-main {
+  --v-layout-top: 0px !important ;
+}
+
 .no-bottom-bar {
   --v-layout-bottom: 0 !important;
 }
