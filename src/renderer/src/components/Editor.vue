@@ -19,7 +19,7 @@ defineProps<{
       <v-btn prepend-icon="mdi-calculator" value="simulation">{{ $t('Simulation') }}</v-btn>
     </v-bottom-navigation>
 
-    <v-window v-model="selectedPage" class="h-100">
+    <v-window v-model="selectedPage" class="window-without-bottom-bar">
       <!-- Inspector -->
       <v-window-item value="inspector" class="h-100">
         <InspectorPage
@@ -71,4 +71,11 @@ export default {
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.window-without-bottom-bar {
+  height: calc(100% - var(--app-bar-height));
+  .v-window__container {
+    height: 100%;
+  }
+}
+</style>

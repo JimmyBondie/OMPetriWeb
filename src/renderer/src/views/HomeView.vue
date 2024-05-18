@@ -31,10 +31,7 @@ import Settings from '../components/Settings.vue'
       </v-list>
     </v-navigation-drawer>
 
-    <v-main
-      style="height: calc(100% - var(--app-bar-height))"
-      :class="selectedTab.includes('overview') ? 'single-bottom-bar' : 'no-bottom-bar'"
-    >
+    <v-main style="height: calc(100% - var(--app-bar-height))">
       <v-window v-model="selectedTab[0]" direction="vertical" class="h-100">
         <!-- Overview -->
         <v-window-item value="overview" class="h-100">
@@ -74,13 +71,5 @@ export default {
 
 .v-main {
   --v-layout-top: 0px !important ;
-}
-
-.no-bottom-bar {
-  --v-layout-bottom: 0 !important;
-}
-
-.single-bottom-bar {
-  --v-layout-bottom: 56px !important;
 }
 </style>
