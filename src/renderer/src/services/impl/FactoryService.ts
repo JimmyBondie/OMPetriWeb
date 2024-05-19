@@ -57,7 +57,12 @@ export class FactoryService extends CustomService implements IFactoryService {
 
   public createDao(): ModelDAO {
     const dao: ModelDAO = new ModelDAO(Guid.create().toString())
-    dao.author = i18n.global.t('Guest')
+    if (window.require != undefined) {
+      const os = window.require('os')
+      dao.author = os.userInfo().username
+    } else {
+      dao.author = i18n.global.t('Guest')
+    }
     dao.creationDateTime = DateTime.now().toJSDate()
     dao.name = i18n.global.t('Untitled')
     dao.model.addColor(this.DEFAULT_COLOUR)
