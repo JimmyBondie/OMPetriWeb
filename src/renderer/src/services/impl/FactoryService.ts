@@ -57,9 +57,8 @@ export class FactoryService extends CustomService implements IFactoryService {
 
   public createDao(): ModelDAO {
     const dao: ModelDAO = new ModelDAO(Guid.create().toString())
-    if (window.require != undefined) {
-      const os = window.require('os')
-      dao.author = os.userInfo().username
+    if (window.api) {
+      dao.author = window.api.userName
     } else {
       dao.author = i18n.global.t('Guest')
     }

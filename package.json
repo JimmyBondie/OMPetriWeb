@@ -2,6 +2,7 @@
   "name": "ompetriweb",
   "version": "0.0.1",
   "main": "./out/main/index.js",
+  "type": "module",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",

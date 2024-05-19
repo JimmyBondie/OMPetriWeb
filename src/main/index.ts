@@ -18,10 +18,8 @@ function createWindow(): void {
     titleBarOverlay: true,
     ...(process && process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
-      preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
-      nodeIntegration: true,
-      contextIsolation: false
+      preload: join(__dirname, '../preload/index.mjs'),
+      sandbox: false
     }
   })
 

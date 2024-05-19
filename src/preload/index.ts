@@ -3,10 +3,14 @@ import { electronAPI } from '@electron-toolkit/preload'
 import TitleBarPkg from 'custom-electron-titlebar'
 import { TitleBarOptions } from 'custom-electron-titlebar/titlebar/options'
 import path from 'path'
+import { userInfo } from 'os'
+import { ContextBridgeAPI } from './ContextBridgeAPI'
 const { TitlebarColor, Titlebar } = TitleBarPkg
 
 // Custom APIs for renderer
-const api = {}
+const api: ContextBridgeAPI = {
+  userName: userInfo().username
+}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
