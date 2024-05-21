@@ -151,6 +151,11 @@ export class Place extends Node {
   }
 
   public getToken(color: Color): Token | undefined {
-    return this._tokens.get(color)
+    for (const [key, value] of this._tokens) {
+      if (key.id == color.id) {
+        return value
+      }
+    }
+    return undefined
   }
 }
