@@ -10,6 +10,7 @@ import { Model } from './core/Model'
 import { IElement } from './entity/intf/IElement'
 import { Function } from './core/Function'
 import { saveAs } from 'file-saver'
+import { ISimulationService } from './services/intf/ISimulationService'
 
 class StoreState extends Object {
   private _fileDialog: UseFileDialogReturn = useFileDialog({
@@ -32,6 +33,10 @@ class StoreState extends Object {
 
   public get parameterService(): IParameterService {
     return services.parameterService
+  }
+
+  public get simulationService(): ISimulationService {
+    return services.simulationService
   }
 
   public openModel(): Promise<ModelDAO> {
@@ -99,6 +104,27 @@ const store: Store<StoreState> = createStore({
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     },
+    startSimulation:
+      (state: StoreState) =>
+      (
+        dao: ModelDAO,
+        optionalCompilerArgs: string,
+        optionalSimulationArgs: string,
+        stopTime: number,
+        intervals: number,
+        integrator: string,
+        log: (text: string) => void
+      ): [AbortController, Promise<boolean>] => {
+        return state.simulationService.startSimulation(
+          dao,
+          optionalCompilerArgs,
+          optionalSimulationArgs,
+          stopTime,
+          intervals,
+          integrator,
+          log
+        )
+      },
     validateAndGetFunction:
       (state: StoreState) =>
       (model: Model, element: IElement, functionString: string): Function => {

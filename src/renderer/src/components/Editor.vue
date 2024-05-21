@@ -47,7 +47,7 @@ defineProps<{
 
       <!-- Simulation -->
       <v-window-item value="simulation" class="h-100">
-        <SimulationPage class="h-100"></SimulationPage>
+        <SimulationPage :dao="dao" class="h-100"></SimulationPage>
       </v-window-item>
     </v-window>
   </main>

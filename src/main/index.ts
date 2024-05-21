@@ -60,6 +60,8 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
+  ipcMain.handle('getTempDir', () => app.getPath('temp'))
+
   createWindow()
 
   app.on('activate', function () {
