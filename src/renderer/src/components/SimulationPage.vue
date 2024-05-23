@@ -22,7 +22,11 @@ defineProps<{
         <v-row justify="center">
           <v-col class="d-flex justify-center">
             <v-tooltip
-              :text="$t('PleaseDownloadDesktopAppForSimulation')"
+              :text="
+                inBrowser
+                  ? $t('PleaseDownloadDesktopAppForSimulation')
+                  : $t('CouldNotFindOpenModelicaInstallation')
+              "
               :disabled="!simulationNotPossible"
               location="top"
             >
@@ -170,14 +174,15 @@ defineProps<{
 export default {
   data() {
     return {
-      intervals: 100,
+      inBrowser: !window.api,
       inSimulation: false,
+      intervals: 100,
       logText: '',
       optionalCompilerArgs: '',
       optionalSimulationArgs: '',
       showLog: false,
       showResultsBtn: false,
-      simulationNotPossible: window.api == undefined,
+      simulationNotPossible: !this.simulationCompilerExists(),
       simulationIntegrator: 'dassl',
       startStop: true,
       stopTime: 10,
@@ -185,7 +190,7 @@ export default {
     }
   },
   methods: {
-    ...mapGetters(['startSimulation']),
+    ...mapGetters(['simulationCompilerExists', 'startSimulation']),
     async runSimulation() {
       this.showResultsBtn = false
       this.logText = ''

@@ -42,6 +42,15 @@ export class SimulationService extends CustomService implements ISimulationServi
     return [controller, promise]
   }
 
+  public get simulationCompilerExists(): boolean {
+    try {
+      const path: string = this.simulationCompilerPath
+      return path != '' && window.api && window.api.fileExists(path)
+    } catch (_: any) {
+      return false
+    }
+  }
+
   public get simulationCompilerPath(): string {
     if (this._compilerPath == '') {
       this._compilerPath = this.getCompilerPath()

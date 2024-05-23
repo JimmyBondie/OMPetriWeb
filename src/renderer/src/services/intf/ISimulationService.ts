@@ -1,6 +1,7 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 
 export interface ISimulationService {
+  readonly simulationCompilerExists: boolean
   readonly simulationCompilerPath: string
   readonly simulationWorkingDir: string
   startSimulation(

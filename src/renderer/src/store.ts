@@ -104,6 +104,9 @@ const store: Store<StoreState> = createStore({
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     },
+    simulationCompilerExists: (state: StoreState): boolean => {
+      return state.simulationService.simulationCompilerExists
+    },
     startSimulation:
       (state: StoreState) =>
       (
