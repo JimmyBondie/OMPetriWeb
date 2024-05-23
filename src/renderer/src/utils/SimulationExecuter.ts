@@ -4,6 +4,7 @@ import { SimulationException } from '@renderer/services/impl/SimulationService'
 export class SimulationExecuter extends Object {
   private _integrator: string
   private _intervals: number
+  private _log: (text: string) => void
   private _optionalSimulationArgs: string
   private _serverPort: number
   private _simulationExecutable: string
@@ -15,11 +16,13 @@ export class SimulationExecuter extends Object {
     optionalSimulationArgs: string,
     stopTime: number,
     intervals: number,
-    integrator: string
+    integrator: string,
+    log: (text: string) => void
   ) {
     super()
     this._integrator = integrator
     this._intervals = intervals
+    this._log = log
     this._optionalSimulationArgs = optionalSimulationArgs
     this._serverPort = serverPort
     this._simulationExecutable = simulationExecutable
@@ -57,14 +60,17 @@ export class SimulationExecuter extends Object {
     }
 
     let output: string = ''
+    this._log('Simulation: Output [START]')
     await window.api.spawn(
       this._simulationExecutable,
       cmdLineArgs,
       services.simulationService.simulationWorkingDir,
       (text: string) => {
         output += text
+        this._log(text)
       }
     )
+    this._log('Simulation: Output [END]')
 
     return output
   }

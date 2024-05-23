@@ -144,18 +144,15 @@ class SimulationThread extends CustomService {
       this._optionalSimulationArgs,
       this._stopTime,
       this._intervals,
-      this._integrator
+      this._integrator,
+      this._log
     )
-    const [isFailed, output]: [boolean, string] = await simulationExecuter.run()
+    const [isFailed, _]: [boolean, string] = await simulationExecuter.run()
     if (isFailed) {
       throw new SimulationException('Executing simulation failed!')
     }
 
     this._log('Simulation: Reading and storing results...')
-
-    this._log('Simulation: Output [START]')
-    this._log(output)
-    this._log('Simulation: Output [END]')
   }
 
   private async runCompiler(): Promise<References> {
