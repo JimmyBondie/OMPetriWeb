@@ -64,6 +64,14 @@ export default {
 </script>
 
 <style lang="scss">
+.v-navigation-drawer {
+  z-index: 2004 !important;
+}
+
+.v-navigation-drawer__scrim {
+  z-index: 2003 !important;
+}
+
 .v-navigation-drawer--left {
   top: calc(var(--app-bar-height) + var(--toolbar-height)) !important;
   height: calc(100% - var(--app-bar-height) - var(--toolbar-height)) !important;
