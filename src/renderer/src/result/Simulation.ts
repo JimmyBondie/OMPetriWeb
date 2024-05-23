@@ -2,6 +2,7 @@ import { References } from '@renderer/core/References'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { IElement } from '@renderer/entity/intf/IElement'
 import { ResultsException } from '@renderer/exception/ResultsException'
+import i18n from '@renderer/main'
 
 export class Simulation extends Object {
   private _dao: ModelDAO
@@ -19,9 +20,7 @@ export class Simulation extends Object {
     for (const variable of this._variables) {
       if (this._resultsMap.has(variable)) {
         throw new ResultsException(
-          "Results data structure already contains list for variable '" +
-            variable +
-            "'! Data integrity not given."
+          i18n.global.t('ResultsAlreadyContainsListForVariable', { variable: variable })
         )
       }
       this._resultsMap.set(variable, new Array<BigInt | number>())
@@ -57,9 +56,7 @@ export class Simulation extends Object {
   // Adds data. Appends data to the existing data lists for each variable.
   public addData(data: Array<BigInt | number>) {
     if (data.length != this._variables.length) {
-      throw new ResultsException(
-        'Incoming data size does not match size of available variables! Data integrity not given.'
-      )
+      throw new ResultsException(i18n.global.t('DataSizeDoesNotMatchVariables'))
     }
     for (let i = 0; i < data.length; i++) {
       const result: Array<BigInt | number> | undefined = this._resultsMap.get(this._variables[i])

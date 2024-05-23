@@ -1,6 +1,7 @@
 import { IElement } from '@renderer/entity/intf/IElement'
 import { Simulation } from './Simulation'
 import { ResultsException } from '@renderer/exception/ResultsException'
+import i18n from '@renderer/main'
 
 export class ResultSet extends Object {
   private _autoAdding: boolean = false
@@ -18,7 +19,7 @@ export class ResultSet extends Object {
     this._variable = variable
     if (!simulation.getData(variable)) {
       throw new ResultsException(
-        "Data for variable '" + variable + "' cannot be found in the associated simulation results"
+        i18n.global.t('DataCannotBeFoundInSimulation', { variable: variable })
       )
     }
   }

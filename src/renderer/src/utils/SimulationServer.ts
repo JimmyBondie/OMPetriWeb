@@ -1,5 +1,6 @@
 import { References } from '@renderer/core/References'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
+import i18n from '@renderer/main'
 import { Simulation } from '@renderer/result/Simulation'
 import { services } from '@renderer/services'
 import { Buffer } from 'buffer'
@@ -42,7 +43,7 @@ export class SimulationServer extends Object {
         (hadError: boolean) => this.onClose.call(this, hadError)
       )
       if (!isSocketReady) {
-        this._log("Socket port '" + this._serverPort + "' already in use. Incrementing.")
+        this._log(i18n.global.t('SocketPortAlreadyInUse', { port: this._serverPort }))
         this._serverPort++
         countPortsChecked++
       }
@@ -58,7 +59,7 @@ export class SimulationServer extends Object {
     let buffer: Buffer = Buffer.from(this._receivedData)
     let position: number = 1 //Skip the first byte
 
-    this._log('Simulation: Initializing results storage...')
+    this._log(i18n.global.t('SimulationInitializingResultsStorage'))
     position = this.readSimulationVariables(buffer, position)
     this._results = new Simulation(this._dao, this._simulationVariables, this._references)
     this.readAndStoreSimulationResults(buffer, position)

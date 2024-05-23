@@ -14,6 +14,7 @@ import { Weight } from '@renderer/core/Weight'
 import { INode } from '@renderer/entity/intf/INode'
 import { IElement } from '@renderer/entity/intf/IElement'
 import { services } from '@renderer/services'
+import i18n from '@renderer/main'
 
 export class OpenModelicaExporterException extends CustomError {}
 
@@ -142,7 +143,7 @@ export class OpenModelicaExporter extends Object {
           if (isColoredPn) {
             line += ''
             throw new OpenModelicaExporterException(
-              'Colored discrete places are not yet supported!'
+              i18n.global.t('ColoredDiscretePlacesAreNotSupported')
             ) // TODO
           } else {
             line += 'PNlib.Components.PD'
@@ -152,7 +153,9 @@ export class OpenModelicaExporter extends Object {
         }
 
         default: {
-          throw new OpenModelicaExporterException('Unhandled place type: ' + place.placeType)
+          throw new OpenModelicaExporterException(
+            i18n.global.t('UnhandledPlaceType', { type: PlaceType.toText(place.placeType) })
+          )
         }
       }
       line += ` '${place.id}'`
@@ -197,7 +200,7 @@ export class OpenModelicaExporter extends Object {
         } else {
           if (!token) {
             throw new OpenModelicaExporterException(
-              "No token for colour '" + color.id + "' available."
+              i18n.global.t('NoTokenForColorAvailable', { id: color.id })
             )
           }
 
@@ -263,7 +266,7 @@ export class OpenModelicaExporter extends Object {
           if (isColoredPn) {
             line += ''
             throw new OpenModelicaExporterException(
-              'Colored discrete transitions are not yet supported!'
+              i18n.global.t('ColoredDiscreteTransitionsAreNotSupported')
             )
           } else {
             line += 'PNlib.Components.TD'
@@ -276,7 +279,7 @@ export class OpenModelicaExporter extends Object {
           if (isColoredPn) {
             line += ''
             throw new OpenModelicaExporterException(
-              'Colored stochastic transitions are not yet supported!'
+              i18n.global.t('ColoredStochasticTransitionsAreNotSupported')
             )
           } else {
             line += 'PNlib.Components.TDS'
@@ -287,7 +290,9 @@ export class OpenModelicaExporter extends Object {
 
         default: {
           throw new OpenModelicaExporterException(
-            'Unhandled transition type: ' + transition.transitionType
+            i18n.global.t('UnhandledTransitionType', {
+              type: TransitionType.toText(transition.transitionType)
+            })
           )
         }
       }
@@ -348,7 +353,7 @@ export class OpenModelicaExporter extends Object {
 
         default: {
           throw new OpenModelicaExporterException(
-            'Cannot export unhandled arc type: ' + arc.arcType
+            i18n.global.t('CannotExportUnhandledArcType', { type: ArcType.toText(arc.arcType) })
           )
         }
       }
@@ -376,7 +381,7 @@ export class OpenModelicaExporter extends Object {
             line += this.writeConnectionNonNormal(arc)
           } catch (e: any) {
             throw new OpenModelicaExporterException(
-              e.message + ' Inhibitory arc cannot connect transition to place.'
+              e.message + ' ' + i18n.global.t('TransitionCannotInhibitPlace')
             )
           }
           break
@@ -387,7 +392,7 @@ export class OpenModelicaExporter extends Object {
             line += this.writeConnectionNonNormal(arc)
           } catch (e: any) {
             throw new OpenModelicaExporterException(
-              e.message + ' Text arc cannot connect transition to place.'
+              e.message + ' ' + i18n.global.t('TransitionCannotTestPlace')
             )
           }
           break
@@ -395,7 +400,7 @@ export class OpenModelicaExporter extends Object {
 
         default: {
           throw new OpenModelicaExporterException(
-            "Unhandled connection for arc type '" + arc.arcType + "'."
+            i18n.global.t('UnexpectedArcType', { type: ArcType.toText(arc.arcType) })
           )
         }
       }
@@ -456,7 +461,7 @@ export class OpenModelicaExporter extends Object {
         index++ // no increment if disabled - handle as if arc does not exist
       }
     }
-    throw new OpenModelicaExporterException('Node cannot be found to be source of the given arcs!')
+    throw new OpenModelicaExporterException(i18n.global.t('ArcSourceCannotBeFound'))
   }
 
   private getArcIndexWithTargetNode(arcs: Array<IArc>, target: INode): number {
@@ -469,7 +474,7 @@ export class OpenModelicaExporter extends Object {
         index++
       }
     }
-    throw new OpenModelicaExporterException('Node cannot be found to be target of the given arcs!')
+    throw new OpenModelicaExporterException(i18n.global.t('ArcTargetCannotBeFound'))
   }
 
   // Gets the string representing an element's function.
@@ -648,7 +653,7 @@ export class OpenModelicaExporter extends Object {
         connection += this.CMNT_END
       }
     } else {
-      throw new OpenModelicaExporterException('Invalid connection found!')
+      throw new OpenModelicaExporterException(i18n.global.t('InvalidConnection'))
     }
 
     return connection
@@ -764,7 +769,7 @@ export class OpenModelicaExporter extends Object {
       }
 
       default: {
-        throw new OpenModelicaExporterException('Unhandled conflict resolution type detected!')
+        throw new OpenModelicaExporterException(i18n.global.t('UnhandledConflictResolutionType'))
       }
     }
 

@@ -1,3 +1,4 @@
+import i18n from '@renderer/main'
 import { services } from '@renderer/services'
 import { SimulationException } from '@renderer/services/impl/SimulationService'
 
@@ -40,7 +41,7 @@ export class SimulationExecuter extends Object {
       output = await this.runSimulation()
     } catch (e: any) {
       isFailed = true
-      throw new SimulationException('Failed to start the simulation process!')
+      throw new SimulationException(i18n.global.t('FailedToStartSimulationProcess'))
     }
 
     return [isFailed, output]
@@ -60,7 +61,7 @@ export class SimulationExecuter extends Object {
     }
 
     let output: string = ''
-    this._log('Simulation: Output [START]')
+    this._log(i18n.global.t('SimulationOutputStart'))
     await window.api.spawn(
       this._simulationExecutable,
       cmdLineArgs,
@@ -70,7 +71,7 @@ export class SimulationExecuter extends Object {
         this._log(text)
       }
     )
-    this._log('Simulation: Output [END]')
+    this._log(i18n.global.t('SimulationOutputEnd'))
 
     return output
   }

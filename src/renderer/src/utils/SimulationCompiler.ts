@@ -3,6 +3,7 @@ import { CustomService, IServiceManager } from '../services/intf'
 import { SimulationException } from '../services/impl/SimulationService'
 import { utils } from '@renderer/utils'
 import { References } from '@renderer/core/References'
+import i18n from '@renderer/main'
 
 export class SimulationCompiler extends CustomService {
   private _dao: ModelDAO
@@ -56,13 +57,13 @@ export class SimulationCompiler extends CustomService {
         if (!window.api.isDirectory(path)) {
           // File older than 5 minutes
           if (date - window.api.getLastModifiedTime(path) > 300000) {
-            this._log('Deleting: ' + file)
+            this._log(i18n.global.t('DeletingFile', { file: file }))
             window.api.deleteFile(path)
           }
         }
       }
     } catch (e: any) {
-      throw new SimulationException('Failed to get the required directories! [' + e.message + ']')
+      throw new SimulationException(i18n.global.t('FailedToGetDirectories', { message: e.message }))
     }
   }
 
@@ -78,7 +79,7 @@ export class SimulationCompiler extends CustomService {
       )
     } catch (e: any) {
       throw new SimulationException(
-        'Failed to export the data for OpenModelica! [' + e.message + ']'
+        i18n.global.t('FailedToExportDataForOpenModelica', { message: e.message })
       )
     }
   }
@@ -91,19 +92,19 @@ export class SimulationCompiler extends CustomService {
       path = this.parseSubstring(path, '"', '"')
     } catch (e: any) {
       throw new SimulationException(
-        'Path to simulation executable can not be parsed. Output: \n' + output
+        i18n.global.t('CannotParsePathForSimulationExecutable', { output: output })
       )
     }
 
     if (path == '') {
-      throw new SimulationException('Build failed. Output: \n' + output)
+      throw new SimulationException(i18n.global.t('BuildFailed', { output: output }))
     }
 
     if (window.api.platform == 'win32') {
       path += '.exe'
     }
 
-    this._log('Sim Executable: ' + path)
+    this._log(i18n.global.t('SimulationExecutable', { path: path }))
 
     return path
   }

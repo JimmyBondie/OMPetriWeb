@@ -6,6 +6,7 @@ import { SimulationCompiler } from '../../utils/SimulationCompiler'
 import { SimulationServer } from '@renderer/utils/SimulationServer'
 import { SimulationExecuter } from '@renderer/utils/SimulationExecuter'
 import { References } from '@renderer/core/References'
+import i18n from '@renderer/main'
 
 export class SimulationException extends CustomError {}
 
@@ -70,9 +71,7 @@ export class SimulationService extends CustomService implements ISimulationServi
     const pathOpenModelica: string | undefined = window.electron.process.env[openModelicaHomeDir]
     if (!pathOpenModelica) {
       throw new SimulationException(
-        "'" +
-          openModelicaHomeDir +
-          "' environment variable is not set! Please install OpenModelica or set the variable correctly."
+        i18n.global.t('OpenModelicaEnvVariableNotSet', { variable: openModelicaHomeDir })
       )
     }
 
@@ -84,9 +83,7 @@ export class SimulationService extends CustomService implements ISimulationServi
       return pathCompiler
     } else {
       throw new SimulationException(
-        "'" +
-          openModelicaHomeDir +
-          "' environment variable is not set correctly! Please set the variable correctly or reinstall OpenModelica."
+        i18n.global.t('OpenModelicaEnvVariableNotSetCorrectly', { variable: openModelicaHomeDir })
       )
     }
   }
@@ -94,7 +91,7 @@ export class SimulationService extends CustomService implements ISimulationServi
   private getWorkingDirectory(): string {
     let dir: string = window.api.tempDir
     if (!window.api.fileExists(dir) || !window.api.isDirectory(dir)) {
-      throw new SimulationException("Application's working directory not accessible!")
+      throw new SimulationException(i18n.global.t('WorkingDirNotAccessible'))
     }
 
     dir = window.api.joinPaths(dir, 'JFX_PetriNet', 'data')
@@ -136,15 +133,15 @@ class SimulationThread extends CustomService {
   }
 
   public async run() {
-    this._log('Simulation: Initializing...')
+    this._log(i18n.global.t('SimulationInitializing'))
 
-    this._log('Simulation: Building...')
+    this._log(i18n.global.t('SimulationBuilding'))
     const simulationReferences: References = await this.runCompiler()
 
-    this._log('Simulation: Creating communication server socket...')
+    this._log(i18n.global.t('SimulationCreatingSocket'))
     const simulationServer = new SimulationServer(this._dao, simulationReferences, this._log)
     if (!(await simulationServer.run())) {
-      throw new SimulationException('Simulation communication server cannot be started!')
+      throw new SimulationException(i18n.global.t('SimulationCannotStartServer'))
     }
 
     const simulationExecuter = new SimulationExecuter(
@@ -158,10 +155,10 @@ class SimulationThread extends CustomService {
     )
     const [isFailed, _]: [boolean, string] = await simulationExecuter.run()
     if (isFailed) {
-      throw new SimulationException('Executing simulation failed!')
+      throw new SimulationException(i18n.global.t('ExecutingSimulationFailed'))
     }
 
-    this._log('Simulation: Reading and storing results...')
+    this._log(i18n.global.t('SimulationReadingStoringResults'))
   }
 
   private async runCompiler(): Promise<References> {
