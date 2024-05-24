@@ -17,9 +17,6 @@ import { useLocale, useTheme } from 'vuetify/lib/framework.mjs'
             item-title="name"
             item-value="code"
             density="compact"
-            :open-text="$t('Open')"
-            :close-text="$t('Close')"
-            :no-data-text="$t('NoDataAvailable')"
           ></v-select>
         </v-list-item-subtitle>
       </v-list-item>

@@ -21,9 +21,6 @@ defineProps<{
     prepend-icon="mdi-alpha-t-box-outline"
     variant="underlined"
     density="compact"
-    :open-text="$t('Open')"
-    :close-text="$t('Close')"
-    :no-data-text="$t('NoDataAvailable')"
   ></v-select>
 </template>
 

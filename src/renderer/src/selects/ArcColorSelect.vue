@@ -22,9 +22,6 @@ defineEmits(['update:color'])
     prepend-icon="mdi-palette"
     variant="underlined"
     density="compact"
-    :open-text="$t('Open')"
-    :close-text="$t('Close')"
-    :no-data-text="$t('NoDataAvailable')"
     disabled
   >
     <template v-slot:append>
