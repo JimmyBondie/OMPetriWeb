@@ -7,6 +7,10 @@ import { Simulation } from '@renderer/result/Simulation'
 import { mergeProps } from 'vue'
 import { VTextarea } from 'vuetify/lib/components/index.mjs'
 import { mapActions, mapGetters } from 'vuex'
+import VChart from 'vue-echarts'
+import { useTheme } from 'vuetify/lib/framework.mjs'
+import { ECharts, EChartsOption, LineSeriesOption } from 'echarts'
+import { XAXisOption } from 'echarts/types/dist/shared'
 
 defineProps<{
   dao?: ModelDAO
@@ -335,7 +339,9 @@ defineProps<{
 
       <v-divider vertical></v-divider>
 
-      <v-col cols="6"></v-col>
+      <v-col cols="6">
+        <v-chart autoresize :theme="theme" :option="getChartOptions()" ref="chart"></v-chart>
+      </v-col>
     </v-row>
   </main>
 </template>
@@ -377,6 +383,7 @@ export default {
       simulationIntegrator: 'dassl',
       startStop: this.dao != undefined,
       stopTime: 10,
+      theme: useTheme().global.name,
       thread: undefined as AbortController | undefined
     }
   },
@@ -418,6 +425,48 @@ export default {
       } else {
         return value.toFixed(2)
       }
+    },
+    getChartOptions(): EChartsOption {
+      const options: EChartsOption = {
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          show: true
+        },
+        backgroundColor: 'rgb(var(--v-theme-surface))',
+        yAxis: {
+          type: 'value',
+          name: this.$t('Token')
+        }
+      }
+
+      let timeValues: Array<string> = new Array<string>()
+      if (this.selectedSimulation) {
+        const timeData: Array<number | BigInt> | undefined = this.selectedSimulation.timeData
+        if (timeData) {
+          timeValues = timeData.map<string>((value: number | BigInt) => this.formatNumber(value))
+        }
+      }
+
+      const xAxis: XAXisOption = {
+        type: 'category',
+        name: this.$t('Time'),
+        data: timeValues
+      }
+
+      const series: Array<LineSeriesOption> = new Array<LineSeriesOption>()
+      for (const resultSet of this.selectedResultSets) {
+        series.push({
+          type: 'line',
+          data: resultSet.data.map<string>((value: number | BigInt) => this.formatNumber(value)),
+          name: `${resultSet.element.id} - ${this.getValueName()(resultSet.variable)}`
+        })
+      }
+
+      options.xAxis = xAxis
+      options.series = series
+      return options
     },
     getElements(): Array<AutocompleteWrapper<Node>> {
       if (!this.selectedSimulation) {
@@ -633,6 +682,12 @@ export default {
       this.thread = controller
       this.showResultsBtn = await promise
       this.inSimulation = false
+    }
+  },
+  watch: {
+    selectedResultSets() {
+      let chart: ECharts = this.$refs.chart as ECharts
+      chart.setOption(this.getChartOptions())
     }
   }
 }

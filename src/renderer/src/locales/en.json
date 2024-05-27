@@ -168,6 +168,7 @@
   "Stochastic": "Stochastic",
   "StopTime": "Stop Time",
   "Test": "Test",
+  "Time": "Time",
   "Token": "Token",
   "TokenFromActual": "Token from {element} [actual]",
   "TokenFromIndexActual": "Token from <{index}> [actual]",

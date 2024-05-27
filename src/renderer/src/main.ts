@@ -64,6 +64,18 @@ import '@mdi/font/css/materialdesignicons.css'
 // Vue Store
 import store from './store'
 
+// eCharts
+import { use } from 'echarts/core'
+import { SVGRenderer } from 'echarts/renderers'
+import {
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent
+} from 'echarts/components'
+import { LineChart } from 'echarts/charts'
+use([SVGRenderer, TitleComponent, TooltipComponent, LegendComponent, GridComponent, LineChart])
+
 const app = createApp(App)
 app.use(i18n)
 app.use(router)
