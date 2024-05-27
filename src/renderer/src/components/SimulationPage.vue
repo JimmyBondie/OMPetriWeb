@@ -320,9 +320,6 @@ defineProps<{
               <td>{{ formatNumber(getMinValue(item as ResultSet)) }}</td>
               <td>{{ formatNumber(getMaxValue(item as ResultSet)) }}</td>
               <td>
-                <v-checkbox-btn></v-checkbox-btn>
-              </td>
-              <td>
                 <v-btn
                   color="error"
                   icon="mdi-trash-can-outline"
@@ -528,7 +525,6 @@ export default {
           sortRaw: (a: ResultSet, b: ResultSet): number =>
             this.compareNumbers(this.getMaxValue(a), this.getMaxValue(b))
         },
-        { title: this.$t('Add'), sortable: false },
         { title: this.$t('Delete'), sortable: false }
       ]
     },
