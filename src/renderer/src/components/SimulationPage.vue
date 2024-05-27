@@ -312,7 +312,11 @@ defineProps<{
           <template v-slot:item="{ item }">
             <tr>
               <td style="padding: 0 8px">
-                <v-checkbox-btn v-model="selectedResultSets" :value="item"></v-checkbox-btn>
+                <v-checkbox-btn
+                  v-model="selectedResultSets"
+                  :value="item"
+                  @update:model-value="item.shown = !item.shown"
+                ></v-checkbox-btn>
               </td>
               <td>
                 {{ (item as ResultSet).simulation.dateTimeString }}
