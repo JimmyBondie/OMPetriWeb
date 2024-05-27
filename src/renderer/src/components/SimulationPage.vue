@@ -6,7 +6,7 @@ import { ResultSet } from '@renderer/result/ResultSet'
 import { Simulation } from '@renderer/result/Simulation'
 import { mergeProps } from 'vue'
 import { VTextarea } from 'vuetify/lib/components/index.mjs'
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import VChart from 'vue-echarts'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ECharts, EChartsOption, LineSeriesOption } from 'echarts'
@@ -282,8 +282,8 @@ defineProps<{
               ></v-btn>
             </template>
 
-            <v-btn key="1">{{ $t('OnlySelected') }}</v-btn>
-            <v-btn key="2">{{ $t('All') }}</v-btn>
+            <v-btn key="1" @click="saveResults(selectedResultSets)">{{ $t('OnlySelected') }}</v-btn>
+            <v-btn key="2" @click="saveSimulations(getSimulationResults())">{{ $t('All') }}</v-btn>
           </v-speed-dial>
         </template>
       </v-tooltip>
@@ -399,6 +399,7 @@ export default {
       'simulationCompilerExists',
       'startSimulation'
     ]),
+    ...mapMutations(['saveResults', 'saveSimulations']),
     ...mapActions(['openResults']),
     addSelected() {
       if (!this.selectedSimulation) {

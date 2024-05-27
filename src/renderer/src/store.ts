@@ -206,6 +206,12 @@ const store: Store<StoreState> = createStore({
     saveModel(state: StoreState, dao: ModelDAO) {
       state.saveModel(dao)
     },
+    saveResults(state: StoreState, resultSets: Array<ResultSet>) {
+      state.saveResults(resultSets)
+    },
+    saveSimulations(state: StoreState, simulationResults: Array<Simulation>) {
+      state.saveSimulations(simulationResults)
+    },
     setElementFunction(state: StoreState, { model, element, func, color }) {
       state.parameterService.setElementFunction(model, element, func, color)
     },
