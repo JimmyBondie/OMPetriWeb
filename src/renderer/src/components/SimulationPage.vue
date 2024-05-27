@@ -323,7 +323,7 @@ defineProps<{
               </td>
               <td>{{ (item as ResultSet).simulation.dao.name }}</td>
               <td>{{ (item as ResultSet).element.id }}</td>
-              <td>{{ getValueName()((item as ResultSet).variable) }}</td>
+              <td>{{ getValueName()((item as ResultSet).variable, selectedSimulation) }}</td>
               <td>{{ formatNumber(getStartValue(item as ResultSet)) }}</td>
               <td>{{ formatNumber(getEndValue(item as ResultSet)) }}</td>
               <td>{{ formatNumber(getMinValue(item as ResultSet)) }}</td>
@@ -465,7 +465,7 @@ export default {
         series.push({
           type: 'line',
           data: resultSet.data.map<string>((value: number | BigInt) => this.formatNumber(value)),
-          name: `${resultSet.element.id} - ${this.getValueName()(resultSet.variable)}`
+          name: `${resultSet.element.id} - ${this.getValueName()(resultSet.variable, this.selectedSimulation)}`
         })
       }
 
@@ -550,7 +550,9 @@ export default {
           title: this.$t('Value'),
           sortable: true,
           sortRaw: (a: ResultSet, b: ResultSet): number =>
-            this.getValueName()(a.variable).localeCompare(this.getValueName()(b.variable))
+            this.getValueName()(a.variable, this.selectedSimulation).localeCompare(
+              this.getValueName()(b.variable, this.selectedSimulation)
+            )
         },
         {
           key: 'start',
