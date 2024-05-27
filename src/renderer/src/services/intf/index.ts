@@ -4,16 +4,18 @@ import { IModelService } from './IModelService'
 import { IModelXmlConverter } from './IModelXmlConverter'
 import { IParameterService } from './IParameterService'
 import { IResultService } from './IResultService'
+import { IResultsXmlConverter } from './IResultsXmlConverter'
 import { ISimulationService } from './ISimulationService'
 
 export interface IServiceManager {
   readonly factoryService: IFactoryService
+  readonly modelSbmlConverter: IModelSbmlConverter
   readonly modelService: IModelService
+  readonly modelXmlConverter: IModelXmlConverter
   readonly parameterService: IParameterService
   readonly resultService: IResultService
-  readonly sbmlConverter: IModelSbmlConverter
+  readonly resultsXmlConverter: IResultsXmlConverter
   readonly simulationService: ISimulationService
-  readonly xmlConverter: IModelXmlConverter
 }
 
 export class CustomService extends Object {

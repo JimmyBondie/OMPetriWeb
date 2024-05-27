@@ -35,6 +35,10 @@ export class Simulation extends Object {
     return this._dateTime
   }
 
+  public get dateTimeString(): string {
+    return this._dateTime.toLocaleString()
+  }
+
   // Gets all elements that are referenced in the simulation data.
   public get elements(): Array<IElement> {
     return Array.from(this._variableReferences.elementToFilterReferences.keys())

@@ -21,6 +21,17 @@ export namespace ElementType {
     }
   }
 
+  export function toString(elementType: ElementType): string {
+    switch (elementType) {
+      case ElementType.ARC:
+        return 'ARC'
+      case ElementType.PLACE:
+        return 'PLACE'
+      case ElementType.TRANSITION:
+        return 'TRANSITION'
+    }
+  }
+
   export function toText(elementType: ElementType): string {
     switch (elementType) {
       case ElementType.ARC:

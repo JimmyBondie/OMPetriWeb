@@ -89,7 +89,7 @@ export class SimulationCompiler extends CustomService {
 
     try {
       path = output.substring(output.lastIndexOf('{'))
-      path = this.parseSubstring(path, '"', '"')
+      path = utils.parseSubstring(path, '"', '"')
     } catch (e: any) {
       throw new SimulationException(
         i18n.global.t('CannotParsePathForSimulationExecutable', { output: output })
@@ -107,19 +107,6 @@ export class SimulationCompiler extends CustomService {
     this._log(i18n.global.t('SimulationExecutable', { path: path }))
 
     return path
-  }
-
-  // Parses a substring. Parses a subject String from a given starting String
-  // to a given ending String. Returns NULL if the String cannot be parsed.
-  public parseSubstring(subject: string, start: string, end: string): string {
-    if (subject == '') return ''
-
-    const s: number = subject.indexOf(start) + start.length
-    const e: number = subject.indexOf(end, s)
-
-    if (s >= e) return ''
-
-    return subject.substring(s, e)
   }
 
   public async run(): Promise<References> {

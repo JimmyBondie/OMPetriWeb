@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import SimulationPage from '@renderer/components/SimulationPage.vue'
 import About from '../components/About.vue'
 import Overview from '../components/Overview.vue'
 import Settings from '../components/Settings.vue'
@@ -22,6 +23,9 @@ import Settings from '../components/Settings.vue'
         <v-list-item prepend-icon="mdi-graph-outline" value="overview">
           {{ $t('Overview') }}
         </v-list-item>
+        <v-list-item prepend-icon="mdi-calculator-variant-outline" value="simulations">
+          {{ $t('Simulations') }}
+        </v-list-item>
         <v-list-item prepend-icon="mdi-cog-outline" value="settings">
           {{ $t('Settings') }}
         </v-list-item>
@@ -36,6 +40,10 @@ import Settings from '../components/Settings.vue'
         <!-- Overview -->
         <v-window-item value="overview" class="h-100">
           <Overview class="h-100"></Overview>
+        </v-window-item>
+
+        <v-window-item value="simulations" class="h-100">
+          <SimulationPage class="h-100"></SimulationPage>
         </v-window-item>
 
         <!-- Settings -->

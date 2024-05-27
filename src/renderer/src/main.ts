@@ -32,6 +32,23 @@ const vuetify = createVuetify({
     VNumberInput
   },
   defaults: {
+    VAutocomplete: {
+      closeText: i18n.global.t('Close'),
+      noDataText: i18n.global.t('NoDataAvailable'),
+      openText: i18n.global.t('Open')
+    },
+    VDataTable: {
+      firstPageLabel: i18n.global.t('FirstPage'),
+      itemsPerPageText: i18n.global.t('ItemsPerPage'),
+      lastPageLabel: i18n.global.t('LastPage'),
+      nextPageLabel: i18n.global.t('NextPage'),
+      noDataText: i18n.global.t('NoDataAvailable'),
+      pageText: `{0}-{1} ${i18n.global.t('Of')} {2}`,
+      prevPageLabel: i18n.global.t('PrevPage')
+    },
+    VPagination: {
+      ariaLabel: ''
+    },
     VSelect: {
       closeText: i18n.global.t('Close'),
       noDataText: i18n.global.t('NoDataAvailable'),

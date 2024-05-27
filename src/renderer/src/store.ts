@@ -11,22 +11,11 @@ import { IElement } from './entity/intf/IElement'
 import { Function } from './core/Function'
 import { saveAs } from 'file-saver'
 import { ISimulationService } from './services/intf/ISimulationService'
+import { Simulation } from './result/Simulation'
+import { IResultService } from './services/intf/IResultService'
+import { ResultSet } from './result/ResultSet'
 
 class StoreState extends Object {
-  private _fileDialog: UseFileDialogReturn = useFileDialog({
-    accept: 'text/xml,.sbml'
-  })
-  private _onLoadFile: ((fileList: FileList | null) => Promise<void>) | null = null
-
-  public constructor() {
-    super()
-    this._fileDialog.onChange(async (fileList: FileList | null) => {
-      if (this._onLoadFile) {
-        await this._onLoadFile(fileList)
-      }
-    })
-  }
-
   public get modelService(): IModelService {
     return services.modelService
   }
@@ -35,48 +24,90 @@ class StoreState extends Object {
     return services.parameterService
   }
 
+  public get resultsService(): IResultService {
+    return services.resultService
+  }
+
   public get simulationService(): ISimulationService {
     return services.simulationService
   }
 
-  public openModel(): Promise<ModelDAO> {
-    return new Promise<ModelDAO>((resolve, reject) => {
-      this._onLoadFile = async (fileList: FileList | null) => {
-        let model: ModelDAO | null = null
+  public openFile(accept: string): Promise<Array<[string, string]>> {
+    return new Promise<Array<[string, string]>>((resolve, _) => {
+      const fileDialog: UseFileDialogReturn = useFileDialog({
+        accept: accept
+      })
+
+      fileDialog.onChange(async (fileList: FileList | null) => {
+        const result: Array<[string, string]> = new Array<[string, string]>()
         if (fileList) {
           for (const file of fileList) {
-            const text = await file.text()
-            try {
-              const extension: string | undefined = file.name.split('.').pop()
-              if (extension && extension.localeCompare('sbml') == 0) {
-                model = services.sbmlConverter.importSbml(text)
-              } else {
-                model = services.xmlConverter.importXML(text)
-              }
-            } catch (e: any) {
-              reject(e)
-            }
-          }
-          if (model) {
-            resolve(model)
-          } else {
-            reject()
+            result.push([file.name, await file.text()])
           }
         }
-      }
-      this._fileDialog.reset()
-      this._fileDialog.open()
+        resolve(result)
+      })
+
+      fileDialog.open()
     })
   }
 
+  public async openModel(): Promise<ModelDAO | null> {
+    const fileList: Array<[string, string]> = await this.openFile('text/xml,.sbml')
+    let model: ModelDAO | null = null
+    for (const [name, content] of fileList) {
+      const extension: string | undefined = name.split('.').pop()
+      if (extension && extension.localeCompare('sbml') == 0) {
+        model = services.modelSbmlConverter.importSbml(content)
+      } else {
+        model = services.modelXmlConverter.importXML(content)
+      }
+    }
+    return model
+  }
+
+  public async openResults(): Promise<Array<Simulation>> {
+    const fileList: Array<[string, string]> = await this.openFile('text/xml')
+    let simulations: Array<Simulation> = new Array<Simulation>()
+    for (const [_, content] of fileList) {
+      simulations.push(...services.resultsXmlConverter.importXml(content))
+    }
+    for (const simulation of simulations) {
+      this.resultsService.addResult(simulation)
+    }
+    return simulations
+  }
+
   public saveModel(dao: ModelDAO) {
-    const file: File = new File([services.xmlConverter.writeXml(dao)], `${dao.name}.xml`, {
+    const file: File = new File([services.modelXmlConverter.writeXml(dao)], `${dao.name}.xml`, {
       type: 'text/xml;charset=utf-8',
       endings: 'native'
     })
 
     saveAs(file)
     dao.hasChanges = false
+  }
+
+  public saveResults(resultSets: Array<ResultSet>) {
+    const file: File = new File([services.resultsXmlConverter.exportResultSets(resultSets)], '', {
+      type: 'text/xml;charset=utf-8',
+      endings: 'native'
+    })
+
+    saveAs(file)
+  }
+
+  public saveSimulations(simulationResults: Array<Simulation>) {
+    const file: File = new File(
+      [services.resultsXmlConverter.exportSimulationResults(simulationResults)],
+      '',
+      {
+        type: 'text/xml;charset=utf-8',
+        endings: 'native'
+      }
+    )
+
+    saveAs(file)
   }
 }
 
@@ -104,6 +135,19 @@ const store: Store<StoreState> = createStore({
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     },
+    getSharedValues:
+      (state: StoreState) =>
+      (results: Simulation, elements: Array<IElement>): Map<string, Array<string>> => {
+        return state.resultsService.getSharedValues(results, elements)
+      },
+    getSimulationResults: (state: StoreState): Array<Simulation> => {
+      return state.resultsService.simulationResults
+    },
+    getValueName:
+      (state: StoreState) =>
+      (value: string, simulation: Simulation): string => {
+        return state.resultsService.getValueName(value, simulation)
+      },
     simulationCompilerExists: (state: StoreState): boolean => {
       return state.simulationService.simulationCompilerExists
     },
@@ -170,8 +214,11 @@ const store: Store<StoreState> = createStore({
     }
   },
   actions: {
-    openModel(context): Promise<ModelDAO> {
+    openModel(context): Promise<ModelDAO | null> {
       return context.state.openModel()
+    },
+    openResults(context): Promise<Array<Simulation>> {
+      return context.state.openResults()
     }
   }
 })

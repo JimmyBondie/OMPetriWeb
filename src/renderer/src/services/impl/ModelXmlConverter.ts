@@ -687,28 +687,6 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     dom.appendChild(model)
     dom.normalize()
 
-    const transformer: XSLTProcessor = new XSLTProcessor()
-    transformer.importStylesheet(
-      new DOMParser().parseFromString(
-        `<xsl:transform
-          version="1.0"
-          xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-        >
-          <xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-          <xsl:template match="@*|node()">
-            <xsl:copy>
-              <xsl:apply-templates select="@*|node()"/>
-            </xsl:copy>
-          </xsl:template>
-        </xsl:transform>`,
-        'text/xml'
-      )
-    )
-
-    const result: Document = transformer.transformToDocument(dom)
-    return (
-      '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' +
-      new XMLSerializer().serializeToString(result)
-    )
+    return this.xmlToString(dom)
   }
 }
