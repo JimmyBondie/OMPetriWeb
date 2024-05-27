@@ -375,7 +375,7 @@ export default {
       showResultsBtn: false,
       simulationNotPossible: !this.simulationCompilerExists(),
       simulationIntegrator: 'dassl',
-      startStop: true,
+      startStop: this.dao != undefined,
       stopTime: 10,
       thread: undefined as AbortController | undefined
     }
