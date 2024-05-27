@@ -298,7 +298,7 @@ defineProps<{
               title: $t('All')
             }
           ]"
-          v-model="selectedItems"
+          v-model="selectedResultSets"
           :headers="getHeaders()"
           :items="resultSets"
           return-object
@@ -307,7 +307,7 @@ defineProps<{
           <template v-slot:item="{ item }">
             <tr>
               <td style="padding: 0 8px">
-                <v-checkbox-btn v-model="selectedItems" :value="item"></v-checkbox-btn>
+                <v-checkbox-btn v-model="selectedResultSets" :value="item"></v-checkbox-btn>
               </td>
               <td>
                 {{ (item as ResultSet).simulation.dateTimeString }}
@@ -323,7 +323,12 @@ defineProps<{
                 <v-checkbox-btn></v-checkbox-btn>
               </td>
               <td>
-                <v-btn color="error" icon="mdi-trash-can-outline" variant="text"></v-btn>
+                <v-btn
+                  color="error"
+                  icon="mdi-trash-can-outline"
+                  variant="text"
+                  @click="removeFromResultSets(item as ResultSet)"
+                ></v-btn>
               </td>
             </tr>
           </template>
@@ -365,7 +370,7 @@ export default {
       resultSets: [] as Array<ResultSet>,
       selectedDAO: this.dao as ModelDAO | undefined,
       selectedElements: [] as Array<Node>,
-      selectedItems: [] as Array<ResultSet>,
+      selectedResultSets: [] as Array<ResultSet>,
       selectedSimulation: undefined as Simulation | undefined,
       selectedValues: [] as Array<string>,
       showLog: false,
@@ -599,6 +604,12 @@ export default {
       }
 
       return choices
+    },
+    removeFromResultSets(resultSet: ResultSet) {
+      const index: number = this.resultSets.indexOf(resultSet)
+      if (index >= 0) {
+        this.resultSets.splice(index, 1)
+      }
     },
     async runSimulation() {
       this.showResultsBtn = false
