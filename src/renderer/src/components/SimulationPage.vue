@@ -167,7 +167,9 @@ defineProps<{
           </v-row>
           <v-row v-if="showResultsBtn">
             <v-col>
-              <v-btn color="secondary" block>{{ $t('SimulationFinishedShowResults') }}</v-btn>
+              <v-btn color="secondary" block @click="startStop = false">
+                {{ $t('SimulationFinishedShowResults') }}
+              </v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -190,14 +192,13 @@ defineProps<{
 
       <!-- Select simulation -->
       <v-autocomplete
-        v-if="!dao"
         class="ml-2"
         :label="$t('Simulation')"
         :items="getSimulations()"
         item-title="dateTimeString"
         v-model="<Simulation>selectedSimulation"
         return-object
-        :disabled="!selectedDAO"
+        :disabled="!selectedDAO || startStop"
         density="compact"
         hide-details
       ></v-autocomplete>
