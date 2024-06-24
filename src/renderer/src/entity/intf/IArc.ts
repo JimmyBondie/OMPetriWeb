@@ -71,7 +71,7 @@ export interface IArc extends IElement {
   readonly target: INode
   readonly weights: Array<Weight>
 
-  addWeight(weight: Weight)
+  addWeight(weight: Weight): void
 
   getWeight(color: Color): Weight | undefined
 }
