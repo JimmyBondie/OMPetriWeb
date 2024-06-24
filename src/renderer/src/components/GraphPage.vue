@@ -35,6 +35,8 @@ import DAOAuthorEdit from '@renderer/edits/DAOAuthorEdit.vue'
 import DAODescriptionEdit from '@renderer/edits/DAODescriptionEdit.vue'
 import { FlowArcType } from '@renderer/flow/FlowArcType'
 import FlowCluster from '@renderer/flow/FlowCluster.vue'
+import { DataCluster } from '@renderer/data/impl/DataCluster'
+import QuickViewCluster from '@renderer/quickview/QuickViewCluster.vue'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -214,6 +216,15 @@ defineProps<{
               :arc="selectedDataElement"
               :shape="<IGraphElement>selectedGraphElement"
             ></QuickViewArc>
+          </v-expansion-panel-text>
+
+          <!-- Clusters -->
+          <v-expansion-panel-text v-if="selectedDataElement instanceof DataCluster">
+            <QuickViewCluster
+              :dao="dao"
+              :cluster="selectedDataElement"
+              :shape="<IGraphElement>selectedGraphElement"
+            ></QuickViewCluster>
           </v-expansion-panel-text>
         </v-expansion-panel>
       </v-expansion-panels>
