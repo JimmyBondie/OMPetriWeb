@@ -96,6 +96,7 @@
   "InvalidConnection": "Ungültige Verbindung gefunden!",
   "InvalidSelectionForClustering": "Ungültige Auswahl für die Gruppierung!",
   "InvalidShapeAssociatedToArcData": "Ungültige Form in Verbindung mit Kanten-Daten!",
+  "Items": "Elemente",
   "ItemsPerPage": "Elemente pro Seite",
   "Label": "Bezeichnung",
   "Language": "Sprache",

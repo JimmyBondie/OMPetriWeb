@@ -96,6 +96,7 @@
   "InvalidConnection": "Invalid connection found!",
   "InvalidSelectionForClustering": "Invalid selection for clustering!",
   "InvalidShapeAssociatedToArcData": "Invalid shape associated to arc data!",
+  "Items": "Items",
   "ItemsPerPage": "Items per page",
   "Label": "Label",
   "Language": "Language",
