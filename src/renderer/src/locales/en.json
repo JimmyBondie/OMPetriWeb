@@ -12,6 +12,7 @@
   "CannotConnectContinuousTransitionAndDiscretePlace": "A continuous transition cannot be connected to a discrete place!",
   "CannotConnectDiscretePlaceAndContinuousTransition": "A discrete place cannot be connected to a continuous transition!",
   "CannotConnectSameType": "Nodes of the same type cannot be connected.",
+  "CannotCreateCluster": "Cannot create cluster: \"{msg}\"",
   "CannotCreateClusterArc": "Trying to create a cluster arc when neither source nor target is a cluster!",
   "CannotCreateElement": "Cannot create element of undefined type!",
   "CannotCreateParameterInvalidName": "Cannot create parameter using invalid name!",

@@ -24,6 +24,7 @@ import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { GraphArc } from '@renderer/graph/impl/GraphArc'
 import { Token } from '@renderer/core/Token'
 import i18n from '@renderer/main'
+import { IGraphCluster } from '@renderer/graph/intf/IGraphCluster'
 
 export class ModelSbmlConverterError extends CustomError {}
 
@@ -99,6 +100,18 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
         }
       }
     )
+
+    try {
+      const cluster: IGraphCluster = this.services.hierarchyService.cluster(
+        dao,
+        childNodes,
+        elem.getAttribute(this.attrId) ?? ''
+      )
+      cluster.data.labelText = elem.getAttribute(this.attrLabel) ?? ''
+      dao.graph.addNode(cluster)
+    } catch (e: any) {
+      throw new ModelSbmlConverterError(i18n.global.t('CannotCreateCluster', { msg: e.message }))
+    }
 
     return result
   }
