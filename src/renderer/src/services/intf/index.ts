@@ -1,4 +1,5 @@
 import { IFactoryService } from './IFactoryService'
+import { IHierarchyService } from './IHierarchyService'
 import { IModelSbmlConverter } from './IModelSbmlConverter'
 import { IModelService } from './IModelService'
 import { IModelXmlConverter } from './IModelXmlConverter'
@@ -9,6 +10,7 @@ import { ISimulationService } from './ISimulationService'
 
 export interface IServiceManager {
   readonly factoryService: IFactoryService
+  readonly hierarchyService: IHierarchyService
   readonly modelSbmlConverter: IModelSbmlConverter
   readonly modelService: IModelService
   readonly modelXmlConverter: IModelXmlConverter

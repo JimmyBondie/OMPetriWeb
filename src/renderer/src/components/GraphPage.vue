@@ -34,6 +34,7 @@ import DAONameEdit from '@renderer/edits/DAONameEdit.vue'
 import DAOAuthorEdit from '@renderer/edits/DAOAuthorEdit.vue'
 import DAODescriptionEdit from '@renderer/edits/DAODescriptionEdit.vue'
 import { FlowArcType } from '@renderer/flow/FlowArcType'
+import FlowCluster from '@renderer/flow/FlowCluster.vue'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -49,8 +50,8 @@ defineProps<{
       <VueFlow
         class="basicflow"
         :class="{ dark: useTheme().current.value.dark }"
-        :nodes="dao.graph.nodes"
-        :edges="dao.graph.connections"
+        :nodes="dao.graph.nodesRecursive"
+        :edges="dao.graph.connectionsRecursive"
         @node-click="onSelectNode"
         @node-double-click="onDoubleClickNode"
         @nodes-change="(changes: any) => onNodesChange(changes)"
@@ -79,6 +80,9 @@ defineProps<{
         </template>
         <template #node-graphTransition="props">
           <FlowTransition v-bind="props" />
+        </template>
+        <template #node-graphCluster="props">
+          <FlowCluster v-bind="props" />
         </template>
         <template #edge-placeToTransition="props">
           <FlowArc

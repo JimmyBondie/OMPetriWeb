@@ -15,9 +15,12 @@ import { ResultService } from './ResultService'
 import { IResultService } from '../intf/IResultService'
 import { ResultsXmlConverter } from './ResultsXmlConverter'
 import { IResultsXmlConverter } from '../intf/IResultsXmlConverter'
+import { HierarchyService } from './HierarchyService'
+import { IHierarchyService } from '../intf/IHierarchyService'
 
 export class ServiceManager extends Object implements IServiceManager {
   private _factoryService: FactoryService = new FactoryService(this)
+  private _hierarchyService: HierarchyService = new HierarchyService(this)
   private _modelSbmlConverter: ModelSbmlConverter = new ModelSbmlConverter(this)
   private _modelService: ModelService = new ModelService(this)
   private _modelXmlConverter: ModelXmlConverter = new ModelXmlConverter(this)
@@ -28,6 +31,10 @@ export class ServiceManager extends Object implements IServiceManager {
 
   public get factoryService(): IFactoryService {
     return this._factoryService
+  }
+
+  public get hierarchyService(): IHierarchyService {
+    return this._hierarchyService
   }
 
   public get modelSbmlConverter(): IModelSbmlConverter {

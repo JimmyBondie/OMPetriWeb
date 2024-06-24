@@ -31,6 +31,8 @@ import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { Graph } from '@renderer/graph/Graph'
 import { BaseXmlConverter } from './BaseXmlConverter'
+import { IGraphCluster } from '@renderer/graph/intf/IGraphCluster'
+import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 
 export class ModelXmlConverterError extends CustomError {}
 
@@ -124,7 +126,17 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     })
 
     // Graph
-    this.readGroup<ModelDAO>(dao, root, '', this.tagGraph, this.readGraph)
+    this.readGroup<[ModelDAO, Element | undefined]>(
+      [dao, undefined],
+      root,
+      '',
+      this.tagGraph,
+      ([dao, clusterElement]: [ModelDAO, Element | undefined], node: Element) => {
+        if (node.parentElement == root) {
+          this.readGraph([dao, clusterElement], node)
+        }
+      }
+    )
 
     dao = this.services.modelService.addModel(dao)
     return dao
@@ -191,30 +203,89 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     return utils.functionFactory.build('1')
   }
 
-  private readGraph(dao: ModelDAO, node: Element): Array<IGraphElement> {
-    // Read recursive graphs
-    const nodes: Array<IGraphElement> = new Array<IGraphElement>()
-    this.readGroup<ModelDAO>(dao, node, this.tagClusters, this.tagCluster, (dao, node) => {
-      nodes.push(...this.readGraph(dao, node))
-    })
+  private readGraph(
+    [dao, clusterElement]: [ModelDAO, Element | undefined],
+    graphElement: Element
+  ): Array<IGraphElement> {
+    let nodeElements: Element | null = null
+    let clusterElements: Element | null = null
 
-    // Read the nodes
-    this.readGroup<ModelDAO>(dao, node, this.tagNodes, this.tagNode, (dao, node) => {
-      const graphNode: IGraphNode | undefined = dao.graph.getNode(this.readId(node))
-      if (graphNode) {
-        let attribute: string | null = node.getAttribute(this.attrPosX)
-        if (attribute) {
-          graphNode.xCoordinate = Number.parseFloat(attribute)
-        }
-
-        attribute = node.getAttribute(this.attrPosY)
-        if (attribute) {
-          graphNode.yCoordinate = Number.parseFloat(attribute)
-        }
-
-        nodes.push(graphNode)
+    this.readGroup<ModelDAO>(dao, graphElement, '', this.tagNodes, (_: ModelDAO, node: Element) => {
+      if (node.parentElement == graphElement) {
+        nodeElements = node
       }
     })
+
+    this.readGroup<ModelDAO>(
+      dao,
+      graphElement,
+      '',
+      this.tagClusters,
+      (_: ModelDAO, node: Element) => {
+        if (node.parentElement == graphElement) {
+          clusterElements = node
+        }
+      }
+    )
+
+    // Recursively create subgraphs.
+    const nodes: Array<IGraphElement> = new Array<IGraphElement>()
+    if (clusterElements) {
+      this.readGroup<ModelDAO>(
+        dao,
+        clusterElements,
+        '',
+        this.tagCluster,
+        (dao: ModelDAO, clusterChildElement: Element) => {
+          this.readGroup<ModelDAO>(
+            dao,
+            clusterChildElement,
+            '',
+            this.tagGraph,
+            (dao: ModelDAO, node: Element) => {
+              nodes.push(...this.readGraph([dao, clusterChildElement], node))
+            }
+          )
+        }
+      )
+    }
+
+    // Cluster the related nodes
+    if (nodeElements) {
+      this.readGroup<ModelDAO>(
+        dao,
+        nodeElements,
+        '',
+        this.tagNode,
+        (dao: ModelDAO, graphElement: Element) => {
+          const graphNode: IGraphNode = dao.graph.getNode(this.readId(graphElement))
+          let attribute: string | null = graphElement.getAttribute(this.attrPosX)
+          if (attribute) {
+            graphNode.xCoordinate = Number.parseFloat(attribute)
+          }
+
+          attribute = graphElement.getAttribute(this.attrPosY)
+          if (attribute) {
+            graphNode.yCoordinate = Number.parseFloat(attribute)
+          }
+
+          nodes.push(graphNode)
+        }
+      )
+    }
+
+    if (clusterElement) {
+      const cluster: IGraphCluster = this.services.hierarchyService.cluster(
+        dao,
+        nodes,
+        this.readId(clusterElement)
+      )
+      cluster.data.description = clusterElement.getAttribute(this.attrDescription) ?? ''
+      cluster.data.labelText = clusterElement.getAttribute(this.attrLabel) ?? ''
+    } else {
+      // no cluster is created for the root graph
+      return []
+    }
 
     return nodes
   }
@@ -435,6 +506,19 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     return elements
   }
 
+  private writeCluster(dom: Document, clusters: Array<IGraphCluster>): Element {
+    const elements: Element = dom.createElement(this.tagClusters)
+    for (const cluster of clusters) {
+      const clusterElement: Element = dom.createElement(this.tagCluster)
+      clusterElement.setAttribute(this.attrId, cluster.id)
+      clusterElement.setAttribute(this.attrLabel, cluster.data.labelText)
+      clusterElement.setAttribute(this.attrDescription, cluster.data.description)
+      clusterElement.appendChild(this.writeGraph(dom, cluster.graph))
+      elements.appendChild(clusterElement)
+    }
+    return elements
+  }
+
   private writeColors(dom: Document, colors: Array<Color>): Element {
     const elements: Element = dom.createElement(this.tagColors)
     for (const color of colors) {
@@ -466,6 +550,12 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       if (data.equals(arc)) {
         conn = this.writeConnection(dom, shape as GraphArc)
         shapes.appendChild(conn)
+      } else if (data.type == DataType.CLUSTERARC) {
+        const dca: DataClusterArc = data as DataClusterArc
+        for (const innerArc of dca.storedArcs.values()) {
+          conn = this.writeConnection(dom, innerArc)
+          shapes.appendChild(conn)
+        }
       } else {
         throw new ModelXmlConverterError(i18n.global.t('InvalidShapeAssociatedToArcData'))
       }
@@ -476,7 +566,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
 
   private writeGraph(dom: Document, graph: Graph): Element {
     const elements: Element = dom.createElement(this.tagGraph)
-    elements.appendChild(dom.createElement(this.tagClusters))
+    elements.appendChild(this.writeCluster(dom, graph.clusters))
     elements.appendChild(this.writeNodes(dom, graph.nodes))
     return elements
   }
