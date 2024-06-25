@@ -3,6 +3,7 @@
   "Add": "Hinzufügen",
   "All": "Alle",
   "Arc": "Kante",
+  "Arcs": "Kanten",
   "ArcSourceCannotBeFound": "Kantenquelle kann nicht gefunden werden!",
   "ArcTargetCannotBeFound": "Kantenziel kann nicht gefunden werden!",
   "ArcTypeWasNotSpecified": "Der Kantentyp wurde nicht angegeben!",

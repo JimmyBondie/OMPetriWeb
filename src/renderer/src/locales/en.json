@@ -3,6 +3,7 @@
   "Add": "Add",
   "All": "All",
   "Arc": "Arc",
+  "Arcs": "Arcs",
   "ArcSourceCannotBeFound": "Arc source cannot be found!",
   "ArcTargetCannotBeFound": "Arc target cannot be found!",
   "ArcTypeWasNotSpecified": "Arc type was not specified!",
