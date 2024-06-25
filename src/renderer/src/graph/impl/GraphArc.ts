@@ -1,11 +1,13 @@
 import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { IGraphArc } from '../intf/IGraphArc'
 import { IGraphNode } from '../intf/IGraphNode'
+import { DataCluster } from '@renderer/data/impl/DataCluster'
 
 export class GraphArc extends Object implements IGraphArc {
   private _data: IDataArc
   private _disabled: boolean = false
   private _id: string
+  private _parentCluster: DataCluster | null = null
   private _source: IGraphNode
   private _target: IGraphNode
 
@@ -36,6 +38,10 @@ export class GraphArc extends Object implements IGraphArc {
 
   public get id(): string {
     return this._id
+  }
+
+  public get parentCluster(): DataCluster | null {
+    return this._parentCluster
   }
 
   public get source(): string {
@@ -96,5 +102,9 @@ export class GraphArc extends Object implements IGraphArc {
         this._target.disabled = false
       }
     }
+  }
+
+  public set parentCluster(parentCluster: DataCluster | null) {
+    this._parentCluster = parentCluster
   }
 }

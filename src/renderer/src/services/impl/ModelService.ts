@@ -24,6 +24,8 @@ import { PlaceType } from '@renderer/entity/impl/Place'
 import { ReferenceType } from '@renderer/core/Parameter/ReferencingParameter'
 import { utils } from '@renderer/utils'
 import { DataArc } from '@renderer/data/impl/DataArc'
+import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
+import { Graph } from '@renderer/graph/Graph'
 
 export class ModelService extends CustomService implements IModelService {
   private _models: Array<ModelDAO> = new Array<ModelDAO>()
@@ -36,7 +38,7 @@ export class ModelService extends CustomService implements IModelService {
     if (arc && arc.data && arc.data.type != DataType.CLUSTERARC) {
       dao.model.addElement(arc.data)
     }
-    dao.graph.addConnection(arc)
+    this.getGraph(dao, arc).addConnection(arc)
   }
 
   public addElement(dao: ModelDAO, element: IElement) {
@@ -60,7 +62,7 @@ export class ModelService extends CustomService implements IModelService {
     if (node && node.data && node.data.type != DataType.CLUSTER) {
       dao.model.addElement(node.data)
     }
-    dao.graph.addNode(node)
+    this.getGraph(dao, node).addNode(node)
   }
 
   public changeArcType(dao: ModelDAO, arc: DataArc, type: ArcType) {
@@ -205,6 +207,14 @@ export class ModelService extends CustomService implements IModelService {
     return node
   }
 
+  private getGraph(dao: ModelDAO, node: IGraphElement): Graph {
+    if (node.parentCluster) {
+      return node.parentCluster.graph
+    } else {
+      return dao.graph
+    }
+  }
+
   public newModel(): ModelDAO {
     const dao: ModelDAO = this.services.factoryService.createDao()
     dao.hasChanges = true
@@ -263,12 +273,13 @@ export class ModelService extends CustomService implements IModelService {
   }
 
   private removeArcShape(dao: ModelDAO, arc: IGraphArc) {
-    dao.graph.removeConnection(arc)
+    this.getGraph(dao, arc).removeConnection(arc)
     arc.data.shapes.delete(arc)
   }
 
   private removeNodeShape(dao: ModelDAO, node: IGraphNode) {
-    dao.graph.removeNode(node)
+    node.parentCluster
+    this.getGraph(dao, node).removeNode(node)
     node.data.shapes.delete(node)
   }
 
@@ -450,6 +461,9 @@ export class ModelService extends CustomService implements IModelService {
      */
     if (source.data.type == target.data.type) {
       throw new DataException(i18n.global.t('CannotConnectSameType'))
+    }
+    if (source instanceof GraphCluster || target instanceof GraphCluster) {
+      throw new DataException('Cannot create connection to a cluster from the outside.')
     }
     if (source.children.has(target) || target.parents.has(source)) {
       throw new DataException(i18n.global.t('NodesAlreadyConnected'))
