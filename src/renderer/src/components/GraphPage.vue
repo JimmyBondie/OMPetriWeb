@@ -279,10 +279,14 @@ export default {
       this.connect({ dao: this.dao, source: sourceShape, target: targetShape })
     },
     onDoubleClickEdge(event: EdgeMouseEvent) {
-      this.onOpenInspector(event.edge.data)
+      if (!(event.edge.data instanceof DataClusterArc)) {
+        this.onOpenInspector(event.edge.data)
+      }
     },
     onDoubleClickNode(event: NodeMouseEvent) {
-      this.onOpenInspector(event.node.data)
+      if (!(event.node.data instanceof DataCluster)) {
+        this.onOpenInspector(event.node.data)
+      }
     },
     onDragEnd() {
       this.isDragging = false
