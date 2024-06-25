@@ -226,12 +226,12 @@ export class Model extends Object {
     }
     let index: number = arc.source.arcsOut.indexOf(arc)
     if (index >= 0) {
-      arc.source.arcsOut.slice(index, 1)
+      arc.source.arcsOut.splice(index, 1)
     }
 
     index = arc.target.arcsIn.indexOf(arc)
     if (index >= 0) {
-      arc.target.arcsIn.slice(index, 1)
+      arc.target.arcsIn.splice(index, 1)
     }
 
     this._arcs.delete(arc.id)
@@ -268,12 +268,12 @@ export class Model extends Object {
     }
     while (node.arcsIn.length > 0) {
       this.removeArc(node.arcsIn[0])
-      node.arcsIn.slice(0, 1)
+      node.arcsIn.splice(0, 1)
     }
 
     while (node.arcsOut.length > 0) {
       this.removeArc(node.arcsOut[0])
-      node.arcsOut.slice(0, 1)
+      node.arcsOut.splice(0, 1)
     }
 
     if (node instanceof Place) {
