@@ -50,10 +50,8 @@ export class GraphCluster extends GraphNode implements IGraphCluster {
         min = node.xCoordinate
       }
     }
-    if (min < 0) {
-      for (const node of this._dataCluster.graph.nodes) {
-        node.xCoordinate -= min
-      }
+    for (const node of this._dataCluster.graph.nodes) {
+      node.xCoordinate -= min
     }
 
     super.xCoordinate = xCoordinate
@@ -69,10 +67,8 @@ export class GraphCluster extends GraphNode implements IGraphCluster {
         min = node.yCoordinate
       }
     }
-    if (min < 0) {
-      for (const node of this._dataCluster.graph.nodes) {
-        node.yCoordinate -= min
-      }
+    for (const node of this._dataCluster.graph.nodes) {
+      node.yCoordinate -= min
     }
 
     super.yCoordinate = yCoordinate
