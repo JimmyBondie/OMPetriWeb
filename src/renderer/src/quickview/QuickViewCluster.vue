@@ -18,7 +18,7 @@ defineProps<{
   <v-divider class="mt-6 mb-5"></v-divider>
 
   <!-- Nodes -->
-  <v-list height="200" rounded density="compact">
+  <v-list density="compact">
     <v-list-subheader>
       {{ $t('Items') }}
     </v-list-subheader>
@@ -27,6 +27,7 @@ defineProps<{
       v-for="node in cluster.graph.nodes"
       :value="node"
       density="compact"
+      rounded
       :base-color="node.disabled ? 'grey' : undefined"
       :title="node.id"
     >
