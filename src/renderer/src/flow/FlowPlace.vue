@@ -15,7 +15,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
         class="rounded-circle cursor-pointer"
         height="40"
         width="40"
-        color="green-darken-2"
+        :color="selected ? 'green-lighten-3' : 'green-darken-2'"
         :border="calcBorder()"
         v-bind="tooltip"
         @mousedown="showTooltip = false"

@@ -13,7 +13,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
       <Handle></Handle>
       <v-card
         class="pa-1 cursor-pointer"
-        :color="calcColor()"
+        :color="selected ? 'blue-lighten-3' : calcColor()"
         width="15"
         height="40"
         :border="calcBorder()"

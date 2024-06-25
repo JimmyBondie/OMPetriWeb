@@ -18,7 +18,13 @@ import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 export class HierarchyServiceError extends CustomError {}
 
 export class HierarchyService extends CustomService implements IHierarchyService {
-  public cluster(dao: ModelDAO, selected: Array<IGraphElement>, clusterId: string): IGraphCluster {
+  private readonly PREFIX_ID_CLUSTER: string = 'C'
+
+  public cluster(dao: ModelDAO, selected: Array<IGraphElement>, clusterId?: string): IGraphCluster {
+    if (!clusterId) {
+      clusterId = this.getClusterId(dao)
+    }
+
     if (selected.length == 0) {
       throw new HierarchyServiceError(i18n.global.t('NoElementsSelected'))
     }
@@ -114,6 +120,7 @@ export class HierarchyService extends CustomService implements IHierarchyService
       graph.addConnection(conn)
     }
 
+    cluster.calcPosition()
     return cluster
   }
 
@@ -170,5 +177,9 @@ export class HierarchyService extends CustomService implements IHierarchyService
     }
 
     return shapeNew
+  }
+
+  private getClusterId(dao: ModelDAO): string {
+    return this.PREFIX_ID_CLUSTER + dao.nextClusterId
   }
 }

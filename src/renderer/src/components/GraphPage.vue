@@ -7,7 +7,9 @@ import {
   EdgeMouseEvent,
   NodeChange,
   Connection,
-  GraphNode as FlowGraphNode
+  GraphNode as FlowGraphNode,
+  getRectOfNodes,
+  Dimensions
 } from '@vue-flow/core'
 import { Background } from '@vue-flow/background'
 import { useTheme } from 'vuetify/lib/framework.mjs'
@@ -38,6 +40,7 @@ import { DataCluster } from '@renderer/data/impl/DataCluster'
 import QuickViewCluster from '@renderer/quickview/QuickViewCluster.vue'
 import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 import QuickViewClusterArc from '@renderer/quickview/QuickViewClusterArc.vue'
+import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -173,6 +176,24 @@ defineProps<{
                   </template>
                 </v-tooltip>
               </v-col>
+
+              <v-col class="d-flex justify-center">
+                <!-- New cluster -->
+                <v-tooltip :text="$t('NewCluster')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="d-flex justify-center align-center pa-1"
+                      width="60"
+                      height="40"
+                      variant="tonal"
+                      v-bind="tooltip"
+                      @click="clusterSelectedElements"
+                    >
+                      <v-icon icon="mdi-plus"></v-icon>
+                    </v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
             </v-row>
           </v-expansion-panel-text>
         </v-expansion-panel>
@@ -247,7 +268,24 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['connect', 'createNode', 'saveModel']),
+    ...mapMutations(['connect', 'createCluster', 'createNode', 'saveModel']),
+    clusterSelectedElements() {
+      if (!this.vueFlowInstance) {
+        return
+      }
+      const selected: Array<FlowGraphNode> = this.vueFlowInstance.getSelectedNodes
+      const shapes: Array<IGraphElement> = new Array<IGraphElement>()
+      for (const node of selected) {
+        for (const shape of (node.data as IDataNode).shapes) {
+          if (node.id == shape.id) {
+            shapes.push(shape)
+            break
+          }
+        }
+      }
+
+      this.createCluster({ dao: this.dao, selected: shapes })
+    },
     onConnect(params: Connection) {
       if (!this.vueFlowInstance) {
         return
@@ -345,16 +383,38 @@ export default {
       }
 
       for (const change of changes) {
-        if (change.type != 'position' || !change.dragging || !change.position) {
+        if (
+          change.type != 'dimensions' &&
+          (change.type != 'position' || !change.dragging || !change.position)
+        ) {
           continue
         }
 
         const node: IGraphNode | undefined = this.dao.graph.nodes.find(
           (value: IGraphNode) => value.id == change.id
         )
+        if (!node) {
+          continue
+        }
 
-        if (node) {
+        if (change.type == 'position') {
           node.position = change.position
+          continue
+        } else if (node instanceof GraphCluster) {
+          const children: Array<FlowGraphNode> = new Array<FlowGraphNode>()
+          for (const shape of node.data.graph.nodes) {
+            const found: FlowGraphNode | undefined = this.vueFlowInstance.findNode(shape.id)
+            if (found) {
+              children.push(found)
+            }
+          }
+
+          const dimensions: Dimensions = getRectOfNodes(children)
+          const element: Element | null = document.querySelector(`[data-id="${change.id}"]`)
+          if (element instanceof HTMLDivElement) {
+            element.style.height = `${dimensions.height}px`
+            element.style.width = `${dimensions.width}px`
+          }
         }
       }
     },

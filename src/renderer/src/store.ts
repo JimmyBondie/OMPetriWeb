@@ -14,8 +14,13 @@ import { ISimulationService } from './services/intf/ISimulationService'
 import { Simulation } from './result/Simulation'
 import { IResultService } from './services/intf/IResultService'
 import { ResultSet } from './result/ResultSet'
+import { IHierarchyService } from './services/intf/IHierarchyService'
 
 class StoreState extends Object {
+  public get hierarchyService(): IHierarchyService {
+    return services.hierarchyService
+  }
+
   public get modelService(): IModelService {
     return services.modelService
   }
@@ -193,6 +198,9 @@ const store: Store<StoreState> = createStore({
     },
     connect(state: StoreState, { dao, source, target }) {
       state.modelService.connect(dao, source, target)
+    },
+    createCluster(state: StoreState, { dao, selected }) {
+      state.hierarchyService.cluster(dao, selected)
     },
     createNode(state: StoreState, { dao, type, posX, posY }) {
       state.modelService.create(dao, type, posX, posY)

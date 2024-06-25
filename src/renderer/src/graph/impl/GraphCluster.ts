@@ -73,4 +73,20 @@ export class GraphCluster extends GraphNode implements IGraphCluster {
 
     super.yCoordinate = yCoordinate
   }
+
+  public calcPosition() {
+    let minX: number = Infinity
+    let minY: number = Infinity
+    for (const node of this._dataCluster.graph.nodes) {
+      if (node.xCoordinate < minX) {
+        minX = node.xCoordinate
+      }
+      if (node.yCoordinate < minY) {
+        minY = node.yCoordinate
+      }
+    }
+
+    this.xCoordinate = minX
+    this.yCoordinate = minY
+  }
 }
