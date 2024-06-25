@@ -2,15 +2,19 @@
 import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { FlowArcType } from './FlowArcType'
 import { ArcType } from '@renderer/entity/intf/IArc'
-import { XYPosition } from '@vue-flow/core'
+import { GraphNode, XYPosition } from '@vue-flow/core'
+import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
+import { DataType } from '@renderer/data/intf/DataType'
+import { UnsupportedOperationException } from '@renderer/exception/UnsupportedOperationException'
 
 defineProps<{
   data: IDataArc
+  source: GraphNode
   sourceX: number
   sourceY: number
+  target: GraphNode
   targetX: number
   targetY: number
-  flowType: FlowArcType
 }>()
 </script>
 
@@ -58,6 +62,14 @@ defineProps<{
 
 <script lang="ts">
 export default {
+  data() {
+    return {
+      flowType: this.getFlowArcType() as FlowArcType,
+      placeHeight: 40 as number,
+      transitionHeight: 40 as number,
+      transitionWidth: 15 as number
+    }
+  },
   methods: {
     calcPath(): string {
       const source: XYPosition = this.getSource()
@@ -65,22 +77,78 @@ export default {
       return `M${source.x},${source.y} L ${target.x} ${target.y}`
     },
     getClass(): string {
-      switch (this.data.arcType) {
+      switch (this.getArcType()) {
         case ArcType.TEST:
           return 'animated'
         default:
           return ''
       }
     },
+    getFlowArcType(): FlowArcType {
+      switch (this.data.source.type) {
+        case DataType.PLACE: {
+          switch (this.data.target.type) {
+            case DataType.TRANSITION: {
+              return FlowArcType.PLACE_TO_TRANSITION
+            }
+
+            case DataType.CLUSTER: {
+              return FlowArcType.PLACE_TO_CLUSTER
+            }
+          }
+          break
+        }
+
+        case DataType.TRANSITION: {
+          switch (this.data.target.type) {
+            case DataType.PLACE: {
+              return FlowArcType.TRANSITION_TO_PLACE
+            }
+
+            case DataType.CLUSTER: {
+              return FlowArcType.TRANSITION_TO_CLUSTER
+            }
+          }
+          break
+        }
+
+        case DataType.CLUSTER: {
+          switch (this.data.target.type) {
+            case DataType.PLACE: {
+              return FlowArcType.CLUSTER_TO_PLACE
+            }
+
+            case DataType.TRANSITION: {
+              return FlowArcType.CLUSTER_TO_TRANSITION
+            }
+
+            case DataType.CLUSTER: {
+              return FlowArcType.CLUSTER_TO_CLUSTER
+            }
+          }
+          break
+        }
+      }
+
+      throw new UnsupportedOperationException(this.$t('UnhandledElementType'))
+    },
     getMarkerEnd(): string {
-      switch (this.data.arcType) {
+      switch (this.getArcType()) {
         case ArcType.INHIBITORY:
           return `circle_${this.data.id}`
         default:
           return `arrow_${this.data.id}`
       }
     },
-    getSourcePlacePosition(radius: number, targetHeight: number): XYPosition {
+    getArcType(): ArcType {
+      if (this.data instanceof DataClusterArc) {
+        // DataClusterArcs should be displayed as normal arcs
+        return ArcType.NORMAL
+      } else {
+        return this.data.arcType
+      }
+    },
+    getSourceCircleToRectPosition(radius: number, targetHeight: number): XYPosition {
       // Calculate middle point
       const source: XYPosition = {
         x: this.sourceX,
@@ -107,7 +175,7 @@ export default {
         y: source.y + connection.y
       }
     },
-    getSourceTransitionPosition(
+    getSourceRectToCirclePosition(
       sourceHeight: number,
       sourceWidth: number,
       targetHeight: number
@@ -150,13 +218,54 @@ export default {
       }
     },
     getSource(): XYPosition {
-      if (this.flowType == FlowArcType.PLACE_TO_TRANSITION) {
-        return this.getSourcePlacePosition(20, 40)
-      } else {
-        return this.getSourceTransitionPosition(40, 15, 40)
+      switch (this.flowType) {
+        case FlowArcType.PLACE_TO_TRANSITION: {
+          return this.getSourceCircleToRectPosition(this.placeHeight / 2, this.transitionHeight)
+        }
+        case FlowArcType.TRANSITION_TO_PLACE: {
+          return this.getSourceRectToCirclePosition(
+            this.transitionHeight,
+            this.transitionWidth,
+            this.placeHeight
+          )
+        }
+        case FlowArcType.PLACE_TO_CLUSTER: {
+          return this.getSourceCircleToRectPosition(
+            this.placeHeight / 2,
+            this.target.dimensions.height
+          )
+        }
+        case FlowArcType.CLUSTER_TO_PLACE: {
+          return this.getSourceRectToCirclePosition(
+            this.source.dimensions.height,
+            this.source.dimensions.width,
+            this.placeHeight
+          )
+        }
+        case FlowArcType.TRANSITION_TO_CLUSTER: {
+          return this.getSourceRectToCirclePosition(
+            this.transitionHeight,
+            this.transitionWidth,
+            this.target.dimensions.height
+          )
+        }
+        case FlowArcType.CLUSTER_TO_TRANSITION: {
+          return this.getSourceRectToCirclePosition(
+            this.source.dimensions.height,
+            this.source.dimensions.width,
+            this.transitionHeight
+          )
+        }
+        case FlowArcType.CLUSTER_TO_CLUSTER: {
+          return this.getSourceRectToCirclePosition(
+            this.source.dimensions.height,
+            this.source.dimensions.width,
+            this.target.dimensions.height
+          )
+        }
       }
     },
-    getTargetPlacePosition(radius: number, sourceHeight: number): XYPosition {
+    getTargetRectToCirclePosition(radius: number, sourceHeight: number): XYPosition {
       // Calculate middle point
       const source: XYPosition = {
         x: this.sourceX,
@@ -183,7 +292,7 @@ export default {
         y: target.y + connection.y
       }
     },
-    getTargetTransitionPosition(
+    getTargetCircleToRectPosition(
       sourceHeight: number,
       targetHeight: number,
       targetWidth: number
@@ -226,10 +335,51 @@ export default {
       }
     },
     getTarget(): XYPosition {
-      if (this.flowType == FlowArcType.PLACE_TO_TRANSITION) {
-        return this.getTargetTransitionPosition(40, 40, 15)
-      } else {
-        return this.getTargetPlacePosition(20, 40)
+      switch (this.flowType) {
+        case FlowArcType.PLACE_TO_TRANSITION: {
+          return this.getTargetCircleToRectPosition(
+            this.placeHeight,
+            this.transitionHeight,
+            this.transitionWidth
+          )
+        }
+        case FlowArcType.TRANSITION_TO_PLACE: {
+          return this.getTargetRectToCirclePosition(this.placeHeight / 2, this.transitionHeight)
+        }
+        case FlowArcType.PLACE_TO_CLUSTER: {
+          return this.getTargetCircleToRectPosition(
+            this.placeHeight,
+            this.target.dimensions.height,
+            this.target.dimensions.width
+          )
+        }
+        case FlowArcType.CLUSTER_TO_PLACE: {
+          return this.getTargetRectToCirclePosition(
+            this.placeHeight / 2,
+            this.source.dimensions.height
+          )
+        }
+        case FlowArcType.TRANSITION_TO_CLUSTER: {
+          return this.getTargetCircleToRectPosition(
+            this.transitionHeight,
+            this.target.dimensions.height,
+            this.target.dimensions.width
+          )
+        }
+        case FlowArcType.CLUSTER_TO_TRANSITION: {
+          return this.getTargetCircleToRectPosition(
+            this.source.dimensions.height,
+            this.transitionHeight,
+            this.transitionWidth
+          )
+        }
+        case FlowArcType.CLUSTER_TO_CLUSTER: {
+          return this.getTargetCircleToRectPosition(
+            this.source.dimensions.height,
+            this.target.dimensions.height,
+            this.target.dimensions.width
+          )
+        }
       }
     }
   }

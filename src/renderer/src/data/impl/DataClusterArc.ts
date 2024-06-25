@@ -16,12 +16,16 @@ export class DataClusterArc extends Object implements IDataArc {
   private _description: string = ''
   private _id: string
   private _shapes: Set<IGraphElement> = new Set<IGraphElement>()
+  private _source: IDataNode
   private _storedArcs: Map<string, IGraphArc> = new Map<string, IGraphArc>()
+  private _target: IDataNode
 
-  public constructor(id: string) {
+  public constructor(id: string, source: IDataNode, target: IDataNode) {
     super()
     this._dataType = DataType.CLUSTERARC
     this._id = id
+    this._source = source
+    this._target = target
   }
 
   public get arcType(): ArcType {
@@ -77,7 +81,7 @@ export class DataClusterArc extends Object implements IDataArc {
   }
 
   public get source(): IDataNode {
-    throw new UnsupportedOperationException(i18n.global.t('NotSupported'))
+    return this._source
   }
 
   public get storedArcs(): Map<string, IGraphArc> {
@@ -85,7 +89,7 @@ export class DataClusterArc extends Object implements IDataArc {
   }
 
   public get target(): IDataNode {
-    throw new UnsupportedOperationException(i18n.global.t('NotSupported'))
+    return this._target
   }
 
   public get type(): DataType {

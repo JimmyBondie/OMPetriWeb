@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DataCluster } from '@renderer/data/impl/DataCluster'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
-import { NodeProps } from '@vue-flow/core'
+import { Handle, NodeProps } from '@vue-flow/core'
 
 defineProps<NodeProps<IDataNode, any, string>>()
 </script>
@@ -9,6 +9,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
 <template>
   <v-tooltip v-model="showTooltip" :text="data.id" location="top">
     <template v-slot:activator="{ props: tooltip }">
+      <Handle class="opacity-0"></Handle>
       <v-card
         class="h-100 w-100 cursor-pointer"
         v-bind="tooltip"

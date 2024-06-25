@@ -33,7 +33,6 @@ import { IDataNode } from '@renderer/data/intf/IDataNode'
 import DAONameEdit from '@renderer/edits/DAONameEdit.vue'
 import DAOAuthorEdit from '@renderer/edits/DAOAuthorEdit.vue'
 import DAODescriptionEdit from '@renderer/edits/DAODescriptionEdit.vue'
-import { FlowArcType } from '@renderer/flow/FlowArcType'
 import FlowCluster from '@renderer/flow/FlowCluster.vue'
 import { DataCluster } from '@renderer/data/impl/DataCluster'
 import QuickViewCluster from '@renderer/quickview/QuickViewCluster.vue'
@@ -86,22 +85,13 @@ defineProps<{
         <template #node-graphCluster="props">
           <FlowCluster v-bind="props" />
         </template>
-        <template #edge-placeToTransition="props">
+        <template #edge-graphArc="props">
           <FlowArc
             :data="props.data"
-            :flow-type="FlowArcType.PLACE_TO_TRANSITION"
+            :source="props.sourceNode"
             :source-x="props.sourceX"
             :source-y="props.sourceY"
-            :target-x="props.targetX"
-            :target-y="props.targetY"
-          />
-        </template>
-        <template #edge-transitionToPlace="props">
-          <FlowArc
-            :data="props.data"
-            :flow-type="FlowArcType.TRANSITION_TO_PLACE"
-            :source-x="props.sourceX"
-            :source-y="props.sourceY"
+            :target="props.targetNode"
             :target-x="props.targetX"
             :target-y="props.targetY"
           />

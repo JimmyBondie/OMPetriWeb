@@ -144,7 +144,7 @@ export class HierarchyService extends CustomService implements IHierarchyService
       shape = existingArc
       data = shape.data as DataClusterArc
     } else {
-      data = new DataClusterArc(idData)
+      data = new DataClusterArc(idData, source.data, target.data)
       shape = new GraphArc(idShape, source, target, data)
       shapeNew = shape
       clusterArcs.push(shapeNew)
