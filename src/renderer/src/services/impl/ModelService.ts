@@ -26,6 +26,7 @@ import { utils } from '@renderer/utils'
 import { DataArc } from '@renderer/data/impl/DataArc'
 import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
 import { Graph } from '@renderer/graph/Graph'
+import { DataCluster } from '@renderer/data/impl/DataCluster'
 
 export class ModelService extends CustomService implements IModelService {
   private _models: Array<ModelDAO> = new Array<ModelDAO>()
@@ -192,7 +193,11 @@ export class ModelService extends CustomService implements IModelService {
   }
 
   public connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc {
+    if (source.parentCluster != target.parentCluster) {
+      throw new DataException(i18n.global.t('CannotConnectDifferentClusters'))
+    }
     const arc: IGraphArc = this.services.factoryService.createConnection(source, target)
+    arc.parentCluster = source.parentCluster
     this.validateConnection(source, target)
     this.validateArc(arc.data)
     this.addArc(dao, arc)
@@ -200,8 +205,15 @@ export class ModelService extends CustomService implements IModelService {
     return arc
   }
 
-  public create(dao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {
+  public create(
+    dao: ModelDAO,
+    cluster: DataCluster | null,
+    type: DataType,
+    posX: number,
+    posY: number
+  ): IGraphNode {
     const node: IGraphNode = this.services.factoryService.createNode(dao, type, posX, posY)
+    node.parentCluster = cluster
     this.addNode(dao, node)
     dao.hasChanges = true
     return node

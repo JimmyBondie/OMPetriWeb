@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { DataCluster } from '@renderer/data/impl/DataCluster'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
-import { Handle, NodeProps } from '@vue-flow/core'
+import { GraphNode, Handle, NodeProps, VueFlowStore, useVueFlow } from '@vue-flow/core'
 
 defineProps<NodeProps<IDataNode, any, string>>()
 </script>
@@ -16,6 +16,10 @@ defineProps<NodeProps<IDataNode, any, string>>()
         @mousedown="showTooltip = false"
         :ripple="false"
         variant="tonal"
+        :border="selected ? 'opacity-50 thin' : undefined"
+        :color="dragOver ? 'green' : undefined"
+        @dragenter="onDragEnter"
+        @dragleave="onDragLeave"
       >
         <v-card-title class="text-center">
           {{ cluster.labelText }}
@@ -30,7 +34,33 @@ export default {
   data() {
     return {
       cluster: this.data as DataCluster,
+      dragOver: false as boolean,
+      flowInstance: useVueFlow() as VueFlowStore,
       showTooltip: false
+    }
+  },
+  methods: {
+    onDragEnter() {
+      if (!this.flowInstance) {
+        return
+      }
+
+      const node: GraphNode | undefined = this.flowInstance.findNode(this.id)
+      if (node) {
+        this.dragOver = true
+        this.flowInstance.addSelectedNodes([node])
+      }
+    },
+    onDragLeave() {
+      if (!this.flowInstance) {
+        return
+      }
+
+      const node: GraphNode | undefined = this.flowInstance.findNode(this.id)
+      if (node) {
+        this.dragOver = false
+        this.flowInstance.removeSelectedNodes([node])
+      }
     }
   }
 }

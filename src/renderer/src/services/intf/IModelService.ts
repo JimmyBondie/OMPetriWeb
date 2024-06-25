@@ -2,6 +2,7 @@ import { Color } from '@renderer/core/Color'
 import { Function } from '@renderer/core/Function'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { DataArc } from '@renderer/data/impl/DataArc'
+import { DataCluster } from '@renderer/data/impl/DataCluster'
 import { DataPlace } from '@renderer/data/impl/DataPlace'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { DataType } from '@renderer/data/intf/DataType'
@@ -31,7 +32,13 @@ export interface IModelService {
   changePlaceType(dao: ModelDAO, place: DataPlace, type: PlaceType): void
   changeTransitionType(dao: ModelDAO, transition: DataTransition, type: TransitionType): void
   connect(dao: ModelDAO, source: IGraphNode, target: IGraphNode): IGraphArc
-  create(dao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode
+  create(
+    dao: ModelDAO,
+    cluster: DataCluster | null,
+    type: DataType,
+    posX: number,
+    posY: number
+  ): IGraphNode
   newModel(): ModelDAO
   removeElement(dao: ModelDAO, element: IGraphElement): void
   removeModel(model: ModelDAO): void

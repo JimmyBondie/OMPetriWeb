@@ -41,6 +41,7 @@ import QuickViewCluster from '@renderer/quickview/QuickViewCluster.vue'
 import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 import QuickViewClusterArc from '@renderer/quickview/QuickViewClusterArc.vue'
 import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
+import { DataException } from '@renderer/services/impl/Exceptions'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -356,6 +357,9 @@ export default {
       }
     },
     onDragStart(event: DragEvent, type: DataType) {
+      if (this.vueFlowInstance) {
+        this.vueFlowInstance.removeSelectedNodes(this.vueFlowInstance.getSelectedNodes)
+      }
       if (event.dataTransfer) {
         event.dataTransfer.effectAllowed = 'move'
       }
@@ -370,12 +374,36 @@ export default {
         return
       }
 
+      const selectedNodes: Array<FlowGraphNode> = this.vueFlowInstance.getSelectedNodes
+      let cluster: DataCluster | null = null
+      if (selectedNodes.length > 1) {
+        throw new DataException(this.$t('CannotCreateInMultipleClusters'))
+      } else if (selectedNodes.length == 1) {
+        const selected: IDataNode = selectedNodes[0].data
+        if (selected instanceof DataCluster) {
+          cluster = selected
+        } else {
+          throw new DataException(this.$t('PleaseSelectCluster'))
+        }
+      }
+
       const position = this.vueFlowInstance.screenToFlowCoordinate({
         x: event.clientX,
         y: event.clientY
       })
 
-      this.createNode({ dao: this.dao, type: this.draggedType, posX: position.x, posY: position.y })
+      if (cluster) {
+        position.x -= selectedNodes[0].position.x
+        position.y -= selectedNodes[0].position.y
+      }
+
+      this.createNode({
+        dao: this.dao,
+        cluster: cluster,
+        type: this.draggedType,
+        posX: position.x,
+        posY: position.y
+      })
     },
     onNodesChange(changes: NodeChange[]) {
       if (!this.vueFlowInstance) {
@@ -390,7 +418,8 @@ export default {
           continue
         }
 
-        const node: IGraphNode | undefined = this.dao.graph.nodes.find(
+        const allNodes: Array<IGraphNode> = this.dao.graph.nodesRecursive
+        const node: IGraphNode | undefined = allNodes.find(
           (value: IGraphNode) => value.id == change.id
         )
         if (!node) {
@@ -402,7 +431,7 @@ export default {
           continue
         } else if (node instanceof GraphCluster) {
           const children: Array<FlowGraphNode> = new Array<FlowGraphNode>()
-          for (const shape of node.data.graph.nodes) {
+          for (const shape of allNodes) {
             const found: FlowGraphNode | undefined = this.vueFlowInstance.findNode(shape.id)
             if (found) {
               children.push(found)

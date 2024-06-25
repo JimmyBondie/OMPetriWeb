@@ -202,8 +202,8 @@ const store: Store<StoreState> = createStore({
     createCluster(state: StoreState, { dao, selected }) {
       state.hierarchyService.cluster(dao, selected)
     },
-    createNode(state: StoreState, { dao, type, posX, posY }) {
-      state.modelService.create(dao, type, posX, posY)
+    createNode(state: StoreState, { dao, cluster, type, posX, posY }) {
+      state.modelService.create(dao, cluster, type, posX, posY)
     },
     removeElement(state: StoreState, { dao, element }) {
       state.modelService.removeElement(dao, element)
