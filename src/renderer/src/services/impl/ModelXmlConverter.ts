@@ -120,9 +120,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       const element: IElement | undefined = dao.model.getElement(
         node.getAttribute(this.attrElementId) ?? ''
       )
-      if (element) {
-        this.services.parameterService.add(dao.model, this.readParameter(element, node))
-      }
+      this.services.parameterService.add(dao.model, this.readParameter(element, node))
     })
 
     // Graph
@@ -372,7 +370,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     data.disabled = data.disabled
   }
 
-  private readParameter(element: IElement, node: Element): Parameter {
+  private readParameter(element: IElement | undefined, node: Element): Parameter {
     const id: string = this.readId(node)
     const value: string = node.textContent ?? ''
 
@@ -382,6 +380,9 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       }
 
       case ParameterType.LOCAL: {
+        if (!element) {
+          throw new ModelXmlConverterError(i18n.global.t('ImportFailedUnhandledParamType'))
+        }
         return utils.parameterFactory.createLocalParameter(id, value, element)
       }
 
