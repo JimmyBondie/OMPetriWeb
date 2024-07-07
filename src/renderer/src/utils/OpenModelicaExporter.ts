@@ -183,15 +183,9 @@ export class OpenModelicaExporter extends Object {
           }
 
           if (token) {
-            if (place.placeType == PlaceType.CONTINUOUS) {
-              tmp1 += token.valueStart
-              tmp2 += token.valueMin
-              tmp3 += token.valueMax
-            } else {
-              tmp1 += token.valueStart.toFixed(0)
-              tmp2 += token.valueMin.toFixed(0)
-              tmp3 += token.valueMax.toFixed(0)
-            }
+            tmp1 += this.formatNumber(token.valueStart, place.placeType == PlaceType.CONTINUOUS)
+            tmp2 += this.formatNumber(token.valueMin, place.placeType == PlaceType.CONTINUOUS)
+            tmp3 += this.formatNumber(token.valueMax, place.placeType == PlaceType.CONTINUOUS)
           } else {
             tmp1 += '0'
             tmp2 += '0'
@@ -204,15 +198,9 @@ export class OpenModelicaExporter extends Object {
             )
           }
 
-          if (place.placeType == PlaceType.CONTINUOUS) {
-            tmp1 += token.valueStart
-            tmp2 += token.valueMin
-            tmp3 += token.valueMax
-          } else {
-            tmp1 += token.valueStart.toFixed(0)
-            tmp2 += token.valueMin.toFixed(0)
-            tmp3 += token.valueMax.toFixed(0)
-          }
+          tmp1 += this.formatNumber(token.valueStart, place.placeType == PlaceType.CONTINUOUS)
+          tmp2 += this.formatNumber(token.valueMin, place.placeType == PlaceType.CONTINUOUS)
+          tmp3 += this.formatNumber(token.valueMax, place.placeType == PlaceType.CONTINUOUS)
           unit = token.unit
         }
       }
@@ -449,6 +437,34 @@ export class OpenModelicaExporter extends Object {
     window.api.writeFile(fileMOS, content.join('\n'), { encoding: 'utf-8' })
 
     return references
+  }
+
+  private formatNumber(num: number, float: boolean): string {
+    const maxFloat: number = 3.40282e38
+    const maxInt: number = 1073741823
+
+    let value: number
+    if (float) {
+      if (num < -maxFloat) {
+        value = -maxFloat
+      } else if (num > maxFloat) {
+        value = maxFloat
+      } else {
+        value = num
+      }
+
+      return value.toString()
+    } else {
+      if (num < -maxInt) {
+        value = -maxInt
+      } else if (num > maxInt) {
+        value = maxInt
+      } else {
+        value = num
+      }
+
+      return value.toFixed(0)
+    }
   }
 
   private getArcIndexWithSourceNode(arcs: Array<IArc>, source: INode): number {
