@@ -94,7 +94,7 @@ export class SimulationService extends CustomService implements ISimulationServi
       throw new SimulationException(i18n.global.t('WorkingDirNotAccessible'))
     }
 
-    dir = window.api.joinPaths(dir, 'JFX_PetriNet', 'data')
+    dir = window.api.joinPaths(dir, 'OMPetriWeb', 'data')
     if (!window.api.fileExists(dir) || !window.api.isDirectory(dir)) {
       window.api.createDir(dir)
     }
