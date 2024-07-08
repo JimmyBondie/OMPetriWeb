@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "main": "./out/main/index.js",
   "type": "module",
+  "description": "Application for Modeling and Simulation of Extended Hybrid Petri Nets",
+  "author": {
+    "name": "Leon Maximilian Kassebaum",
+    "email": "leon.kassebaum@uni-bielefeld.de",
+    "url": "https://www.techfak.uni-bielefeld.de/ags/bi/"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts,.vue --fix",
