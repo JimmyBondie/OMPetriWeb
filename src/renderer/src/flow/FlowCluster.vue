@@ -2,6 +2,7 @@
 import { DataCluster } from '@renderer/data/impl/DataCluster'
 import { IDataNode } from '@renderer/data/intf/IDataNode'
 import { GraphNode, Handle, NodeProps, VueFlowStore, useVueFlow } from '@vue-flow/core'
+import { NodeResizer } from '@vue-flow/node-resizer'
 
 defineProps<NodeProps<IDataNode, any, string>>()
 </script>
@@ -9,6 +10,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
 <template>
   <v-tooltip v-model="showTooltip" :text="data.id" location="top">
     <template v-slot:activator="{ props: tooltip }">
+      <NodeResizer color="transparent"></NodeResizer>
       <Handle class="opacity-0"></Handle>
       <v-card
         class="h-100 w-100 cursor-pointer"

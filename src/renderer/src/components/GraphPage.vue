@@ -512,6 +512,9 @@ export default {
 // Controls
 @import '@vue-flow/controls/dist/style.css';
 
+// Resizer
+@import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
+
 .basicflow {
   .vue-flow__controls {
     display: flex;
