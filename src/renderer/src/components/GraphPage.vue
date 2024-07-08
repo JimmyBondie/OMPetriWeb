@@ -430,15 +430,15 @@ export default {
           node.position = change.position
           continue
         } else if (node instanceof GraphCluster) {
-          const children: Array<FlowGraphNode> = new Array<FlowGraphNode>()
-          for (const shape of allNodes) {
+          const children: Array<IGraphNode> = node.graph.nodesRecursive
+          const flowChilds: Array<FlowGraphNode> = new Array<FlowGraphNode>()
+          for (const shape of children) {
             const found: FlowGraphNode | undefined = this.vueFlowInstance.findNode(shape.id)
             if (found) {
-              children.push(found)
+              flowChilds.push(found)
             }
           }
-
-          const dimensions: Dimensions = getRectOfNodes(children)
+          const dimensions: Dimensions = getRectOfNodes(flowChilds)
           const element: Element | null = document.querySelector(`[data-id="${change.id}"]`)
           if (element instanceof HTMLDivElement) {
             element.style.height = `${dimensions.height}px`
