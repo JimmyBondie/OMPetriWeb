@@ -84,4 +84,6 @@ app.use(store)
 app.use(VueMathjax)
 app.mount('#app')
 
+router.push('/')
+
 export default i18n
