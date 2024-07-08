@@ -513,7 +513,7 @@ export default {
 @import '@vue-flow/controls/dist/style.css';
 
 // Resizer
-@import 'https://cdn.jsdelivr.net/npm/@vue-flow/node-resizer@latest/dist/style.css';
+@import '@vue-flow/node-resizer/dist/style.css';
 
 .basicflow {
   .vue-flow__controls {
