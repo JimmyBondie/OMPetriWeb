@@ -698,9 +698,14 @@ export default {
       return choices
     },
     removeFromResultSets(resultSet: ResultSet) {
-      const index: number = this.resultSets.indexOf(resultSet)
+      let index: number = this.resultSets.indexOf(resultSet)
       if (index >= 0) {
         this.resultSets.splice(index, 1)
+      }
+
+      index = this.selectedResultSets.indexOf(resultSet)
+      if (index >= 0) {
+        this.selectedResultSets.splice(index, 1)
       }
     },
     async runSimulation() {
