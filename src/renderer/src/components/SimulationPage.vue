@@ -73,7 +73,16 @@ defineProps<{
               </v-btn>
             </v-col>
             <v-col class="d-flex justify-center">
-              <v-btn prepend-icon="mdi-open-in-app" :disabled="inSimulation" stacked>
+              <v-btn
+                prepend-icon="mdi-open-in-app"
+                :disabled="inSimulation"
+                stacked
+                @click="
+                  openResults().then(() => {
+                    startStop = false
+                  })
+                "
+              >
                 {{ $t('Open') }}
               </v-btn>
             </v-col>
