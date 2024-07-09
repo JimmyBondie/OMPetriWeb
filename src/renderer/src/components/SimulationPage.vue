@@ -30,6 +30,18 @@ defineProps<{
     >
       <v-card rounded>
         <v-progress-linear color="primary" :indeterminate="inSimulation"></v-progress-linear>
+
+        <v-card-title style="display: contents">
+          <v-btn
+            class="float-right"
+            icon="mdi-close"
+            density="compact"
+            variant="text"
+            :disabled="inSimulation"
+            @click="startStop = false"
+          ></v-btn>
+        </v-card-title>
+
         <v-container class="pa-7">
           <v-row justify="center">
             <v-col class="d-flex justify-center">
@@ -265,6 +277,24 @@ defineProps<{
       </v-btn>
 
       <v-spacer></v-spacer>
+
+      <!-- New simulation -->
+      <v-tooltip
+        :text="inBrowser ? $t('PleaseDownloadDesktopAppForSimulation') : $t('NewSimulation')"
+        location="top"
+      >
+        <template v-slot:activator="{ props }">
+          <div v-bind="props">
+            <v-btn
+              v-if="dao"
+              icon="mdi-play"
+              variant="text"
+              :disabled="simulationNotPossible"
+              @click="startStop = true"
+            ></v-btn>
+          </div>
+        </template>
+      </v-tooltip>
 
       <!-- Load from file -->
       <v-tooltip :text="$t('Open')" location="top">
