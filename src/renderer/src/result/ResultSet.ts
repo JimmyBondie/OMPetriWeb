@@ -28,7 +28,7 @@ export class ResultSet extends Object {
     return this._autoAdding
   }
 
-  public get data(): Array<BigInt | number> {
+  public get data(): Array<bigint | number> {
     return this._simulation.getData(this._variable)
   }
 

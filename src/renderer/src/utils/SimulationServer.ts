@@ -91,7 +91,7 @@ export class SimulationServer extends Object {
           }
 
           const startPos: number = position
-          const data: Array<BigInt | number> = new Array<BigInt | number>(this._vars)
+          const data: Array<bigint | number> = new Array<bigint | number>(this._vars)
           let index: number = 0
           for (let r = 0; r < this._doubles; r++) {
             data[index] = buffer.readDoubleLE(position)

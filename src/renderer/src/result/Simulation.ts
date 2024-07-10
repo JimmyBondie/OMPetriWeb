@@ -7,7 +7,7 @@ import i18n from '@renderer/main'
 export class Simulation extends Object {
   private _dao: ModelDAO
   private _dateTime: Date = new Date()
-  private _resultsMap: Map<string, Array<BigInt | number>>
+  private _resultsMap: Map<string, Array<bigint | number>>
   private _variableReferences: References
   private _variables: Array<string>
 
@@ -16,14 +16,14 @@ export class Simulation extends Object {
     this._dao = dataDao
     this._variables = variables
     this._variableReferences = variableReferences
-    this._resultsMap = new Map<string, Array<BigInt | number>>()
+    this._resultsMap = new Map<string, Array<bigint | number>>()
     for (const variable of this._variables) {
       if (this._resultsMap.has(variable)) {
         throw new ResultsException(
           i18n.global.t('ResultsAlreadyContainsListForVariable', { variable: variable })
         )
       }
-      this._resultsMap.set(variable, new Array<BigInt | number>())
+      this._resultsMap.set(variable, new Array<bigint | number>())
     }
   }
 
@@ -44,12 +44,12 @@ export class Simulation extends Object {
     return Array.from(this._variableReferences.elementToFilterReferences.keys())
   }
 
-  public get timeData(): Array<BigInt | number> | undefined {
-    const data: Array<BigInt | number> | undefined = this._resultsMap.get('time')
+  public get timeData(): Array<bigint | number> | undefined {
+    const data: Array<bigint | number> | undefined = this._resultsMap.get('time')
     if (data) {
       return data
     } else {
-      return new Array<BigInt | number>()
+      return new Array<bigint | number>()
     }
   }
 
@@ -58,12 +58,12 @@ export class Simulation extends Object {
   }
 
   // Adds data. Appends data to the existing data lists for each variable.
-  public addData(data: Array<BigInt | number>) {
+  public addData(data: Array<bigint | number>) {
     if (data.length != this._variables.length) {
       throw new ResultsException(i18n.global.t('DataSizeDoesNotMatchVariables'))
     }
     for (let i = 0; i < data.length; i++) {
-      const result: Array<BigInt | number> | undefined = this._resultsMap.get(this._variables[i])
+      const result: Array<bigint | number> | undefined = this._resultsMap.get(this._variables[i])
       if (result) {
         result.push(data[i])
       }
@@ -79,12 +79,12 @@ export class Simulation extends Object {
   }
 
   // Gets data associated to a filter variable.
-  public getData(variable: string): Array<BigInt | number> {
-    const data: Array<BigInt | number> | undefined = this._resultsMap.get(variable)
+  public getData(variable: string): Array<bigint | number> {
+    const data: Array<bigint | number> | undefined = this._resultsMap.get(variable)
     if (data) {
       return data
     } else {
-      return new Array<BigInt | number>()
+      return new Array<bigint | number>()
     }
   }
 

@@ -281,7 +281,7 @@ export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXml
         const id: string = this.readId(node)
         const content: string | null = node.textContent
         if (content) {
-          const values: Array<number | BigInt> = simulation.getData(id)
+          const values: Array<number | bigint> = simulation.getData(id)
           for (const value of content.split(',')) {
             values.push(parseFloat(value))
           }
@@ -293,7 +293,7 @@ export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXml
   private writeDataValues(
     dom: Document,
     variableId: string,
-    data: Array<number | BigInt>
+    data: Array<number | bigint>
   ): Element {
     const elem: Element = dom.createElement(this.tagData)
     elem.setAttribute(this.attrId, variableId)

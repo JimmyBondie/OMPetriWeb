@@ -454,7 +454,7 @@ export default {
         this.resultSets.push(new ResultSet(this.selectedSimulation as Simulation, element, value))
       }
     },
-    compareNumbers(a: number | BigInt, b: number | BigInt): number {
+    compareNumbers(a: number | bigint, b: number | bigint): number {
       if (a == b) {
         return 0
       } else if (a < b) {
@@ -463,8 +463,8 @@ export default {
         return 1
       }
     },
-    formatNumber(value: number | BigInt): string {
-      if (value instanceof BigInt) {
+    formatNumber(value: number | bigint): string {
+      if (typeof value === 'bigint') {
         return value.toString()
       } else {
         return value.toFixed(2)
@@ -487,9 +487,9 @@ export default {
 
       let timeValues: Array<string> = new Array<string>()
       if (this.selectedSimulation) {
-        const timeData: Array<number | BigInt> | undefined = this.selectedSimulation.timeData
+        const timeData: Array<number | bigint> | undefined = this.selectedSimulation.timeData
         if (timeData) {
-          timeValues = timeData.map<string>((value: number | BigInt) => this.formatNumber(value))
+          timeValues = timeData.map<string>((value: number | bigint) => this.formatNumber(value))
         }
       }
 
@@ -503,7 +503,7 @@ export default {
       for (const resultSet of this.selectedResultSets) {
         series.push({
           type: 'line',
-          data: resultSet.data.map<string>((value: number | BigInt) => this.formatNumber(value)),
+          data: resultSet.data.map<string>((value: number | bigint) => this.formatNumber(value)),
           name: `${resultSet.element.id} - ${this.getValueName()(resultSet.variable, this.selectedSimulation)}`
         })
       }
@@ -550,7 +550,7 @@ export default {
       }
       return result
     },
-    getEndValue(resultSet: ResultSet): number | BigInt {
+    getEndValue(resultSet: ResultSet): number | bigint {
       if (resultSet.data.length == 0) {
         return 0
       } else {
@@ -624,8 +624,8 @@ export default {
         { title: this.$t('Delete'), sortable: false }
       ]
     },
-    getMaxValue(resultSet: ResultSet): number | BigInt {
-      let max: number | BigInt = 0
+    getMaxValue(resultSet: ResultSet): number | bigint {
+      let max: number | bigint = 0
       for (const value of resultSet.data) {
         if (value > max) {
           max = value
@@ -633,12 +633,12 @@ export default {
       }
       return max
     },
-    getMinValue(resultSet: ResultSet): number | BigInt {
+    getMinValue(resultSet: ResultSet): number | bigint {
       if (resultSet.data.length == 0) {
         return 0
       }
 
-      let min: number | BigInt = resultSet.data[0]
+      let min: number | bigint = resultSet.data[0]
       for (const value of resultSet.data) {
         if (value < min) {
           min = value
@@ -658,7 +658,7 @@ export default {
         .filter((sim: Simulation) => sim.dao == this.selectedDAO)
         .sort((s1: Simulation, s2: Simulation) => s1.dateTime.getTime() - s2.dateTime.getTime())
     },
-    getStartValue(resultSet: ResultSet): number | BigInt {
+    getStartValue(resultSet: ResultSet): number | bigint {
       if (resultSet.data.length == 0) {
         return 0
       } else {
