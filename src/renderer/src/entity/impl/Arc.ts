@@ -56,6 +56,11 @@ export class Arc extends Element implements IArc {
   }
 
   public getWeight(color: Color): Weight | undefined {
-    return this._weights.get(color)
+    for (const [key, value] of this._weights) {
+      if (color.id == key.id) {
+        return value
+      }
+    }
+    return undefined
   }
 }
