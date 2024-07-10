@@ -578,48 +578,40 @@ export class OpenModelicaExporter extends Object {
     references.addElementReference(place, filter)
     references.addFilterReference(filter, place)
 
-    if (place.placeType == PlaceType.CONTINUOUS) {
-      let index: number = 1
-      for (const arc of place.arcsOut) {
-        if (arc.disabled) {
-          continue
-        }
-
-        const transition: Transition = arc.target as Transition
-        if (transition.transitionType == TransitionType.CONTINUOUS) {
-          filter = `'${arc.source.id}'.tokenFlow.outflow[${index}]`
-          references.addElementReference(arc, filter)
-          references.addElementReference(place, filter)
-          references.addFilterReference(filter, place)
-
-          filter = `der(${filter})`
-          references.addElementReference(arc, filter)
-          references.addElementReference(place, filter)
-          references.addFilterReference(filter, place)
-        }
-        index++
+    let index: number = 1
+    for (const arc of place.arcsOut) {
+      if (arc.disabled) {
+        continue
       }
 
-      index = 1
-      for (const arc of place.arcsIn) {
-        if (arc.disabled) {
-          continue
-        }
+      filter = `'${arc.source.id}'.tokenFlow.outflow[${index}]`
+      references.addElementReference(arc, filter)
+      references.addElementReference(place, filter)
+      references.addFilterReference(filter, place)
 
-        const transition: Transition = arc.source as Transition
-        if (transition.transitionType == TransitionType.CONTINUOUS) {
-          filter = `'${arc.target.id}'.tokenFlow.inflow[${index}]`
-          references.addElementReference(arc, filter)
-          references.addElementReference(place, filter)
-          references.addFilterReference(filter, place)
+      filter = `der(${filter})`
+      references.addElementReference(arc, filter)
+      references.addElementReference(place, filter)
+      references.addFilterReference(filter, place)
+      index++
+    }
 
-          filter = `der(${filter})`
-          references.addElementReference(arc, filter)
-          references.addElementReference(place, filter)
-          references.addFilterReference(filter, place)
-        }
-        index++
+    index = 1
+    for (const arc of place.arcsIn) {
+      if (arc.disabled) {
+        continue
       }
+
+      filter = `'${arc.target.id}'.tokenFlow.inflow[${index}]`
+      references.addElementReference(arc, filter)
+      references.addElementReference(place, filter)
+      references.addFilterReference(filter, place)
+
+      filter = `der(${filter})`
+      references.addElementReference(arc, filter)
+      references.addElementReference(place, filter)
+      references.addFilterReference(filter, place)
+      index++
     }
 
     return references
@@ -629,11 +621,9 @@ export class OpenModelicaExporter extends Object {
   private setTransitionReferences(references: References, transition: Transition): References {
     let filter: string = ''
 
-    if (transition.transitionType == TransitionType.CONTINUOUS) {
-      filter = `'${transition.id}'.actualSpeed`
-      references.addElementReference(transition, filter)
-      references.addFilterReference(filter, transition)
-    }
+    filter = `'${transition.id}'.actualSpeed`
+    references.addElementReference(transition, filter)
+    references.addFilterReference(filter, transition)
 
     filter = `'${transition.id}'.fire`
     references.addElementReference(transition, filter)
