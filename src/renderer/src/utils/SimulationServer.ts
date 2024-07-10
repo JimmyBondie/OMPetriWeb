@@ -123,6 +123,7 @@ export class SimulationServer extends Object {
             }
           }
           this._results.addData(data)
+          position = startPos + length
           break
         }
 
