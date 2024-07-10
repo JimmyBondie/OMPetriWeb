@@ -711,7 +711,15 @@ export default {
         }
       }
 
-      return choices
+      return choices.filter(
+        (choice: AutocompleteWrapper<Array<string>>): boolean =>
+          choice.value != undefined &&
+          choice.value.some(
+            (value: string): boolean =>
+              this.selectedSimulation != undefined &&
+              this.selectedSimulation.getData(value).length > 0
+          )
+      )
     },
     removeFromResultSets(resultSet: ResultSet) {
       let index: number = this.resultSets.indexOf(resultSet)
