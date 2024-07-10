@@ -11,6 +11,7 @@ import VChart from 'vue-echarts'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { ECharts, EChartsOption, LineSeriesOption } from 'echarts'
 import { XAXisOption } from 'echarts/types/dist/shared'
+import { Splitpanes, Pane } from 'splitpanes'
 
 defineProps<{
   dao?: ModelDAO
@@ -328,8 +329,8 @@ defineProps<{
       </v-tooltip>
     </v-toolbar>
 
-    <v-row style="height: calc(100% - 64px)" no-gutters>
-      <v-col cols="6">
+    <splitpanes style="height: calc(100% - 64px)" class="splitpanes">
+      <pane>
         <v-data-table
           class="h-100"
           :items-per-page-options="[
@@ -378,14 +379,11 @@ defineProps<{
             </tr>
           </template>
         </v-data-table>
-      </v-col>
-
-      <v-divider vertical></v-divider>
-
-      <v-col cols="6">
+      </pane>
+      <pane style="padding-top: 20px">
         <v-chart autoresize :theme="theme" :option="getChartOptions()" ref="chart"></v-chart>
-      </v-col>
-    </v-row>
+      </pane>
+    </splitpanes>
   </main>
 </template>
 
@@ -429,6 +427,10 @@ export default {
       theme: useTheme().global.name,
       thread: undefined as AbortController | undefined
     }
+  },
+  components: {
+    Splitpanes,
+    Pane
   },
   methods: {
     ...mapGetters([
@@ -745,10 +747,30 @@ export default {
 </script>
 
 <style lang="scss">
+@import 'splitpanes/dist/splitpanes.css';
+
 .noWrapChips {
   .v-field__input {
     flex-wrap: nowrap;
     overflow: hidden;
+  }
+}
+
+.splitpanes {
+  .splitpanes__pane {
+    background: rgb(var(--v-theme-surface));
+    transition: none;
+  }
+
+  .splitpanes__splitter {
+    width: 4px;
+    border: 1.5px solid rgb(var(--v-theme-surface));
+    transition: background-color 0.1s ease-out;
+    background-color: rgba(var(--v-border-color), var(--v-border-opacity));
+    &:hover {
+      border-color: rgb(var(--v-theme-primary));
+      background-color: rgb(var(--v-theme-primary));
+    }
   }
 }
 </style>
