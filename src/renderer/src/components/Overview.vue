@@ -7,7 +7,7 @@ import Editor from './Editor.vue'
   <main>
     <v-tabs v-model="selectedModel" bg-color="secondary">
       <!-- Tabs -->
-      <v-tab v-for="model in getModels" :value="model.id">
+      <v-tab v-for="model in getModels" :value="model">
         {{ model.name }}
 
         <v-dialog max-width="500">
@@ -82,7 +82,7 @@ import Editor from './Editor.vue'
     </v-tabs>
 
     <v-window v-model="selectedModel" class="window-without-tabs">
-      <v-window-item v-for="model in getModels" :value="model.id" class="h-100">
+      <v-window-item v-for="model in getModels" :value="model" class="h-100">
         <v-app>
           <Editor :dao="model" class="h-100"></Editor>
         </v-app>
@@ -98,7 +98,7 @@ import { ModelDAO } from '@renderer/dao/ModelDAO'
 export default {
   data() {
     return {
-      selectedModel: ''
+      selectedModel: undefined as ModelDAO | undefined
     }
   },
   computed: {
@@ -110,7 +110,7 @@ export default {
     ...mapActions(['openModel']),
     addModel() {
       const model: ModelDAO = this.addNewModel()
-      this.selectedModel = model.id
+      this.selectedModel = model
     },
     closeModel(model: ModelDAO) {
       this.removeModel(model)
@@ -118,7 +118,7 @@ export default {
     async openNewModule() {
       const model: ModelDAO | null = await this.openModel()
       if (model) {
-        this.selectedModel = model.id
+        this.selectedModel = model
       }
     }
   }
