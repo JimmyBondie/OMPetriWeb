@@ -349,6 +349,20 @@ defineProps<{
           return-object
           show-select
         >
+          <template v-slot:header.delete>
+            <v-btn
+              color="error"
+              icon="mdi-trash-can-outline"
+              variant="text"
+              @click="
+                () => {
+                  selectedResultSets = []
+                  resultSets = []
+                }
+              "
+            ></v-btn>
+          </template>
+
           <template v-slot:item="{ item }">
             <tr>
               <td style="padding: 0 8px">
@@ -623,7 +637,7 @@ export default {
           sortRaw: (a: ResultSet, b: ResultSet): number =>
             this.compareNumbers(this.getMaxValue(a), this.getMaxValue(b))
         },
-        { title: this.$t('Delete'), sortable: false }
+        { key: 'delete', title: this.$t('Delete'), sortable: false }
       ]
     },
     getMaxValue(resultSet: ResultSet): number | bigint {
