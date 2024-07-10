@@ -6,7 +6,11 @@ import { services } from '@renderer/services'
 import { Buffer } from 'buffer'
 
 export class SimulationServer extends Object {
-  private readonly SIZE_OF_INT: number = window.api.platform == 'win32' ? 4 : 8
+  private readonly SIZE_OF_BYTE: number = 1
+  private readonly SIZE_OF_DOUBLE: number = 8
+  private readonly SIZE_OF_INT: number = 8
+  private readonly SIZE_OF_INT16: number = 2
+  private readonly SIZE_OF_INT32: number = 4
 
   private _bools: number = 0
   private _dao: ModelDAO
@@ -77,12 +81,12 @@ export class SimulationServer extends Object {
 
     while (position < buffer.length) {
       const id: number = buffer.readInt8(position)
-      position += 1
+      position += this.SIZE_OF_BYTE
 
       const length: number = buffer.readInt16LE(position)
-      position += 2
+      position += this.SIZE_OF_INT16
 
-      position += 2 // blocks until msg received
+      position += this.SIZE_OF_INT16 // blocks until msg received
 
       switch (id) {
         case 4: {
@@ -95,7 +99,7 @@ export class SimulationServer extends Object {
           let index: number = 0
           for (let r = 0; r < this._doubles; r++) {
             data[index] = buffer.readDoubleLE(position)
-            position += 8
+            position += this.SIZE_OF_DOUBLE
             index++
           }
           for (let i = 0; i < this._ints; i++) {
@@ -109,7 +113,7 @@ export class SimulationServer extends Object {
           }
           for (let b = 0; b < this._bools; b++) {
             data[index] = buffer.readInt8(position)
-            position += 1
+            position += this.SIZE_OF_BYTE
             index++
           }
 
@@ -137,23 +141,26 @@ export class SimulationServer extends Object {
 
   private readSimulationVariables(buffer: Buffer, position: number): number {
     const length: number = buffer.readInt32LE(position)
-    position += 4
+    position += this.SIZE_OF_INT32
 
     buffer = Buffer.from(buffer.subarray(position, position + length))
     position = 0
 
     this._doubles = buffer.readInt32LE(position)
-    position += 4
+    position += this.SIZE_OF_INT32
 
     this._ints = buffer.readInt32LE(position)
-    position += 4
+    position += this.SIZE_OF_INT32
 
     this._bools = buffer.readInt32LE(position)
-    position += 4
+    position += this.SIZE_OF_INT32
 
-    position += 4 //Skip the number of "strings"
+    position += this.SIZE_OF_INT32 //Skip the number of "strings"
 
-    this._expected = 8 * this._doubles + this.SIZE_OF_INT * this._ints + this._bools
+    this._expected =
+      this.SIZE_OF_DOUBLE * this._doubles +
+      this.SIZE_OF_INT * this._ints +
+      this.SIZE_OF_BYTE * this._bools
     this._simulationVariables = new TextDecoder()
       .decode(buffer.subarray(position, length - 1))
       .split('\u0000')
