@@ -137,6 +137,7 @@
   "Open": "Öffnen",
   "OpenModelicaEnvVariableNotSet": "Die Umgebungsvariable \"{variable}\" ist nicht gesetzt! Bitte installieren Sie OpenModelica oder setzen Sie die Variable korrekt.",
   "OpenModelicaEnvVariableNotSetCorrectly": "Die Umgebungsvariable \"{variable}\" ist nicht korrekt gesetzt! Bitte setzen Sie die Variable richtig oder installieren Sie OpenModelica neu.",
+  "OpenSourceLibrariesUsed": "Verwendete Open-Source-Bibliotheken:",
   "OptionalCompilerArgs": "Optionale Compiler-Argumente",
   "OptionalSimulationArgs": "Optionale Simulations-Argumente",
   "OutgoingArcs": "Ausgehende Kanten",

@@ -137,6 +137,7 @@
   "Open": "Open",
   "OpenModelicaEnvVariableNotSet": "\"{variable}\" environment variable is not set! Please install OpenModelica or set the variable correctly.",
   "OpenModelicaEnvVariableNotSetCorrectly": "\"{variable}\" environment variable is not set correctly! Please set the variable correctly or reinstall OpenModelica.",
+  "OpenSourceLibrariesUsed": "Open source libraries used:",
   "OptionalCompilerArgs": "Optional Compiler Arguments",
   "OptionalSimulationArgs": "Optional Simulations Arguments",
   "OutgoingArcs": "Outgoing arcs",

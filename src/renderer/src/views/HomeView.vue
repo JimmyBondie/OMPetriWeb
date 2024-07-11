@@ -52,8 +52,8 @@ import Settings from '../components/Settings.vue'
         </v-window-item>
 
         <!-- About -->
-        <v-window-item value="about" class="h-100">
-          <About class="h-100"></About>
+        <v-window-item value="about" class="h-100 overflow-auto">
+          <About></About>
         </v-window-item>
       </v-window>
     </v-main>
