@@ -62,4 +62,8 @@ export class Element extends Object implements IElement {
   public equals(element: IElement): boolean {
     return element && element.id == this.id && element.elementType == this.elementType
   }
+
+  public removeLocalParameter(parameter: Parameter) {
+    this._localParameters.delete(parameter.id)
+  }
 }

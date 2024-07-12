@@ -2,11 +2,11 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
-import { mapGetters } from 'vuex'
 import ParameterNameEdit from '@renderer/edits/ParameterNameEdit.vue'
 import ParameterValueEdit from '@renderer/edits/ParameterValueEdit.vue'
 import ParameterUnitEdit from '@renderer/edits/ParameterUnitEdit.vue'
 import ParameterScopeSelect from '@renderer/selects/ParameterScopeSelect.vue'
+import { mapGetters, mapMutations } from 'vuex'
 
 defineProps<{
   dao: ModelDAO
@@ -15,6 +15,26 @@ defineProps<{
 </script>
 
 <template>
+  <v-dialog v-if="parameterToDelete" max-width="500" v-model="askDelete">
+    <v-card>
+      <v-card-text>{{ $t('WantToDeleteParameter', { id: parameterToDelete.id }) }}</v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          @click="
+            () => {
+              askDelete = false
+              removeParameter({ dao: dao, parameter: parameterToDelete })
+            }
+          "
+          >{{ $t('Yes') }}</v-btn
+        >
+        <v-btn @click="askDelete = false">{{ $t('No') }}</v-btn>
+        <v-btn @click="askDelete = false">{{ $t('Cancel') }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
   <v-row class="pa-4">
     <v-col>
       <v-list height="250" rounded density="compact" v-model:selected="selectedParameters">
@@ -47,7 +67,26 @@ defineProps<{
               ? 'grey'
               : undefined
           "
-        ></v-list-item>
+        >
+          <template v-slot:append>
+            <v-tooltip :text="$t('Delete')" location="top">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  variant="text"
+                  color="error"
+                  icon="mdi-trash-can"
+                  @click.stop="
+                    () => {
+                      parameterToDelete = parameter
+                      askDelete = true
+                    }
+                  "
+                ></v-btn>
+              </template>
+            </v-tooltip>
+          </template>
+        </v-list-item>
       </v-list>
     </v-col>
 
@@ -80,12 +119,17 @@ defineProps<{
 export default {
   data() {
     return {
+      askDelete: false as boolean,
+      parameterToDelete: null as Parameter | null,
       filter: '',
       selectedParameters: [] as Array<Parameter>
     }
   },
   computed: {
     ...mapGetters(['getFilteredAndSortedParameterList'])
+  },
+  methods: {
+    ...mapMutations(['removeParameter'])
   }
 }
 </script>

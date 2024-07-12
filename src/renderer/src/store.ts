@@ -211,6 +211,9 @@ const store: Store<StoreState> = createStore({
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)
     },
+    removeParameter(state: StoreState, { dao, parameter }) {
+      state.parameterService.remove(dao, parameter)
+    },
     saveModel(state: StoreState, dao: ModelDAO) {
       state.saveModel(dao)
     },

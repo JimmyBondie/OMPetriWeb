@@ -283,6 +283,13 @@ export class Model extends Object {
     }
   }
 
+  public removeParameter(param: Parameter) {
+    for (const elem of param.usingElements) {
+      elem.relatedParameters.delete(param)
+    }
+    this._parameters.delete(param.id)
+  }
+
   private removeTransition(transition: Transition) {
     for (const id of transition.function.elementIds) {
       this._parameters.get(id)?.usingElements.delete(transition)

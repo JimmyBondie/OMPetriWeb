@@ -94,6 +94,7 @@
   "ImportFailedUnhandledParamType": "File import failed: Found incorrect parameter type",
   "IncomingArcs": "Incoming arcs",
   "IncomingNodes": "Incoming nodes",
+  "InconsistencyParamRelatedToNonTransition": "Inconsistency found. Local parameter related to non-transition element.",
   "Inhibitor": "Inhibitor",
   "Inspector": "Inspector",
   "Intervals": "Intervals",
@@ -216,6 +217,7 @@
   "ValueGenerationForTypeNotImplemented": "Value generation for given reference type not yet implemented!",
   "ValueGenerationReferenceTypeNotImplemented": "Value generation for given reference type not yet implemented!",
   "WantToDeleteElement": "Do you really want to delete the element with id \"{id}\"?",
+  "WantToDeleteParameter": "Do you really want to delete the parameter with id \"{id}\"?",
   "WantToSaveChanges": "Do you want to save the changes you made to \"{name}\"",
   "WorkingDirNotAccessible": "Application's working directory not accessible!",
   "Yes": "Yes"

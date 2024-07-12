@@ -94,6 +94,7 @@
   "ImportFailedUnhandledParamType": "Dateiimport fehlgeschlagen: Fehlerhafter Parametertyp gefunden",
   "IncomingArcs": "Ankommende Kanten",
   "IncomingNodes": "Ankommende Knoten",
+  "InconsistencyParamRelatedToNonTransition": "Inkonsistenz gefunden. Lokaler Parameter bezieht sich auf ein anderes Element als eine Transition.",
   "Inhibitor": "Inhibitor",
   "Inspector": "Inspektor",
   "Intervals": "Intervalle",
@@ -216,6 +217,7 @@
   "ValueGenerationForTypeNotImplemented": "Wertgenerierung für gegebenen Referenztyp noch nicht implementiert!",
   "ValueGenerationReferenceTypeNotImplemented": "Wertgenerierung für gegebenen Referenztyp noch nicht implementiert!",
   "WantToDeleteElement": "Möchten Sie das Element mit der ID \"{id}\" wirklich löschen?",
+  "WantToDeleteParameter": "Möchten Sie den Parameter mit der ID \"{id}\" wirklich löschen?",
   "WantToSaveChanges": "Möchten Sie die Änderungen speichern, die Sie an \"{name}\" vorgenommen haben?",
   "WorkingDirNotAccessible": "Das Arbeitsverzeichnis der Anwendung ist nicht erreichbar!",
   "Yes": "Ja"

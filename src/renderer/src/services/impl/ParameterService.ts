@@ -15,6 +15,7 @@ import { CustomError } from '@renderer/utils/CustomError'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { DataArc } from '@renderer/data/impl/DataArc'
+import { ModelDAO } from '@renderer/dao/ModelDAO'
 
 export class ParameterException extends CustomError {}
 
@@ -233,6 +234,19 @@ export class ParameterService extends CustomService implements IParameterService
 
       default:
         throw new ParameterException(i18n.global.t('ValueGenerationForTypeNotImplemented'))
+    }
+  }
+
+  public remove(dao: ModelDAO, param: Parameter) {
+    this.validateParamRemoval(param)
+    if (param.type == ParameterType.LOCAL) {
+      if (param.relatedElement && param.relatedElement instanceof DataTransition) {
+        ;(param.relatedElement as DataTransition).removeLocalParameter(param)
+      } else {
+        throw new ParameterException(i18n.global.t('InconsistencyParamRelatedToNonTransition'))
+      }
+    } else {
+      dao.model.removeParameter(param)
     }
   }
 
