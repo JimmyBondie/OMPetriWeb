@@ -2,11 +2,10 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
-import ParameterNameEdit from '@renderer/edits/ParameterNameEdit.vue'
-import ParameterValueEdit from '@renderer/edits/ParameterValueEdit.vue'
-import ParameterUnitEdit from '@renderer/edits/ParameterUnitEdit.vue'
-import ParameterScopeSelect from '@renderer/selects/ParameterScopeSelect.vue'
 import { mapGetters, mapMutations } from 'vuex'
+import InspectorParameter from './InspectorParameter.vue'
+import { GlobalParameter } from '@renderer/core/Parameter/GlobalParameter'
+import { ParameterException } from '@renderer/services/impl/Exceptions'
 
 defineProps<{
   dao: ModelDAO
@@ -15,6 +14,48 @@ defineProps<{
 </script>
 
 <template>
+  <v-overlay
+    v-if="dao && newParameter"
+    v-model="addNewParameter"
+    class="align-center justify-center"
+    content-class="w-75"
+    contained
+    persistent
+    no-click-animation
+  >
+    <v-card rounded>
+      <v-container class="pa-7">
+        <v-row>
+          <v-col>
+            <InspectorParameter
+              :dao="dao"
+              :data-element="dataElement"
+              v-on:new-id="(value: string) => (newParameterId = value)"
+              :parameter="<Parameter>newParameter"
+            ></InspectorParameter>
+          </v-col>
+        </v-row>
+      </v-container>
+
+      <v-card-actions class="float-end">
+        <v-btn color="error" @click="addNewParameter = false">
+          {{ $t('Cancel') }}
+        </v-btn>
+        <v-btn
+          color="success"
+          @click="
+            () => {
+              createParameter()
+              addNewParameter = false
+            }
+          "
+        >
+          {{ $t('OK') }}
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-overlay>
+
   <v-dialog v-if="parameterToDelete" max-width="500" v-model="askDelete">
     <v-card>
       <v-card-text>{{ $t('WantToDeleteParameter', { id: parameterToDelete.id }) }}</v-card-text>
@@ -53,6 +94,22 @@ defineProps<{
               density="compact"
               hide-details
             ></v-text-field>
+
+            <v-tooltip :text="$t('Add')" location="top">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  variant="text"
+                  icon="mdi-plus"
+                  @click="
+                    () => {
+                      newParameter = new GlobalParameter('', '')
+                      addNewParameter = true
+                    }
+                  "
+                ></v-btn>
+              </template>
+            </v-tooltip>
           </template>
         </v-list-item>
 
@@ -93,24 +150,11 @@ defineProps<{
     <v-divider class="h-auto" vertical></v-divider>
 
     <v-col v-if="selectedParameters.length > 0">
-      <!-- Name -->
-      <ParameterNameEdit
+      <InspectorParameter
         :dao="dao"
         :data-element="dataElement"
         :parameter="<Parameter>selectedParameters[0]"
-      ></ParameterNameEdit>
-
-      <!-- Value -->
-      <ParameterValueEdit :parameter="<Parameter>selectedParameters[0]"></ParameterValueEdit>
-
-      <!-- Unit -->
-      <ParameterUnitEdit :parameter="<Parameter>selectedParameters[0]"></ParameterUnitEdit>
-
-      <!-- Scope -->
-      <ParameterScopeSelect
-        :dao="dao"
-        :parameter="<Parameter>selectedParameters[0]"
-      ></ParameterScopeSelect>
+      ></InspectorParameter>
     </v-col>
   </v-row>
 </template>
@@ -119,17 +163,52 @@ defineProps<{
 export default {
   data() {
     return {
+      addNewParameter: false as boolean,
       askDelete: false as boolean,
+      newParameter: null as Parameter | null,
+      newParameterId: '' as string,
       parameterToDelete: null as Parameter | null,
       filter: '',
       selectedParameters: [] as Array<Parameter>
     }
   },
   computed: {
-    ...mapGetters(['getFilteredAndSortedParameterList'])
+    ...mapGetters([
+      'createGlobalParameter',
+      'createLocalParameter',
+      'getFilteredAndSortedParameterList'
+    ])
   },
   methods: {
-    ...mapMutations(['removeParameter'])
+    ...mapMutations(['addParameter', 'removeParameter']),
+    createParameter() {
+      if (!this.newParameter) {
+        return
+      }
+
+      let param: Parameter
+      switch (this.newParameter.type) {
+        case ParameterType.GLOBAL: {
+          param = this.createGlobalParameter(this.newParameterId, this.newParameter.value)
+          break
+        }
+
+        case ParameterType.LOCAL: {
+          param = this.createLocalParameter(
+            this.newParameterId,
+            this.newParameter.value,
+            this.dataElement
+          )
+          break
+        }
+
+        default: {
+          throw new ParameterException(this.$t('CannotCreateParameterOtherLocalOrGlobal'))
+        }
+      }
+
+      this.addParameter({ model: this.dao.model, param: param })
+    }
   }
 }
 </script>

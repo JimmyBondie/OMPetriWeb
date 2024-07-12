@@ -1,5 +1,6 @@
 import { IElement } from '@renderer/entity/intf/IElement'
 import i18n from '@renderer/main'
+import { ParameterException } from '@renderer/services/impl/Exceptions'
 
 export enum ParameterType {
   LOCAL,
@@ -105,6 +106,8 @@ export abstract class Parameter extends Object {
   public set id(id: string) {
     if (this._type == ParameterType.REFERENCE) {
       this._id = id
+    } else {
+      throw new ParameterException(i18n.global.t('ShouldNotChangeParameterID'))
     }
   }
 

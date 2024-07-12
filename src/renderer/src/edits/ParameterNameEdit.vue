@@ -28,6 +28,7 @@ defineProps<{
 class InputValidationException extends CustomError {}
 
 export default {
+  emits: ['newId'],
   methods: {
     ...mapGetters(['findParameter']),
     ...mapMutations(['updateParameter']),
@@ -72,6 +73,9 @@ export default {
 
       return true
     },
+    updateNewId(newId: string) {
+      this.$emit('newId', newId)
+    },
     validateAndGetParameterId(text: string): string {
       if (!this.isNameInputValid(text)) {
         throw new InputValidationException(this.$t('CannotCreateParameterInvalidName'))
@@ -88,6 +92,8 @@ export default {
         )
         if (param) {
           this.updateParameter({ parameter: param, value: param.value, unit: param.unit })
+        } else {
+          this.updateNewId(id)
         }
       } catch (e: any) {
         if (e instanceof Error) {

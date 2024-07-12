@@ -15,6 +15,8 @@ import { Simulation } from './result/Simulation'
 import { IResultService } from './services/intf/IResultService'
 import { ResultSet } from './result/ResultSet'
 import { IHierarchyService } from './services/intf/IHierarchyService'
+import { ParameterFactory } from './utils/ParameterFactory'
+import { utils } from './utils'
 
 class StoreState extends Object {
   public get hierarchyService(): IHierarchyService {
@@ -23,6 +25,10 @@ class StoreState extends Object {
 
   public get modelService(): IModelService {
     return services.modelService
+  }
+
+  public get parameterFactory(): ParameterFactory {
+    return utils.parameterFactory
   }
 
   public get parameterService(): IParameterService {
@@ -124,6 +130,16 @@ const store: Store<StoreState> = createStore({
     addNewModel: (state: StoreState): ModelDAO => {
       return state.modelService.newModel()
     },
+    createGlobalParameter:
+      (state: StoreState) =>
+      (id: string, value: string): Parameter => {
+        return state.parameterFactory.createGlobalParameter(id, value)
+      },
+    createLocalParameter:
+      (state: StoreState) =>
+      (id: string, value: string, reference: IElement): Parameter => {
+        return state.parameterFactory.createLocalParameter(id, value, reference)
+      },
     findParameter:
       (state: StoreState) =>
       (model: Model, id: string, element: IElement): Parameter | undefined => {
@@ -184,6 +200,9 @@ const store: Store<StoreState> = createStore({
       }
   },
   mutations: {
+    addParameter(state: StoreState, { model, param }) {
+      state.parameterService.add(model, param)
+    },
     changeArcType(state: StoreState, { dao, arc, type }) {
       state.modelService.changeArcType(dao, arc, type)
     },

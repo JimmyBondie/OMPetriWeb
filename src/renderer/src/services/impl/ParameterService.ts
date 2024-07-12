@@ -11,13 +11,11 @@ import { Color } from '@renderer/core/Color'
 import { Arc } from '@renderer/entity/impl/Arc'
 import { Weight } from '@renderer/core/Weight'
 import { Transition } from '@renderer/entity/impl/Transition'
-import { CustomError } from '@renderer/utils/CustomError'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { DataArc } from '@renderer/data/impl/DataArc'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-
-export class ParameterException extends CustomError {}
+import { ParameterException } from './Exceptions'
 
 export class ParameterService extends CustomService implements IParameterService {
   public add(model: Model, param: Parameter): void {
