@@ -31,7 +31,13 @@ defineProps<{
           <template v-slot:append>
             <v-tooltip :text="$t('Show')" location="top">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" icon="mdi-magnify" density="compact" variant="text"></v-btn>
+                <v-btn
+                  v-bind="props"
+                  icon="mdi-magnify"
+                  density="compact"
+                  variant="text"
+                  @click.stop=""
+                ></v-btn>
               </template>
             </v-tooltip>
 
@@ -43,6 +49,7 @@ defineProps<{
                   icon="mdi-pencil"
                   density="compact"
                   variant="text"
+                  @click.stop=""
                 ></v-btn>
               </template>
             </v-tooltip>
@@ -122,7 +129,13 @@ defineProps<{
           <template v-slot:append>
             <v-tooltip :text="$t('Show')" location="top">
               <template v-slot:activator="{ props }">
-                <v-btn v-bind="props" icon="mdi-magnify" density="compact" variant="text"></v-btn>
+                <v-btn
+                  v-bind="props"
+                  icon="mdi-magnify"
+                  density="compact"
+                  variant="text"
+                  @click.stop=""
+                ></v-btn>
               </template>
             </v-tooltip>
 
@@ -134,6 +147,7 @@ defineProps<{
                   icon="mdi-pencil"
                   density="compact"
                   variant="text"
+                  @click.stop=""
                 ></v-btn>
               </template>
             </v-tooltip>
