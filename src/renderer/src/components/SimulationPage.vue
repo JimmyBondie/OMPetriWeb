@@ -503,7 +503,7 @@ export default {
           }
         },
         tooltip: {
-          trigger: 'item'
+          trigger: 'axis'
         },
         yAxis: {
           type: 'value',
