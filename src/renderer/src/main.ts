@@ -72,7 +72,8 @@ import {
   TooltipComponent,
   GridComponent,
   LegendComponent,
-  ToolboxComponent
+  ToolboxComponent,
+  DataZoomComponent
 } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
 use([
@@ -82,7 +83,8 @@ use([
   LegendComponent,
   GridComponent,
   LineChart,
-  ToolboxComponent
+  ToolboxComponent,
+  DataZoomComponent
 ])
 
 const app = createApp(App)

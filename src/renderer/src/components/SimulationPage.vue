@@ -488,24 +488,26 @@ export default {
     },
     getChartOptions(): EChartsOption {
       const options: EChartsOption = {
-        tooltip: {
-          trigger: 'item'
-        },
+        backgroundColor: 'rgb(var(--v-theme-surface))',
+        dataZoom: {},
         legend: {
           show: true
-        },
-        backgroundColor: 'rgb(var(--v-theme-surface))',
-        yAxis: {
-          type: 'value',
-          name: this.$t('Token')
         },
         toolbox: {
           feature: {
             dataZoom: {
               yAxisIndex: 'none'
             },
+            restore: {},
             saveAsImage: {}
           }
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        yAxis: {
+          type: 'value',
+          name: this.$t('Token')
         }
       }
 
