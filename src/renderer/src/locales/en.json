@@ -138,6 +138,7 @@
   "NoTokenForColorAvailable": "No token for color \"{id}\" available.",
   "NotSupported": "This action is not supported",
   "Of": "of",
+  "OnlyDiscreteValuesPermitted": "Only integer values are permitted for discrete places!",
   "OnlySelected": "Only selected",
   "Open": "Open",
   "OpenModelicaEnvVariableNotSet": "\"{variable}\" environment variable is not set! Please install OpenModelica or set the variable correctly.",

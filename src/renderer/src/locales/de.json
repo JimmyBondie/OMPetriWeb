@@ -138,6 +138,7 @@
   "NoTokenForColorAvailable": "Keine Marke für Farbe \"{id}\" vorhanden.",
   "NotSupported": "Diese Aktion wird nicht unterstützt",
   "Of": "bis",
+  "OnlyDiscreteValuesPermitted": "Bei diskreten Stellen sind nur ganzzahlige Werte erlaubt!",
   "OnlySelected": "Nur ausgewählte",
   "Open": "Öffnen",
   "OpenModelicaEnvVariableNotSet": "Die Umgebungsvariable \"{variable}\" ist nicht gesetzt! Bitte installieren Sie OpenModelica oder setzen Sie die Variable korrekt.",

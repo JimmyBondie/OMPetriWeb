@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Place } from '@renderer/entity/impl/Place'
+import { Place, PlaceType } from '@renderer/entity/impl/Place'
 
 defineProps<{
   place: Place
@@ -9,10 +9,12 @@ defineProps<{
 <template>
   <v-number-input
     :label="$t('TokenMax')"
+    :rules="[validateNumber]"
     control-variant="stacked"
-    v-model="place.tokenMax"
+    :model-value="place.tokenMax"
     variant="underlined"
     density="compact"
+    :inputmode="calcInputMode()"
   >
     <template v-slot:prepend>
       <v-icon>mdi-speedometer</v-icon>
@@ -20,7 +22,34 @@ defineProps<{
   </v-number-input>
 </template>
 
-<script lang="ts"></script>
+<script lang="ts">
+export default {
+  methods: {
+    calcInputMode(): string {
+      switch (this.place.placeType) {
+        case PlaceType.DISCRETE:
+          return 'numeric'
+        case PlaceType.CONTINUOUS:
+          return 'decimal'
+      }
+    },
+    validateNumber(text: string): boolean | string {
+      const num: number = parseFloat(text)
+      if (this.place.placeType == PlaceType.CONTINUOUS) {
+        this.place.tokenMax = num
+        return true
+      } else {
+        if (Number.isInteger(num)) {
+          this.place.tokenMax = num
+          return true
+        } else {
+          return this.$t('OnlyDiscreteValuesPermitted')
+        }
+      }
+    }
+  }
+}
+</script>
 
 <style lang="scss">
 .v-field.v-field--variant-underlined .v-field__append-inner {
