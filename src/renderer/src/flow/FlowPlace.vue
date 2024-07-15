@@ -25,7 +25,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
           :style="'text-overflow: clip; ' + calcStyle()"
           class="pa-0 text-center text-caption"
         >
-          {{ place.token.toFixed(2) }}
+          {{ calcTitle() }}
         </v-card-title>
       </v-card>
     </template>
@@ -55,6 +55,14 @@ export default {
           return 'line-height: 32px'
         case PlaceType.DISCRETE:
           return 'line-height: 40px'
+      }
+    },
+    calcTitle(): string {
+      switch (this.place.placeType) {
+        case PlaceType.CONTINUOUS:
+          return this.place.token.toFixed(2)
+        default:
+          return this.place.token.toFixed(0)
       }
     }
   }
