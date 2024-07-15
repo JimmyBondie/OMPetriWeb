@@ -82,4 +82,8 @@ export class Function extends Object {
       return this._value
     }
   }
+
+  public isSingleElement(): boolean {
+    return this._elements.length == 1
+  }
 }

@@ -168,6 +168,8 @@
   "Settings": "Einstellungen",
   "ShouldNotChangeParameterID": "Die ID für Nicht-Referenzparameter sollte nicht geändert werden!",
   "Show": "Anzeigen",
+  "ShowArcWeights": "Kantengewichte anzeigen",
+  "ShowArcWeightsDescription": "Kantengewichte, die nur eine Zahl oder Variable enthalten, werden direkt auf der Kante angezeigt",
   "Simulation": "Simulation",
   "SimulationBuilding": "Simulation: Erstellen...",
   "SimulationCannotStartServer": "Der Simulations-Kommunikationsserver kann nicht gestartet werden!",

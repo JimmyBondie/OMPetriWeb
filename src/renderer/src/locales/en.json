@@ -168,6 +168,8 @@
   "Settings": "Settings",
   "ShouldNotChangeParameterID": "The ID for non-reference parameters should not be changed!",
   "Show": "Show",
+  "ShowArcWeights": "Show arc weights",
+  "ShowArcWeightsDescription": "Arc weights that only contain a number or variable are displayed directly on the edge",
   "Simulation": "Simulation",
   "SimulationBuilding": "Simulation: Building...",
   "SimulationCannotStartServer": "Simulation communication server cannot be started!",

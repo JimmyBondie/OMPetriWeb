@@ -17,8 +17,16 @@ import { ResultSet } from './result/ResultSet'
 import { IHierarchyService } from './services/intf/IHierarchyService'
 import { ParameterFactory } from './utils/ParameterFactory'
 import { utils } from './utils'
+import { Color } from './core/Color'
+import { IFactoryService } from './services/intf/IFactoryService'
 
 class StoreState extends Object {
+  private _showArcWeights: boolean = true
+
+  public get factoryService(): IFactoryService {
+    return services.factoryService
+  }
+
   public get hierarchyService(): IHierarchyService {
     return services.hierarchyService
   }
@@ -39,8 +47,16 @@ class StoreState extends Object {
     return services.resultService
   }
 
+  public get showArcWeights(): boolean {
+    return this._showArcWeights
+  }
+
   public get simulationService(): ISimulationService {
     return services.simulationService
+  }
+
+  public set showArcWeights(showArcWeights: boolean) {
+    this._showArcWeights = showArcWeights
   }
 
   public openFile(accept: string): Promise<Array<[string, string]>> {
@@ -145,6 +161,9 @@ const store: Store<StoreState> = createStore({
       (model: Model, id: string, element: IElement): Parameter | undefined => {
         return state.parameterService.findParameter(model, id, element)
       },
+    getDefaultColor: (state: StoreState): Color => {
+      return state.factoryService.colorDefault
+    },
     getFilteredAndSortedParameterList:
       (state: StoreState) =>
       (model: Model, element: IDataElement, filter: string): Array<Parameter> => {
@@ -161,6 +180,9 @@ const store: Store<StoreState> = createStore({
       (results: Simulation, elements: Array<IElement>): Map<string, Array<string>> => {
         return state.resultsService.getSharedValues(results, elements)
       },
+    getShowArcWeights: (state: StoreState): boolean => {
+      return state.showArcWeights
+    },
     getSimulationResults: (state: StoreState): Array<Simulation> => {
       return state.resultsService.simulationResults
     },
@@ -244,6 +266,9 @@ const store: Store<StoreState> = createStore({
     },
     setElementFunction(state: StoreState, { model, element, func, color }) {
       state.parameterService.setElementFunction(model, element, func, color)
+    },
+    setShowArcWeights(state: StoreState, showArcWeights: boolean) {
+      state.showArcWeights = showArcWeights
     },
     updateParameter(state: StoreState, { parameter, value, unit }) {
       state.parameterService.updateParameter(parameter, value, unit)

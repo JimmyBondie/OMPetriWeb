@@ -2,10 +2,13 @@
 import { IDataArc } from '@renderer/data/intf/IDataArc'
 import { FlowArcType } from './FlowArcType'
 import { ArcType } from '@renderer/entity/intf/IArc'
-import { GraphNode, XYPosition } from '@vue-flow/core'
+import { EdgeText, GraphNode, XYPosition } from '@vue-flow/core'
 import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 import { DataType } from '@renderer/data/intf/DataType'
 import { UnsupportedOperationException } from '@renderer/exception/UnsupportedOperationException'
+import { Weight } from '@renderer/core/Weight'
+import { mapGetters } from 'vuex'
+import { Function } from '@renderer/core/Function'
 
 defineProps<{
   data: IDataArc
@@ -58,6 +61,12 @@ defineProps<{
     :d="calcPath()"
   />
   <path class="vue-flow__edge-interaction" stroke-width="20" stroke-opacity="0" :d="calcPath()" />
+  <EdgeText
+    v-if="getShowArcWeights && getWeight() != ''"
+    :x="(getSource().x + getTarget().x) / 2"
+    :y="(getSource().y + getTarget().y) / 2"
+    :label="getWeight()"
+  ></EdgeText>
 </template>
 
 <script lang="ts">
@@ -70,11 +79,22 @@ export default {
       transitionWidth: 15 as number
     }
   },
+  computed: {
+    ...mapGetters(['getDefaultColor', 'getShowArcWeights'])
+  },
   methods: {
     calcPath(): string {
       const source: XYPosition = this.getSource()
       const target: XYPosition = this.getTarget()
       return `M${source.x},${source.y} L ${target.x} ${target.y}`
+    },
+    getArcType(): ArcType {
+      if (this.data instanceof DataClusterArc) {
+        // DataClusterArcs should be displayed as normal arcs
+        return ArcType.NORMAL
+      } else {
+        return this.data.arcType
+      }
     },
     getClass(): string {
       switch (this.getArcType()) {
@@ -138,14 +158,6 @@ export default {
           return `circle_${this.data.id}`
         default:
           return `arrow_${this.data.id}`
-      }
-    },
-    getArcType(): ArcType {
-      if (this.data instanceof DataClusterArc) {
-        // DataClusterArcs should be displayed as normal arcs
-        return ArcType.NORMAL
-      } else {
-        return this.data.arcType
       }
     },
     getSourceCircleToRectPosition(radius: number, targetHeight: number): XYPosition {
@@ -380,6 +392,19 @@ export default {
             this.target.dimensions.width
           )
         }
+      }
+    },
+    getWeight(): string {
+      const weight: Weight | undefined = this.data.getWeight(this.getDefaultColor)
+      if (weight) {
+        const func: Function = weight.function
+        if (func.isSingleElement()) {
+          return func.formatString()
+        } else {
+          return '...'
+        }
+      } else {
+        return ''
       }
     }
   }

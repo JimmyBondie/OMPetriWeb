@@ -265,8 +265,8 @@ defineProps<{
                 </v-tooltip>
               </v-col>
 
+              <!-- New cluster -->
               <v-col class="d-flex justify-center">
-                <!-- New cluster -->
                 <v-tooltip :text="$t('NewCluster')" location="top">
                   <template v-slot:activator="{ props: tooltip }">
                     <v-card
@@ -634,6 +634,12 @@ export default {
     }
     .vue-flow__minimap {
       background-color: rgb(19, 19, 19);
+    }
+    .vue-flow__edge-textbg {
+      fill: rgb(19, 19, 19);
+    }
+    .vue-flow__edge-text {
+      fill: #fffffb;
     }
   }
 }
