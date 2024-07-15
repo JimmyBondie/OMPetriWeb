@@ -208,7 +208,9 @@ export class ModelService extends CustomService implements IModelService {
   public create(
     dao: ModelDAO,
     cluster: DataCluster | null,
-    type: DataType,
+    type:
+      | { dataType: DataType.PLACE; elemType: PlaceType }
+      | { dataType: DataType.TRANSITION; elemType: TransitionType },
     posX: number,
     posY: number
   ): IGraphNode {

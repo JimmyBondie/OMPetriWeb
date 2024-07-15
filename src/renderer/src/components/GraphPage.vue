@@ -42,6 +42,8 @@ import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 import QuickViewClusterArc from '@renderer/quickview/QuickViewClusterArc.vue'
 import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
 import { DataException } from '@renderer/services/impl/Exceptions'
+import { PlaceType } from '@renderer/entity/impl/Place'
+import { TransitionType } from '@renderer/entity/impl/Transition'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -135,9 +137,36 @@ defineProps<{
         <v-expansion-panel :title="$t('Tools')" value="tools">
           <v-expansion-panel-text>
             <v-row>
+              <!-- New discrete place -->
               <v-col class="d-flex justify-center">
-                <!-- New place -->
-                <v-tooltip :text="$t('NewPlace')" location="top">
+                <v-tooltip :text="$t('NewDiscretePlace')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="rounded-circle cursor-grab"
+                      height="40"
+                      width="40"
+                      color="green-darken-2"
+                      v-bind="tooltip"
+                      draggable="true"
+                      @dragstart="
+                        (e: DragEvent) =>
+                          onDragStart(e, { dataType: DataType.PLACE, elemType: PlaceType.DISCRETE })
+                      "
+                    >
+                      <v-card-title
+                        style="line-height: 40px; user-select: none"
+                        class="pa-0 text-center text-caption user-select-none"
+                      >
+                        1
+                      </v-card-title>
+                    </v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
+
+              <!-- New continuous place -->
+              <v-col class="d-flex justify-center">
+                <v-tooltip :text="$t('NewContinuousPlace')" location="top">
                   <template v-slot:activator="{ props: tooltip }">
                     <v-card
                       class="rounded-circle cursor-grab"
@@ -147,7 +176,13 @@ defineProps<{
                       border="opacity-50 double lg"
                       v-bind="tooltip"
                       draggable="true"
-                      @dragstart="(e: DragEvent) => onDragStart(e, DataType.PLACE)"
+                      @dragstart="
+                        (e: DragEvent) =>
+                          onDragStart(e, {
+                            dataType: DataType.PLACE,
+                            elemType: PlaceType.CONTINUOUS
+                          })
+                      "
                     >
                       <v-card-title
                         style="line-height: 32px; user-select: none"
@@ -160,9 +195,32 @@ defineProps<{
                 </v-tooltip>
               </v-col>
 
+              <!-- New discrete transition -->
               <v-col class="d-flex justify-center">
-                <!-- New transition -->
-                <v-tooltip :text="$t('NewTransition')" location="top">
+                <v-tooltip :text="$t('NewDiscreteTransition')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="pa-1 cursor-grab"
+                      color="blue-darken-2"
+                      width="15"
+                      height="40"
+                      v-bind="tooltip"
+                      draggable="true"
+                      @dragstart="
+                        (e: DragEvent) =>
+                          onDragStart(e, {
+                            dataType: DataType.TRANSITION,
+                            elemType: TransitionType.DISCRETE
+                          })
+                      "
+                    ></v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
+
+              <!-- New continuous transition -->
+              <v-col class="d-flex justify-center">
+                <v-tooltip :text="$t('NewContinuousTransition')" location="top">
                   <template v-slot:activator="{ props: tooltip }">
                     <v-card
                       class="pa-1 cursor-grab"
@@ -172,7 +230,36 @@ defineProps<{
                       border="opacity-50 double lg"
                       v-bind="tooltip"
                       draggable="true"
-                      @dragstart="(e: DragEvent) => onDragStart(e, DataType.TRANSITION)"
+                      @dragstart="
+                        (e: DragEvent) =>
+                          onDragStart(e, {
+                            dataType: DataType.TRANSITION,
+                            elemType: TransitionType.CONTINUOUS
+                          })
+                      "
+                    ></v-card>
+                  </template>
+                </v-tooltip>
+              </v-col>
+
+              <!-- New stochastic transition -->
+              <v-col class="d-flex justify-center">
+                <v-tooltip :text="$t('NewStochasticTransition')" location="top">
+                  <template v-slot:activator="{ props: tooltip }">
+                    <v-card
+                      class="pa-1 cursor-grab"
+                      color="blue-darken-4"
+                      width="15"
+                      height="40"
+                      v-bind="tooltip"
+                      draggable="true"
+                      @dragstart="
+                        (e: DragEvent) =>
+                          onDragStart(e, {
+                            dataType: DataType.TRANSITION,
+                            elemType: TransitionType.STOCHASTIC
+                          })
+                      "
                     ></v-card>
                   </template>
                 </v-tooltip>
@@ -259,7 +346,10 @@ defineProps<{
 export default {
   data() {
     return {
-      draggedType: undefined as DataType | undefined,
+      draggedType: undefined as
+        | { dataType: DataType.PLACE; elemType: PlaceType }
+        | { dataType: DataType.TRANSITION; elemType: TransitionType }
+        | undefined,
       isDragging: false,
       isDragOver: false,
       openPanels: ['model', 'tools'],
@@ -356,7 +446,12 @@ export default {
         }
       }
     },
-    onDragStart(event: DragEvent, type: DataType) {
+    onDragStart(
+      event: DragEvent,
+      type:
+        | { dataType: DataType.PLACE; elemType: PlaceType }
+        | { dataType: DataType.TRANSITION; elemType: TransitionType }
+    ) {
       if (this.vueFlowInstance) {
         this.vueFlowInstance.removeSelectedNodes(this.vueFlowInstance.getSelectedNodes)
       }

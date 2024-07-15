@@ -31,8 +31,6 @@ export class FactoryService extends CustomService implements IFactoryService {
   private PREFIX_ID_TRANSITION: string = 'T'
 
   private defaultArcType: ArcType = ArcType.NORMAL
-  private defaultPlaceType: PlaceType = PlaceType.CONTINUOUS
-  private defaultTransitionType: TransitionType = TransitionType.CONTINUOUS
 
   public get colorDefault(): Color {
     return this.DEFAULT_COLOUR
@@ -69,11 +67,18 @@ export class FactoryService extends CustomService implements IFactoryService {
     return dao
   }
 
-  public createNode(modelDao: ModelDAO, type: DataType, posX: number, posY: number): IGraphNode {
+  public createNode(
+    modelDao: ModelDAO,
+    type:
+      | { dataType: DataType.PLACE; elemType: PlaceType }
+      | { dataType: DataType.TRANSITION; elemType: TransitionType },
+    posX: number,
+    posY: number
+  ): IGraphNode {
     let shape: IGraphNode
-    switch (type) {
+    switch (type.dataType) {
       case DataType.PLACE: {
-        const place: DataPlace = new DataPlace(this.getPlaceId(modelDao), this.defaultPlaceType)
+        const place: DataPlace = new DataPlace(this.getPlaceId(modelDao), type.elemType)
         place.addToken(new Token(this.DEFAULT_COLOUR))
         shape = new GraphPlace(this.getGraphNodeId(modelDao), place)
         break
@@ -82,7 +87,7 @@ export class FactoryService extends CustomService implements IFactoryService {
       case DataType.TRANSITION: {
         const transition: DataTransition = new DataTransition(
           this.getTransitionId(modelDao),
-          this.defaultTransitionType
+          type.elemType
         )
         shape = new GraphTransition(this.getGraphNodeId(modelDao), transition)
         break
