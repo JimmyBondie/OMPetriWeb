@@ -498,6 +498,14 @@ export default {
         yAxis: {
           type: 'value',
           name: this.$t('Token')
+        },
+        toolbox: {
+          feature: {
+            dataZoom: {
+              yAxisIndex: 'none'
+            },
+            saveAsImage: {}
+          }
         }
       }
 

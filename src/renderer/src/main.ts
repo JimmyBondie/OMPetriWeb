@@ -71,10 +71,19 @@ import {
   TitleComponent,
   TooltipComponent,
   GridComponent,
-  LegendComponent
+  LegendComponent,
+  ToolboxComponent
 } from 'echarts/components'
 import { LineChart } from 'echarts/charts'
-use([SVGRenderer, TitleComponent, TooltipComponent, LegendComponent, GridComponent, LineChart])
+use([
+  SVGRenderer,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+  GridComponent,
+  LineChart,
+  ToolboxComponent
+])
 
 const app = createApp(App)
 app.use(i18n)
