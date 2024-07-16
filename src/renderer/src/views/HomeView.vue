@@ -19,7 +19,7 @@ import Settings from '../components/Settings.vue'
       v-model="menuOpen"
       :location="$vuetify.display.mobile ? 'bottom' : undefined"
     >
-      <v-list v-model:selected="selectedTab" nav>
+      <v-list v-model:selected="selectedTab" nav mandatory>
         <v-list-item prepend-icon="mdi-graph-outline" value="overview">
           {{ $t('Overview') }}
         </v-list-item>
