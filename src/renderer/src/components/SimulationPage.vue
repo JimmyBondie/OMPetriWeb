@@ -243,7 +243,18 @@ defineProps<{
         max-width="300"
       >
         <template v-slot:item="{ props, item }">
-          <v-list-subheader v-if="item.raw.isHeader">{{ item.raw.title }}</v-list-subheader>
+          <v-list-subheader
+            v-if="item.raw instanceof AutocompleteWrapperHeader"
+            style="padding-inline-start: 8px !important"
+          >
+            <v-checkbox
+              :label="item.raw.title"
+              hide-details
+              :indeterminate="checkIndeterminate(item.raw.value)"
+              @update:model-value="(value: any) => selectValues(value, <Array<Node>>item.raw.value)"
+            ></v-checkbox>
+          </v-list-subheader>
+
           <v-list-item v-else v-bind="props" :title="item.raw.title">
             <template v-slot:prepend="{ isActive }">
               <v-list-item-action start>
@@ -404,18 +415,16 @@ defineProps<{
 <script lang="ts">
 class AutocompleteWrapper<T> extends Object {
   title: string
-  value: T | undefined
+  value: T
 
-  public constructor(title: string, value?: T) {
+  public constructor(title: string, value: T) {
     super()
     this.title = title
     this.value = value
   }
-
-  public get isHeader(): boolean {
-    return !this.value
-  }
 }
+
+class AutocompleteWrapperHeader<T> extends AutocompleteWrapper<Array<T>> {}
 
 export default {
   data() {
@@ -469,6 +478,12 @@ export default {
 
         this.resultSets.push(new ResultSet(this.selectedSimulation as Simulation, element, value))
       }
+    },
+    checkIndeterminate(values: Array<Node>): boolean {
+      return (
+        values.some((node: Node) => this.selectedElements.includes(node)) &&
+        values.some((node: Node) => !this.selectedElements.includes(node))
+      )
     },
     compareNumbers(a: number | bigint, b: number | bigint): number {
       if (a == b) {
@@ -538,7 +553,7 @@ export default {
       options.series = series
       return options
     },
-    getElements(): Array<AutocompleteWrapper<Node>> {
+    getElements(): Array<AutocompleteWrapper<Node> | AutocompleteWrapperHeader<Node>> {
       if (!this.selectedSimulation) {
         return new Array<AutocompleteWrapper<Node>>()
       }
@@ -558,18 +573,20 @@ export default {
         }
       }
 
-      const result: Array<AutocompleteWrapper<Node>> = new Array<AutocompleteWrapper<Node>>()
+      const result: Array<AutocompleteWrapper<Node> | AutocompleteWrapperHeader<Node>> = new Array<
+        AutocompleteWrapper<Node>
+      >()
       places.sort((a: Node, b: Node) => a.id.localeCompare(b.id))
       transitions.sort((a: Node, b: Node) => a.id.localeCompare(b.id))
 
       if (places.length > 0) {
-        result.push(new AutocompleteWrapper<Node>(this.$t('Places')))
+        result.push(new AutocompleteWrapperHeader<Node>(this.$t('Places'), places))
         for (const place of places) {
           result.push(new AutocompleteWrapper<Node>(place.id, place))
         }
       }
       if (transitions.length > 0) {
-        result.push(new AutocompleteWrapper<Node>(this.$t('Transitions')))
+        result.push(new AutocompleteWrapperHeader<Node>(this.$t('Transitions'), transitions))
         for (const transition of transitions) {
           result.push(new AutocompleteWrapper<Node>(transition.id, transition))
         }
@@ -721,14 +738,12 @@ export default {
         }
       }
 
-      return choices.filter(
-        (choice: AutocompleteWrapper<Array<string>>): boolean =>
-          choice.value != undefined &&
-          choice.value.some(
-            (value: string): boolean =>
-              this.selectedSimulation != undefined &&
-              this.selectedSimulation.getData(value).length > 0
-          )
+      return choices.filter((choice: AutocompleteWrapper<Array<string>>): boolean =>
+        choice.value.some(
+          (value: string): boolean =>
+            this.selectedSimulation != undefined &&
+            this.selectedSimulation.getData(value).length > 0
+        )
       )
     },
     removeFromResultSets(resultSet: ResultSet) {
@@ -767,6 +782,19 @@ export default {
       this.thread = controller
       this.showResultsBtn = await promise
       this.inSimulation = false
+    },
+    selectValues(select: boolean, values: Array<Node>) {
+      const selected: Set<Node> = new Set<Node>(this.selectedElements as Array<Node>)
+      if (select) {
+        for (const value of values) {
+          selected.add(value)
+        }
+      } else {
+        for (const value of values) {
+          selected.delete(value)
+        }
+      }
+      this.selectedElements = Array.from(selected)
     }
   },
   watch: {
