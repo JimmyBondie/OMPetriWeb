@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TourGuideClient } from '@sjmc11/tourguidejs'
 import { useLocale, useTheme } from 'vuetify/lib/framework.mjs'
 import { mapGetters, mapMutations } from 'vuex'
 </script>
@@ -9,7 +10,11 @@ import { mapGetters, mapMutations } from 'vuex'
       <v-list-subheader>{{ $t('General') }}</v-list-subheader>
 
       <!-- Language -->
-      <v-list-item>
+      <v-list-item
+        :data-tg-tour="$t('LanguageDescription')"
+        :data-tg-title="$t('Language')"
+        data-tg-order="6"
+      >
         <v-list-item-title>{{ $t('Language') }}</v-list-item-title>
         <v-list-item-subtitle>
           <v-select
@@ -24,7 +29,11 @@ import { mapGetters, mapMutations } from 'vuex'
       </v-list-item>
 
       <!-- Theme -->
-      <v-list-item>
+      <v-list-item
+        :data-tg-tour="$t('DesignDescription')"
+        :data-tg-title="$t('Design')"
+        data-tg-order="7"
+      >
         <v-list-item-title>{{ $t('Design') }}</v-list-item-title>
         <v-list-item-subtitle>
           <v-btn
@@ -91,10 +100,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getShowArcWeights'])
+    ...mapGetters(['getShowArcWeights', 'getTour'])
   },
   methods: {
     ...mapMutations(['setShowArcWeights'])
+  },
+  mounted() {
+    const tour: TourGuideClient = this.getTour
+    if (tour.isVisible) {
+      tour.refresh()
+    }
   },
   watch: {
     language() {

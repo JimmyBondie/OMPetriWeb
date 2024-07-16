@@ -3,6 +3,8 @@ import SimulationPage from '@renderer/components/SimulationPage.vue'
 import About from '../components/About.vue'
 import Overview from '../components/Overview.vue'
 import Settings from '../components/Settings.vue'
+import { TourGuideClient } from '@sjmc11/tourguidejs/src/Tour'
+import { mapGetters } from 'vuex'
 </script>
 
 <template>
@@ -20,19 +22,57 @@ import Settings from '../components/Settings.vue'
       :location="$vuetify.display.mobile ? 'bottom' : undefined"
     >
       <v-list v-model:selected="selectedTab" nav mandatory>
-        <v-list-item prepend-icon="mdi-graph-outline" value="overview">
+        <v-list-item
+          :data-tg-tour="$t('OverviewDescription')"
+          :data-tg-title="$t('Overview')"
+          data-tg-order="1"
+          prepend-icon="mdi-graph-outline"
+          value="overview"
+          ref="overviewBtn"
+        >
           {{ $t('Overview') }}
         </v-list-item>
-        <v-list-item prepend-icon="mdi-calculator-variant-outline" value="simulations">
+        <v-list-item
+          :data-tg-tour="$t('SimulationsDescription')"
+          :data-tg-title="$t('Simulations')"
+          data-tg-order="4"
+          prepend-icon="mdi-calculator-variant-outline"
+          value="simulations"
+        >
           {{ $t('Simulations') }}
         </v-list-item>
-        <v-list-item prepend-icon="mdi-cog-outline" value="settings">
+        <v-list-item
+          :data-tg-tour="$t('SettingsDescription')"
+          :data-tg-title="$t('Settings')"
+          data-tg-order="5"
+          prepend-icon="mdi-cog-outline"
+          value="settings"
+        >
           {{ $t('Settings') }}
         </v-list-item>
-        <v-list-item prepend-icon="mdi-information-outline" value="about">
+        <v-list-item
+          :data-tg-tour="$t('AboutDescription')"
+          :data-tg-title="$t('About')"
+          data-tg-order="8"
+          prepend-icon="mdi-information-outline"
+          value="about"
+        >
           {{ $t('About') }}
         </v-list-item>
       </v-list>
+
+      <template v-slot:append>
+        <v-btn
+          color="warning"
+          prepend-icon="mdi-help-circle-outline"
+          append-icon="mdi-help-circle-outline"
+          block
+          rounded="0"
+          @click="(<TourGuideClient>getTour).start()"
+        >
+          {{ $t('NeedHelp') }}
+        </v-btn>
+      </template>
     </v-navigation-drawer>
 
     <v-main style="height: calc(100% - var(--app-bar-height))">
@@ -67,11 +107,33 @@ export default {
       menuOpen: true,
       selectedTab: [] as Array<string>
     }
+  },
+  computed: {
+    ...mapGetters(['getTour'])
+  },
+  mounted() {
+    ;(this.getTour as TourGuideClient).onBeforeStepChange(() => {
+      switch (this.getTour.activeStep) {
+        case 0:
+        case 7: {
+          this.selectedTab[0] = 'overview'
+          break
+        }
+
+        case 4: {
+          this.selectedTab[0] = 'settings'
+          break
+        }
+      }
+      window.setTimeout(() => (this.getTour as TourGuideClient).updatePositions(), 500)
+    })
   }
 }
 </script>
 
 <style lang="scss">
+@import '@sjmc11/tourguidejs/src/scss/tour.scss';
+
 .v-navigation-drawer {
   z-index: 2004 !important;
 }
@@ -87,5 +149,26 @@ export default {
 
 .v-main {
   --v-layout-top: 0px !important ;
+}
+
+.tg-backdrop {
+  z-index: 2005;
+  opacity: var(--v-overlay-opacity, 0.7);
+}
+
+.tg-dialog {
+  z-index: 2005 !important;
+  background-color: rgb(var(--v-theme-surface));
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  .tg-dialog-close-btn {
+    fill: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  }
+  .tg-dialog-btn {
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity)) !important;
+    border: thin solid currentColor !important;
+  }
+  .tg-step-progress {
+    color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
+  }
 }
 </style>

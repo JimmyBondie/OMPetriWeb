@@ -19,9 +19,12 @@ import { ParameterFactory } from './utils/ParameterFactory'
 import { utils } from './utils'
 import { Color } from './core/Color'
 import { IFactoryService } from './services/intf/IFactoryService'
+import { TourGuideClient } from '@sjmc11/tourguidejs'
+import i18n from './main'
 
 class StoreState extends Object {
   private _showArcWeights: boolean = true
+  private _tour: TourGuideClient = new TourGuideClient()
 
   public get factoryService(): IFactoryService {
     return services.factoryService
@@ -53,6 +56,17 @@ class StoreState extends Object {
 
   public get simulationService(): ISimulationService {
     return services.simulationService
+  }
+
+  public get tour(): TourGuideClient {
+    this._tour.setOptions({
+      backdropColor: 'rgb(var(--v-theme-on-surface))',
+      nextLabel: i18n.global.t('Next'),
+      prevLabel: i18n.global.t('Back'),
+      finishLabel: i18n.global.t('Finish')
+    })
+
+    return this._tour
   }
 
   public set showArcWeights(showArcWeights: boolean) {
@@ -185,6 +199,9 @@ const store: Store<StoreState> = createStore({
     },
     getSimulationResults: (state: StoreState): Array<Simulation> => {
       return state.resultsService.simulationResults
+    },
+    getTour: (state: StoreState): TourGuideClient => {
+      return state.tour
     },
     getValueName:
       (state: StoreState) =>

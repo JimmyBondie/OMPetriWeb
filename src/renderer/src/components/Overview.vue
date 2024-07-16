@@ -64,7 +64,15 @@ import Editor from './Editor.vue'
       <!-- Create new -->
       <v-tooltip :text="$t('New')" location="top">
         <template v-slot:activator="{ props }">
-          <v-btn icon="mdi-plus" variant="text" v-bind="props" @click="addModel"></v-btn>
+          <v-btn
+            :data-tg-tour="$t('NewDescription')"
+            :data-tg-title="$t('New')"
+            data-tg-order="2"
+            icon="mdi-plus"
+            variant="text"
+            v-bind="props"
+            @click="addModel"
+          ></v-btn>
         </template>
       </v-tooltip>
 
@@ -72,6 +80,9 @@ import Editor from './Editor.vue'
       <v-tooltip :text="$t('Open')" location="top">
         <template v-slot:activator="{ props }">
           <v-btn
+            :data-tg-tour="$t('OpenDescription')"
+            :data-tg-title="$t('Open')"
+            data-tg-order="3"
             icon="mdi-open-in-app"
             variant="text"
             v-bind="props"
@@ -94,6 +105,7 @@ import Editor from './Editor.vue'
 <script lang="ts">
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
+import { TourGuideClient } from '@sjmc11/tourguidejs'
 
 export default {
   data() {
@@ -102,7 +114,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getModels'])
+    ...mapGetters(['getModels', 'getTour'])
   },
   methods: {
     ...mapGetters(['addNewModel']),
@@ -120,6 +132,12 @@ export default {
       if (model) {
         this.selectedModel = model
       }
+    }
+  },
+  mounted() {
+    const tour: TourGuideClient = this.getTour
+    if (tour.isVisible) {
+      tour.refresh()
     }
   }
 }
