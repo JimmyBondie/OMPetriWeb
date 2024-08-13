@@ -1,7 +1,7 @@
 import { Parameter } from '@renderer/core/Parameter'
 import { ElementType, IElement } from '../intf/IElement'
 
-export class Element extends Object implements IElement {
+export abstract class Element extends Object implements IElement {
   private _disabled: boolean
   private _elementType: ElementType
   private _id: string
