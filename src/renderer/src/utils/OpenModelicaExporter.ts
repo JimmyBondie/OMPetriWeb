@@ -743,7 +743,7 @@ export class OpenModelicaExporter extends Object {
           let index: number = 1
           for (const arcIn of place.arcsIn) {
             if (!arcIn.disabled) {
-              confResIn = `${arcIn.conflictResolutionValue}/${place.arcsIn.length},`
+              confResIn += `${arcIn.conflictResolutionValue}/${place.arcsIn.length},`
               index++
             }
           }
