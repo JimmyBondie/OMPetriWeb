@@ -60,7 +60,7 @@ export class Model extends Object {
 
   public addElement(element: IElement) {
     if (this.containsAndNotEqual(element)) {
-      return
+      throw new ModelError(i18n.global.t('IDAlreadyUsedByElement', { id: element.id }))
     }
 
     switch (element.elementType) {
@@ -177,7 +177,7 @@ export class Model extends Object {
       }
     }
 
-    return found ? found.equals(element) : false
+    return found ? !found.equals(element) : false
   }
 
   public containsElement(id: string): boolean {

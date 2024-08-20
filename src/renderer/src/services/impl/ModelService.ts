@@ -495,7 +495,7 @@ export class ModelService extends CustomService implements IModelService {
 
   private validateIdAvailable(dao: ModelDAO, id: string) {
     if (dao.model.containsElement(id)) {
-      throw new DataException(i18n.global.t('IDAlreadyUsedByElement'))
+      throw new DataException(i18n.global.t('IDAlreadyUsedByElement', { id: id }))
     }
     if (dao.model.containsParameter(id)) {
       throw new DataException(i18n.global.t('IDAlreadyUsedByParameter'))

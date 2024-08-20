@@ -84,7 +84,7 @@
   "Guest": "Guest",
   "ID": "ID",
   "IDAlreadyAssignedToParameter": "The element id is already assigned to a local parameter inside that element!",
-  "IDAlreadyUsedByElement": "The specified ID is already used by an element!",
+  "IDAlreadyUsedByElement": "The specified ID \"{id}\" is already used by an element!",
   "IDAlreadyUsedByParameter": "The specified ID is already used by a parameter!",
   "ImportFailedElementNotFound": "File import failed: \"{element}\" with id \"{id}\" not found",
   "ImportFailedMalformedElement": "File import failed: Malformed \"{element}\" element",

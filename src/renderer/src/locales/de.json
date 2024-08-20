@@ -84,7 +84,7 @@
   "Guest": "Gast",
   "ID": "ID",
   "IDAlreadyAssignedToParameter": "Die Element-ID ist bereits einem lokalen Parameter innerhalb dieses Elements zugewiesen!",
-  "IDAlreadyUsedByElement": "Die angegebene ID wird bereits von einem Element verwendet!",
+  "IDAlreadyUsedByElement": "Die angegebene ID \"{id}\" wird bereits von einem Element verwendet!",
   "IDAlreadyUsedByParameter": "Die angegebene ID wird bereits von einem Parameter verwendet!",
   "ImportFailedElementNotFound": "Dateiimport fehlgeschlagen: \"{element}\" mit ID \"{id}\" nicht gefunden",
   "ImportFailedMalformedElement": "Dateiimport fehlgeschlagen: Fehlerhaftes \"{element}\" - Element",
