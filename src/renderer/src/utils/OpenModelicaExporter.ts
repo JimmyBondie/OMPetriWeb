@@ -760,6 +760,7 @@ export class OpenModelicaExporter extends Object {
           let index: number = 1
           for (const arcOut of place.arcsOut) {
             if (!arcOut.disabled) {
+              confResOut += `${arcOut.conflictResolutionValue}/${place.arcsOut.length},`
               index++
             }
           }
