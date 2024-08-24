@@ -177,7 +177,7 @@ export class Model extends Object {
       }
     }
 
-    return found ? !found.equals(element) : false
+    return found != undefined && !found.equals(element)
   }
 
   public containsElement(id: string): boolean {

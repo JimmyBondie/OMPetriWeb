@@ -36,7 +36,7 @@ export class ModelService extends CustomService implements IModelService {
   }
 
   public addArc(dao: ModelDAO, arc: IGraphArc) {
-    if (arc && arc.data && arc.data.type != DataType.CLUSTERARC) {
+    if (arc.data && arc.data.type != DataType.CLUSTERARC) {
       dao.model.addElement(arc.data)
     }
     this.getGraph(dao, arc).addConnection(arc)
