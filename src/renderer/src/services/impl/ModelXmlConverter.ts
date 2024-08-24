@@ -181,8 +181,6 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     }
 
     arc.description = node.getAttribute(this.attrDescription) ?? ''
-
-    this.services.modelService.addElement(dao, arc)
   }
 
   private readColor(dao: ModelDAO, node: Element) {
