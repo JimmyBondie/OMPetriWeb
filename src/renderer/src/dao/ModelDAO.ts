@@ -14,7 +14,6 @@ export class ModelDAO extends Object {
   private _nextNodeId: number = 1
   private _nextPlaceId: number = 1
   private _nextTransitionId: number = 1
-  private _scalePower: number = 0
 
   constructor(id: string) {
     super()
@@ -70,10 +69,6 @@ export class ModelDAO extends Object {
     return this._nextTransitionId++
   }
 
-  public get scalePower(): number {
-    return this._scalePower
-  }
-
   public set author(author: string) {
     this._author = author
   }
@@ -108,10 +103,6 @@ export class ModelDAO extends Object {
 
   public set nextTransitionId(nextTransitionId: number) {
     this._nextTransitionId = nextTransitionId++
-  }
-
-  public set scalePower(scalePower: number) {
-    this.scalePower = scalePower
   }
 
   public clear() {
