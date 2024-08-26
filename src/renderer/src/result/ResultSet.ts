@@ -4,12 +4,10 @@ import { ResultsException } from '@renderer/exception/ResultsException'
 import i18n from '@renderer/main'
 
 export class ResultSet extends Object {
-  private _autoAdding: boolean = false
-  private _dataProcessIndex: number = 0
   private _element: IElement
   private _shown: boolean = false
   private _simulation: Simulation
-  private _timeLastStatusChange: number = Date.now()
+  private _timeLastStatusChange: Date = new Date()
   private _variable: string
 
   public constructor(simulation: Simulation, element: IElement, variable: string) {
@@ -24,20 +22,8 @@ export class ResultSet extends Object {
     }
   }
 
-  public get autoAdding(): boolean {
-    return this._autoAdding
-  }
-
   public get data(): Array<bigint | number> {
     return this._simulation.getData(this._variable)
-  }
-
-  //  Gets the index that indicates which data points have already been
-  //  processed for producing the line chart series. Useful when applying
-  //  downsampling, as the actual list size will not reflect the number
-  //  of processed data points.
-  public get dataProcessedIndex(): number {
-    return this._dataProcessIndex
   }
 
   public get element(): IElement {
@@ -53,7 +39,7 @@ export class ResultSet extends Object {
   }
 
   // Gets the time in milliseconds the for the latest shown status change.
-  public get timeLastShownStatusChange(): number {
+  public get timeLastShownStatusChange(): Date {
     return this._timeLastStatusChange
   }
 
@@ -61,19 +47,9 @@ export class ResultSet extends Object {
     return this._variable
   }
 
-  public set autoAdding(autoAdding: boolean) {
-    this._autoAdding = autoAdding
-  }
-
-  // Sets the index to which data points have already been processed for
-  // producing the line chart series.
-  public set dataProcessedIndex(dataProcessIndex: number) {
-    this._dataProcessIndex = dataProcessIndex
-  }
-
   public set shown(shown: boolean) {
     this._shown = shown
-    this._timeLastStatusChange = Date.now()
+    this._timeLastStatusChange = new Date()
   }
 
   public equals(data: ResultSet): boolean {
