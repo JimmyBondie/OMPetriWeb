@@ -7,7 +7,6 @@ export class ResultSet extends Object {
   private _element: IElement
   private _shown: boolean = false
   private _simulation: Simulation
-  private _timeLastStatusChange: Date = new Date()
   private _variable: string
 
   public constructor(simulation: Simulation, element: IElement, variable: string) {
@@ -38,18 +37,12 @@ export class ResultSet extends Object {
     return this._simulation
   }
 
-  // Gets the time in milliseconds the for the latest shown status change.
-  public get timeLastShownStatusChange(): Date {
-    return this._timeLastStatusChange
-  }
-
   public get variable(): string {
     return this._variable
   }
 
   public set shown(shown: boolean) {
     this._shown = shown
-    this._timeLastStatusChange = new Date()
   }
 
   public equals(data: ResultSet): boolean {
