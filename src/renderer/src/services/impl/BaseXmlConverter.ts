@@ -2,9 +2,9 @@ import { CustomError } from '@renderer/utils/CustomError'
 import { CustomService } from '../intf'
 import i18n from '@renderer/main'
 
-export class BaseXmlConverterError extends CustomError {}
+export class BaseXMLConverterError extends CustomError {}
 
-export class BaseXmlConverter extends CustomService {
+export class BaseXMLConverter extends CustomService {
   private _parser: DOMParser = new DOMParser()
 
   protected get parser(): DOMParser {
@@ -16,7 +16,7 @@ export class BaseXmlConverter extends CustomService {
     if (nodes.length <= 0) {
       return null
     } else if (nodes.length > 1) {
-      throw new BaseXmlConverterError(
+      throw new BaseXMLConverterError(
         i18n.global.t('ImportFailedMoreThanOneElement', { element: tagName })
       )
     }
@@ -25,7 +25,7 @@ export class BaseXmlConverter extends CustomService {
     if (node.nodeType == Node.ELEMENT_NODE) {
       return node
     } else {
-      throw new BaseXmlConverterError(
+      throw new BaseXMLConverterError(
         i18n.global.t('ImportFailedMalformedElement', { tag: tagName })
       )
     }
@@ -36,7 +36,7 @@ export class BaseXmlConverter extends CustomService {
     if (node) {
       return node
     } else {
-      throw new BaseXmlConverterError(i18n.global.t('ImportFailedNoElement', { element: tagName }))
+      throw new BaseXMLConverterError(i18n.global.t('ImportFailedNoElement', { element: tagName }))
     }
   }
 

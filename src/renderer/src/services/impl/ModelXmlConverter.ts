@@ -1,5 +1,5 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { IModelXmlConverter } from '../intf/IModelXmlConverter'
+import { IModelXMLConverter } from '../intf/IModelXMLConverter'
 import i18n from '@renderer/main'
 import { Color } from '@renderer/core/Color'
 import { DateTime } from 'luxon'
@@ -30,13 +30,13 @@ import { Arc } from '@renderer/entity/impl/Arc'
 import { IDataElement } from '@renderer/data/intf/IDataElement'
 import { IGraphArc } from '@renderer/graph/intf/IGraphArc'
 import { Graph } from '@renderer/graph/Graph'
-import { BaseXmlConverter } from './BaseXmlConverter'
+import { BaseXMLConverter } from './BaseXMLConverter'
 import { IGraphCluster } from '@renderer/graph/intf/IGraphCluster'
 import { DataClusterArc } from '@renderer/data/impl/DataClusterArc'
 
-export class ModelXmlConverterError extends CustomError {}
+export class ModelXMLConverterError extends CustomError {}
 
-export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConverter {
+export class ModelXMLConverter extends BaseXMLConverter implements IModelXMLConverter {
   private readonly formatDateTime: string = 'yy-MM-dd HH:mm:ss'
 
   private readonly attrAuthor: string = 'author'
@@ -291,7 +291,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     if (attribute) {
       return attribute
     } else {
-      throw new ModelXmlConverterError(
+      throw new ModelXMLConverterError(
         i18n.global.t('ImportFailedNoElementId', { element: node.tagName })
       )
     }
@@ -357,7 +357,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
         }
 
         default:
-          throw new ModelXmlConverterError(
+          throw new ModelXMLConverterError(
             i18n.global.t('ImportFailedMalformedNodeType', { type: data.type })
           )
       }
@@ -379,13 +379,13 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
 
       case ParameterType.LOCAL: {
         if (!element) {
-          throw new ModelXmlConverterError(i18n.global.t('ImportFailedUnhandledParamType'))
+          throw new ModelXMLConverterError(i18n.global.t('ImportFailedUnhandledParamType'))
         }
         return utils.parameterFactory.createLocalParameter(id, value, element)
       }
 
       default: {
-        throw new ModelXmlConverterError(i18n.global.t('ImportFailedUnhandledParamType'))
+        throw new ModelXMLConverterError(i18n.global.t('ImportFailedUnhandledParamType'))
       }
     }
   }
@@ -461,7 +461,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     const colorId: string = node.getAttribute(this.attrColorId) ?? ''
     const color: Color | undefined = dao.model.getColor(colorId)
     if (!color) {
-      throw new ModelXmlConverterError(
+      throw new ModelXMLConverterError(
         i18n.global.t('ImportFailedElementNotFound', { element: this.tagColor, id: colorId })
       )
     }
@@ -494,7 +494,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       if (data.shapes.size != 0) {
         a.appendChild(this.writeConnections(dom, data))
       } else {
-        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToArcData'))
+        throw new ModelXMLConverterError(i18n.global.t('NoShapeAssociatedToArcData'))
       }
 
       // Weights
@@ -556,7 +556,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
           shapes.appendChild(conn)
         }
       } else {
-        throw new ModelXmlConverterError(i18n.global.t('InvalidShapeAssociatedToArcData'))
+        throw new ModelXMLConverterError(i18n.global.t('InvalidShapeAssociatedToArcData'))
       }
     }
 
@@ -642,7 +642,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       if (data.shapes.size != 0) {
         p.appendChild(this.writeNode(dom, data))
       } else {
-        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToPlaceData'))
+        throw new ModelXMLConverterError(i18n.global.t('NoShapeAssociatedToPlaceData'))
       }
 
       // Tokens
@@ -693,7 +693,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
       if (data.shapes.size != 0) {
         t.appendChild(this.writeNode(dom, data))
       } else {
-        throw new ModelXmlConverterError(i18n.global.t('NoShapeAssociatedToTransitionData'))
+        throw new ModelXMLConverterError(i18n.global.t('NoShapeAssociatedToTransitionData'))
       }
 
       // Local Parameters
@@ -735,7 +735,7 @@ export class ModelXmlConverter extends BaseXmlConverter implements IModelXmlConv
     return weights
   }
 
-  public writeXml(dao: ModelDAO): string {
+  public writeXML(dao: ModelDAO): string {
     const dom: XMLDocument = document.implementation.createDocument('', '')
 
     const model: Element = dom.createElement(this.tagModel) // create the root element

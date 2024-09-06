@@ -1,5 +1,5 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 
-export interface IModelSbmlConverter {
-  importSbml(content: string): ModelDAO
+export interface IModelSBMLConverter {
+  importSBML(content: string): ModelDAO
 }

@@ -1,6 +1,6 @@
 import { Simulation } from '@renderer/result/Simulation'
-import { IResultsXmlConverter } from '../intf/IResultsXmlConverter'
-import { BaseXmlConverter } from './BaseXmlConverter'
+import { IResultsXMLConverter } from '../intf/IResultsXMLConverter'
+import { BaseXMLConverter } from './BaseXMLConverter'
 import { ResultSet } from '@renderer/result/ResultSet'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 import { References } from '@renderer/core/References'
@@ -15,9 +15,9 @@ import { Place, PlaceType } from '@renderer/entity/impl/Place'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
 import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
 
-export class ResultsXmlConverterError extends CustomError {}
+export class ResultsXMLConverterError extends CustomError {}
 
-export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXmlConverter {
+export class ResultsXMLConverter extends BaseXMLConverter implements IResultsXMLConverter {
   private readonly formatDateTime: string = 'yy-MM-dd HH:mm:ss'
 
   private readonly attrAuthor: string = 'author'
@@ -115,7 +115,7 @@ export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXml
     return this.xmlToString(dom)
   }
 
-  public importXml(content: string): Array<Simulation> {
+  public importXML(content: string): Array<Simulation> {
     const xmlDoc: XMLDocument = this.parser.parseFromString(content, 'text/xml')
     const daos: Array<ModelDAO> = new Array<ModelDAO>()
     const simulations: Array<Simulation> = new Array<Simulation>()
@@ -164,7 +164,7 @@ export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXml
 
     const attribute: string | null = elem.getAttribute(this.attrType)
     if (!attribute) {
-      throw new ResultsXmlConverterError(
+      throw new ResultsXMLConverterError(
         i18n.global.t('ImportFailedNoElementType', { element: elem.tagName })
       )
     }
@@ -204,7 +204,7 @@ export class ResultsXmlConverter extends BaseXmlConverter implements IResultsXml
     if (attribute) {
       return attribute
     } else {
-      throw new ResultsXmlConverterError(
+      throw new ResultsXMLConverterError(
         i18n.global.t('ImportFailedNoElementId', { element: node.tagName })
       )
     }

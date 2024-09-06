@@ -1,6 +1,6 @@
 import { ModelDAO } from '@renderer/dao/ModelDAO'
 
-export interface IModelXmlConverter {
+export interface IModelXMLConverter {
   importXML(content: string): ModelDAO
-  writeXml(dao: ModelDAO): string
+  writeXML(dao: ModelDAO): string
 }

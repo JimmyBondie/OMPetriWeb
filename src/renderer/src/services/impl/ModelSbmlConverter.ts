@@ -1,7 +1,7 @@
 import { CustomError } from '@renderer/utils/CustomError'
-import { IModelSbmlConverter } from '../intf/IModelSbmlConverter'
+import { IModelSBMLConverter } from '../intf/IModelSBMLConverter'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { BaseXmlConverter } from './BaseXmlConverter'
+import { BaseXMLConverter } from './BaseXMLConverter'
 import { Function } from '@renderer/core/Function'
 import { IGraphElement } from '@renderer/graph/intf/IGraphElement'
 import { DataTransition } from '@renderer/data/impl/DataTransition'
@@ -26,9 +26,9 @@ import { Token } from '@renderer/core/Token'
 import i18n from '@renderer/main'
 import { IGraphCluster } from '@renderer/graph/intf/IGraphCluster'
 
-export class ModelSbmlConverterError extends CustomError {}
+export class ModelSBMLConverterError extends CustomError {}
 
-export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlConverter {
+export class ModelSBMLConverter extends BaseXMLConverter implements IModelSBMLConverter {
   readonly tagConflictStrategy: string = 'ConflictStrategy'
   readonly tagConnection: string = 'reaction'
   readonly tagConnectionNode: string = 'speciesReference'
@@ -110,7 +110,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       cluster.data.labelText = elem.getAttribute(this.attrLabel) ?? ''
       dao.graph.addNode(cluster)
     } catch (e: any) {
-      throw new ModelSbmlConverterError(i18n.global.t('CannotCreateCluster', { msg: e.message }))
+      throw new ModelSBMLConverterError(i18n.global.t('CannotCreateCluster', { msg: e.message }))
     }
 
     return result
@@ -131,7 +131,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       }
     )
     if (!source) {
-      throw new ModelSbmlConverterError(i18n.global.t('ArcSourceCannotBeFound'))
+      throw new ModelSBMLConverterError(i18n.global.t('ArcSourceCannotBeFound'))
     }
 
     this.readGroup<ModelDAO>(
@@ -144,7 +144,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       }
     )
     if (!target) {
-      throw new ModelSbmlConverterError(i18n.global.t('ArcTargetCannotBeFound'))
+      throw new ModelSBMLConverterError(i18n.global.t('ArcTargetCannotBeFound'))
     }
 
     const tmp: Element | null = this.calcGroupNode(elem, this.tagType)
@@ -153,11 +153,11 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       if (attribute && attribute.localeCompare('PN Edge') == 0) {
         type = ArcType.NORMAL
       } else {
-        throw new ModelSbmlConverterError(i18n.global.t('UnexpectedArcType', { type: type }))
+        throw new ModelSBMLConverterError(i18n.global.t('UnexpectedArcType', { type: type }))
       }
     }
     if (type == null) {
-      throw new ModelSbmlConverterError(i18n.global.t('ArcTypeWasNotSpecified'))
+      throw new ModelSBMLConverterError(i18n.global.t('ArcTypeWasNotSpecified'))
     }
 
     const arc: DataArc = this.getArc(elem, source, target, type)
@@ -172,7 +172,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
     try {
       dao.model.addElement(arc)
     } catch (e: any) {
-      throw new ModelSbmlConverterError(e.message)
+      throw new ModelSBMLConverterError(e.message)
     }
     dao.graph.addConnection(connection)
   }
@@ -213,7 +213,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
             idReferenceMap.set(dataId, data.id)
           } // set reference
         } else {
-          throw new ModelSbmlConverterError(
+          throw new ModelSBMLConverterError(
             i18n.global.t('MissingNodeReference', { refId: refId, dataId: dataId, nodeId: nodeId })
           )
         }
@@ -223,7 +223,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
     }
 
     if (!type || typeStrings.length <= 0) {
-      throw new ModelSbmlConverterError(
+      throw new ModelSBMLConverterError(
         i18n.global.t('NodeTypeNotSpecifiedFor', { dataId: dataId, nodeId: nodeId })
       )
     }
@@ -244,7 +244,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
           try {
             dao.model.addElement(data)
           } catch (e: any) {
-            throw new ModelSbmlConverterError(e.message)
+            throw new ModelSBMLConverterError(e.message)
           }
         }
         node = new GraphPlace(nodeId, data as DataPlace)
@@ -262,7 +262,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
           try {
             dao.model.addElement(data)
           } catch (e: any) {
-            throw new ModelSbmlConverterError(e.message)
+            throw new ModelSBMLConverterError(e.message)
           }
         }
         node = new GraphTransition(nodeId, data as DataTransition)
@@ -270,7 +270,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       }
 
       default: {
-        throw new ModelSbmlConverterError(
+        throw new ModelSBMLConverterError(
           i18n.global.t('UnhandledNodeType', { type: ElementType.toText(type) })
         )
       }
@@ -344,7 +344,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       const param: Parameter = utils.parameterFactory.createLocalParameter(id, value, transition)
 
       if (transition.getLocalParameter(id)) {
-        throw new ModelSbmlConverterError(
+        throw new ModelSBMLConverterError(
           i18n.global.t('ParameterExistsOnLocalScale', { paramId: param.id })
         )
       } else {
@@ -409,7 +409,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
       }
 
       default: {
-        throw new ModelSbmlConverterError(i18n.global.t('UnhandledConflictResolutionType'))
+        throw new ModelSBMLConverterError(i18n.global.t('UnhandledConflictResolutionType'))
       }
     }
 
@@ -450,7 +450,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
         }
 
         default: {
-          throw new ModelSbmlConverterError(i18n.global.t('UnhandledConflictResolutionStrategy'))
+          throw new ModelSBMLConverterError(i18n.global.t('UnhandledConflictResolutionStrategy'))
         }
       }
     }
@@ -509,7 +509,7 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
     return weight
   }
 
-  public importSbml(content: string): ModelDAO {
+  public importSBML(content: string): ModelDAO {
     const xmlDoc: XMLDocument = this.parser.parseFromString(content, 'text/xml')
     let dao: ModelDAO = this.readModelData(xmlDoc)
 
@@ -584,12 +584,12 @@ export class ModelSbmlConverter extends BaseXmlConverter implements IModelSbmlCo
         dao.author = ''
         dao.name = model.getAttribute(this.attrId) ?? ''
       } else {
-        throw new ModelSbmlConverterError(i18n.global.t('ImportFailedMalformedModel'))
+        throw new ModelSBMLConverterError(i18n.global.t('ImportFailedMalformedModel'))
       }
     } else if (nodes.length == 0) {
-      throw new ModelSbmlConverterError(i18n.global.t('ImportFailedNoModel'))
+      throw new ModelSBMLConverterError(i18n.global.t('ImportFailedNoModel'))
     } else {
-      throw new ModelSbmlConverterError(i18n.global.t('ImportFailedMoreThanOneModel'))
+      throw new ModelSBMLConverterError(i18n.global.t('ImportFailedMoreThanOneModel'))
     }
     return dao
   }

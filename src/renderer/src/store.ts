@@ -99,9 +99,9 @@ class StoreState extends Object {
     for (const [name, content] of fileList) {
       const extension: string | undefined = name.split('.').pop()
       if (extension && extension.localeCompare('sbml') == 0) {
-        model = services.modelSbmlConverter.importSbml(content)
+        model = services.modelSBMLConverter.importSBML(content)
       } else {
-        model = services.modelXmlConverter.importXML(content)
+        model = services.modelXMLConverter.importXML(content)
       }
     }
     return model
@@ -111,7 +111,7 @@ class StoreState extends Object {
     const fileList: Array<[string, string]> = await this.openFile('text/xml')
     let simulations: Array<Simulation> = new Array<Simulation>()
     for (const [_, content] of fileList) {
-      simulations.push(...services.resultsXmlConverter.importXml(content))
+      simulations.push(...services.resultsXMLConverter.importXML(content))
     }
     for (const simulation of simulations) {
       this.resultsService.addResult(simulation)
@@ -120,7 +120,7 @@ class StoreState extends Object {
   }
 
   public saveModel(dao: ModelDAO) {
-    const file: File = new File([services.modelXmlConverter.writeXml(dao)], `${dao.name}.xml`, {
+    const file: File = new File([services.modelXMLConverter.writeXML(dao)], `${dao.name}.xml`, {
       type: 'text/xml;charset=utf-8',
       endings: 'native'
     })
@@ -130,7 +130,7 @@ class StoreState extends Object {
   }
 
   public saveResults(resultSets: Array<ResultSet>) {
-    const file: File = new File([services.resultsXmlConverter.exportResultSets(resultSets)], '', {
+    const file: File = new File([services.resultsXMLConverter.exportResultSets(resultSets)], '', {
       type: 'text/xml;charset=utf-8',
       endings: 'native'
     })
@@ -140,7 +140,7 @@ class StoreState extends Object {
 
   public saveSimulations(simulationResults: Array<Simulation>) {
     const file: File = new File(
-      [services.resultsXmlConverter.exportSimulationResults(simulationResults)],
+      [services.resultsXMLConverter.exportSimulationResults(simulationResults)],
       '',
       {
         type: 'text/xml;charset=utf-8',

@@ -1,22 +1,22 @@
 import { IFactoryService } from './IFactoryService'
 import { IHierarchyService } from './IHierarchyService'
-import { IModelSbmlConverter } from './IModelSbmlConverter'
+import { IModelSBMLConverter } from './IModelSBMLConverter'
 import { IModelService } from './IModelService'
-import { IModelXmlConverter } from './IModelXmlConverter'
+import { IModelXMLConverter } from './IModelXMLConverter'
 import { IParameterService } from './IParameterService'
 import { IResultService } from './IResultService'
-import { IResultsXmlConverter } from './IResultsXmlConverter'
+import { IResultsXMLConverter } from './IResultsXMLConverter'
 import { ISimulationService } from './ISimulationService'
 
 export interface IServiceManager {
   readonly factoryService: IFactoryService
   readonly hierarchyService: IHierarchyService
-  readonly modelSbmlConverter: IModelSbmlConverter
+  readonly modelSBMLConverter: IModelSBMLConverter
   readonly modelService: IModelService
-  readonly modelXmlConverter: IModelXmlConverter
+  readonly modelXMLConverter: IModelXMLConverter
   readonly parameterService: IParameterService
   readonly resultService: IResultService
-  readonly resultsXmlConverter: IResultsXmlConverter
+  readonly resultsXMLConverter: IResultsXMLConverter
   readonly simulationService: ISimulationService
 }
 
