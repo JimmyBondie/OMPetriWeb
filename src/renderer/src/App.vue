@@ -76,6 +76,10 @@ html {
   height: calc(100dvh - var(--toolbar-height));
 }
 
+.cet-windows {
+  height: 33px !important;
+}
+
 .cet-menubar {
   display: none !important;
 }
