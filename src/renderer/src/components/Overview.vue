@@ -134,6 +134,10 @@ export default {
       }
     }
   },
+  created() {
+    //Always start with a new model
+    this.addModel()
+  },
   mounted() {
     const tour: TourGuideClient = this.getTour
     if (tour.isVisible) {
