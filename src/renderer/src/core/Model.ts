@@ -99,7 +99,7 @@ export class Model extends Object {
 
       case ParameterType.REFERENCE: {
         if (param.relatedElement) {
-          param.relatedElement.addLocalParameter(param)
+          param.relatedElement.relatedParameters.add(param)
         }
         break
       }
