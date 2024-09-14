@@ -76,16 +76,16 @@ html {
   height: calc(100dvh - var(--toolbar-height));
 }
 
-.cet-windows {
-  height: 33px !important;
-}
-
 .cet-menubar {
   display: none !important;
 }
 
 .cet-container {
   --toolbar-height: 30px;
+}
+
+.tg-backdrop {
+  transform: translateY(calc(-1 * var(--toolbar-height)));
 }
 
 .v-application__wrap {
