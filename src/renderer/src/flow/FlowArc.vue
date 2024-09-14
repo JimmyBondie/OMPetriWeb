@@ -395,17 +395,21 @@ export default {
       }
     },
     getWeight(): string {
-      const weight: Weight | undefined = this.data.getWeight(this.getDefaultColor)
-      if (weight) {
-        const func: Function = weight.function
-        if (func.isSingleElement()) {
-          return func.formatString()
-        } else {
-          return '...'
-        }
-      } else {
+      if (this.data instanceof DataClusterArc) {
         return ''
       }
+
+      const weight: Weight | undefined = this.data.getWeight(this.getDefaultColor)
+      if (!weight) {
+        return ''
+      }
+
+      const func: Function = weight.function
+      if (!func.isSingleElement()) {
+        return ''
+      }
+
+      return func.formatString()
     }
   }
 }
