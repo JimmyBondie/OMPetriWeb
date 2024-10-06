@@ -23,6 +23,7 @@ import { TourGuideClient } from '@sjmc11/tourguidejs'
 import i18n from './main'
 
 class StoreStateSettings extends Object {
+  initialStart: boolean = true
   language: string = ''
   showArcWeights: boolean = true
   theme: string = ''
@@ -220,6 +221,9 @@ const store: Store<StoreState> = createStore({
       (value: string, simulation: Simulation): string => {
         return state.resultsService.getValueName(value, simulation)
       },
+    isInitialStart: (state: StoreState): boolean => {
+      return state.settings.initialStart
+    },
     simulationCompilerExists: (state: StoreState): boolean => {
       return state.simulationService.simulationCompilerExists
     },
@@ -330,7 +334,12 @@ const store: Store<StoreState> = createStore({
           typeof dataObj.theme === 'string'
         ) {
           store.state.settings = dataObj
+          store.state.settings.initialStart = false
+        } else {
+          localStorage.setItem(key, JSON.stringify(store.state.settings))
         }
+      } else {
+        localStorage.setItem(key, JSON.stringify(store.state.settings))
       }
 
       store.subscribe((_, state: StoreState) => {

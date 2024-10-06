@@ -198,6 +198,7 @@
   "SocketPortAlreadyInUse": "Socket-Port {port} wird bereits verwendet. Nächster Versuch.",
   "Speed": "Geschwindigkeit",
   "Start": "Start",
+  "StartTutorial": "Anleitung starten",
   "Stochastic": "Stochastisch",
   "StopTime": "Stoppzeit",
   "Test": "Test",

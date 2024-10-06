@@ -63,6 +63,7 @@ import { mapGetters } from 'vuex'
 
       <template v-slot:append>
         <v-btn
+          v-if="isInitialStart"
           color="warning"
           prepend-icon="mdi-help-circle-outline"
           append-icon="mdi-help-circle-outline"
@@ -109,7 +110,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getTour'])
+    ...mapGetters(['isInitialStart', 'getTour'])
   },
   mounted() {
     ;(this.getTour as TourGuideClient).onBeforeStepChange(() => {

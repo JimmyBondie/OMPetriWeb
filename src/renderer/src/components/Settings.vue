@@ -24,6 +24,7 @@ import { mapGetters, mapMutations } from 'vuex'
             item-value="code"
             density="compact"
             max-width="300px"
+            hide-details
           ></v-select>
         </v-list-item-subtitle>
       </v-list-item>
@@ -51,6 +52,21 @@ import { mapGetters, mapMutations } from 'vuex'
             variant="tonal"
           >
             {{ $t('Dark') }}
+          </v-btn>
+        </v-list-item-subtitle>
+      </v-list-item>
+
+      <!-- Tutorial -->
+      <v-list-item>
+        <v-list-item-title>{{ $t('NeedHelp') }}</v-list-item-title>
+        <v-list-item-subtitle>
+          <v-btn
+            color="warning"
+            variant="tonal"
+            prepend-icon="mdi-help-circle-outline"
+            @click="(<TourGuideClient>getTour).start()"
+          >
+            {{ $t('StartTutorial') }}
           </v-btn>
         </v-list-item-subtitle>
       </v-list-item>

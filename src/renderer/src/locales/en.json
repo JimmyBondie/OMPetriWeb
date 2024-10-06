@@ -198,6 +198,7 @@
   "SocketPortAlreadyInUse": "Socket port {port} already in use. Next attempt.",
   "Speed": "Speed",
   "Start": "Start",
+  "StartTutorial": "Start tutorial",
   "Stochastic": "Stochastic",
   "StopTime": "Stop Time",
   "Test": "Test",
