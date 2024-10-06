@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <v-card :title="$t('About')">
+  <v-card :title="$t('About')" rounded="0">
     <v-card-subtitle> {{ $t('OpenSourceLibrariesUsed') }} </v-card-subtitle>
 
     <v-expansion-panels class="license-texts" multiple>

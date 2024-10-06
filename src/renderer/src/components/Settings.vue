@@ -5,7 +5,7 @@ import { mapGetters, mapMutations } from 'vuex'
 </script>
 
 <template>
-  <v-card :title="$t('Settings')" class="w-100">
+  <v-card :title="$t('Settings')" class="w-100" rounded="0">
     <v-list>
       <v-list-subheader>{{ $t('General') }}</v-list-subheader>
 
