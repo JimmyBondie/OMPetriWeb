@@ -103,7 +103,7 @@ export default {
     ...mapGetters(['getShowArcWeights', 'getTour'])
   },
   methods: {
-    ...mapMutations(['setShowArcWeights'])
+    ...mapMutations(['setLanguage', 'setShowArcWeights', 'setTheme'])
   },
   mounted() {
     const tour: TourGuideClient = this.getTour
@@ -114,6 +114,10 @@ export default {
   watch: {
     language() {
       this.$i18n.locale = this.language
+      this.setLanguage(this.language)
+    },
+    theme() {
+      this.setTheme(this.theme)
     }
   }
 }

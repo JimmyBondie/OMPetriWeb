@@ -22,8 +22,14 @@ import { IFactoryService } from './services/intf/IFactoryService'
 import { TourGuideClient } from '@sjmc11/tourguidejs'
 import i18n from './main'
 
+class StoreStateSettings extends Object {
+  language: string = ''
+  showArcWeights: boolean = true
+  theme: string = ''
+}
+
 class StoreState extends Object {
-  private _showArcWeights: boolean = true
+  private _settings: StoreStateSettings = new StoreStateSettings()
   private _tour: TourGuideClient = new TourGuideClient()
 
   public get factoryService(): IFactoryService {
@@ -50,8 +56,8 @@ class StoreState extends Object {
     return services.resultService
   }
 
-  public get showArcWeights(): boolean {
-    return this._showArcWeights
+  public get settings(): StoreStateSettings {
+    return this._settings
   }
 
   public get simulationService(): ISimulationService {
@@ -69,8 +75,8 @@ class StoreState extends Object {
     return this._tour
   }
 
-  public set showArcWeights(showArcWeights: boolean) {
-    this._showArcWeights = showArcWeights
+  public set settings(settings: StoreStateSettings) {
+    this._settings = settings
   }
 
   public openFile(accept: string): Promise<Array<[string, string]>> {
@@ -186,6 +192,9 @@ const store: Store<StoreState> = createStore({
     getFilteredChoicesForLocalParameters: (state: StoreState) => (model: Model, filter: string) => {
       return state.parameterService.getFilteredChoicesForLocalParameters(model, filter)
     },
+    getLanguage: (state: StoreState): string => {
+      return state.settings.language
+    },
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     },
@@ -195,10 +204,13 @@ const store: Store<StoreState> = createStore({
         return state.resultsService.getSharedValues(results, elements)
       },
     getShowArcWeights: (state: StoreState): boolean => {
-      return state.showArcWeights
+      return state.settings.showArcWeights
     },
     getSimulationResults: (state: StoreState): Array<Simulation> => {
       return state.resultsService.simulationResults
+    },
+    getTheme: (state: StoreState): string => {
+      return state.settings.theme
     },
     getTour: (state: StoreState): TourGuideClient => {
       return state.tour
@@ -284,8 +296,14 @@ const store: Store<StoreState> = createStore({
     setElementFunction(state: StoreState, { model, element, func, color }) {
       state.parameterService.setElementFunction(model, element, func, color)
     },
+    setLanguage(state: StoreState, language: string) {
+      state.settings.language = language
+    },
     setShowArcWeights(state: StoreState, showArcWeights: boolean) {
-      state.showArcWeights = showArcWeights
+      state.settings.showArcWeights = showArcWeights
+    },
+    setTheme(state: StoreState, theme: string) {
+      state.settings.theme = theme
     },
     updateParameter(state: StoreState, { parameter, value, unit }) {
       state.parameterService.updateParameter(parameter, value, unit)
@@ -298,7 +316,28 @@ const store: Store<StoreState> = createStore({
     openResults(context): Promise<Array<Simulation>> {
       return context.state.openResults()
     }
-  }
+  },
+  plugins: [
+    (store: Store<StoreState>): void => {
+      const key: string = 'settings'
+
+      const data: string | null = localStorage.getItem(key)
+      if (data) {
+        const dataObj: StoreStateSettings = JSON.parse(data)
+        if (
+          typeof dataObj.language === 'string' &&
+          typeof dataObj.showArcWeights === 'boolean' &&
+          typeof dataObj.theme === 'string'
+        ) {
+          store.state.settings = dataObj
+        }
+      }
+
+      store.subscribe((_, state: StoreState) => {
+        localStorage.setItem(key, JSON.stringify(state.settings))
+      })
+    }
+  ]
 })
 
 export default store

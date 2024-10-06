@@ -2,6 +2,7 @@
 import { RouterView } from 'vue-router'
 import { useTheme } from 'vuetify'
 import { CustomError } from './utils/CustomError'
+import { mapGetters } from 'vuex'
 </script>
 
 <template>
@@ -43,11 +44,20 @@ export default {
       this.$i18n.locale = this.language
     }
   },
+  methods: {
+    ...mapGetters(['getLanguage', 'getTheme'])
+  },
   mounted() {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    if (this.getTheme()) {
+      this.theme = this.getTheme()
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       this.theme = this.themeDark
     } else {
       this.theme = this.themeLight
+    }
+
+    if (this.getLanguage()) {
+      this.language = this.getLanguage()
     }
   },
   errorCaptured(e: any): boolean {
