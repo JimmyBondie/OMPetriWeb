@@ -10,8 +10,6 @@ setupTitlebar()
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: 'hidden',
@@ -33,6 +31,8 @@ function createWindow(): void {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
+
+  mainWindow.maximize()
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
