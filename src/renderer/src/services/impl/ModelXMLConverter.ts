@@ -6,7 +6,7 @@ import { DateTime } from 'luxon'
 import { Place, PlaceType } from '@renderer/entity/impl/Place'
 import { ConflictResolutionStrategy } from '@renderer/core/ConflictResolutionStrategy'
 import { Token } from '@renderer/core/Token'
-import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
+import { DistributionType, Transition, TransitionType } from '@renderer/entity/impl/Transition'
 import { Function } from '@renderer/core/Function'
 import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { IElement } from '@renderer/entity/intf/IElement'
@@ -51,20 +51,25 @@ export class ModelXMLConverter extends BaseXMLConverter implements IModelXMLConv
   private readonly attrCreationDateTime: string = 'creationDateTime'
   private readonly attrDescription: string = 'description'
   private readonly attrDisabled: string = 'disabled'
+  private readonly attrDistribution: string = 'distribution'
   private readonly attrElementId: string = 'elementId'
+  private readonly attrExpectedValue: string = 'expectedValue'
   private readonly attrId: string = 'id'
   private readonly attrLabel: string = 'label'
+  private readonly attrLowerLimit: string = 'lowerLimit'
   private readonly attrMax: string = 'max'
   private readonly attrMin: string = 'min'
   private readonly attrName: string = 'name'
-  private readonly attrUnit: string = 'unit'
   private readonly attrPosX: string = 'posX'
   private readonly attrPosY: string = 'posY'
   private readonly attrSource: string = 'source'
+  private readonly attrStandardDeviation: string = 'standardDeviation'
   private readonly attrStart: string = 'start'
   private readonly attrSticky: string = 'sticky'
   private readonly attrTarget: string = 'target'
   private readonly attrType: string = 'type'
+  private readonly attrUnit: string = 'unit'
+  private readonly attrUpperLimit: string = 'upperLimit'
 
   private readonly tagArc: string = 'Arc'
   private readonly tagArcs: string = 'Arcs'
@@ -443,6 +448,28 @@ export class ModelXMLConverter extends BaseXMLConverter implements IModelXMLConv
       TransitionType.fromString(node.getAttribute(this.attrType))
     )
 
+    transition.distribution = DistributionType.fromString(node.getAttribute(this.attrDistribution))
+
+    let attribute: string | null = node.getAttribute(this.attrExpectedValue)
+    if (attribute) {
+      transition.expectedValue = Number.parseFloat(attribute)
+    }
+
+    attribute = node.getAttribute(this.attrLowerLimit)
+    if (attribute) {
+      transition.lowerLimit = Number.parseFloat(attribute)
+    }
+
+    attribute = node.getAttribute(this.attrStandardDeviation)
+    if (attribute) {
+      transition.standardDeviation = Number.parseFloat(attribute)
+    }
+
+    attribute = node.getAttribute(this.attrUpperLimit)
+    if (attribute) {
+      transition.upperLimit = Number.parseFloat(attribute)
+    }
+
     // Local parameters
     this.readGroup(dao, node, this.tagParametersLocal, this.tagParameter, (_, node) => {
       this.services.parameterService.add(dao.model, this.readParameter(transition, node))
@@ -676,6 +703,11 @@ export class ModelXMLConverter extends BaseXMLConverter implements IModelXMLConv
 
       t.setAttribute(this.attrId, data.id)
       t.setAttribute(this.attrType, TransitionType.toString(data.transitionType))
+      t.setAttribute(this.attrDistribution, DistributionType.toString(data.distribution))
+      t.setAttribute(this.attrExpectedValue, data.expectedValue.toString())
+      t.setAttribute(this.attrLowerLimit, data.lowerLimit.toString())
+      t.setAttribute(this.attrStandardDeviation, data.standardDeviation.toString())
+      t.setAttribute(this.attrUpperLimit, data.upperLimit.toString())
       if (data.disabled) {
         t.setAttribute(this.attrDisabled, data.disabled.toString())
       }

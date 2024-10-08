@@ -4,7 +4,7 @@ import { Parameter, ParameterType } from '@renderer/core/Parameter'
 import { References } from '@renderer/core/References'
 import { Arc } from '@renderer/entity/impl/Arc'
 import { Place, PlaceType } from '@renderer/entity/impl/Place'
-import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
+import { DistributionType, Transition, TransitionType } from '@renderer/entity/impl/Transition'
 import { CustomError } from './CustomError'
 import { ArcType, IArc } from '@renderer/entity/intf/IArc'
 import { Token } from '@renderer/core/Token'
@@ -298,6 +298,18 @@ export class OpenModelicaExporter extends Object {
         line += `=0${this.CMNT_START}${this.getFunctionValueString(model, transition, functionValue)}${this.CMNT_END}`
       } else {
         line += `=${this.getFunctionValueString(model, transition, functionValue)}`
+      }
+
+      // Distribution
+      if (transition.transitionType == TransitionType.STOCHASTIC) {
+        line += `,distributionType=PNlib.Types.DistributionType.${DistributionType.toString(transition.distribution)}`
+        if (transition.distribution == DistributionType.UNIFORM) {
+          line += `,a=${this.formatNumber(transition.lowerLimit, true)}`
+          line += `,b=${this.formatNumber(transition.upperLimit, true)}`
+        } else if (transition.distribution == DistributionType.NORMAL) {
+          line += `,mu=${this.formatNumber(transition.expectedValue, true)}`
+          line += `,sigma=${this.formatNumber(transition.standardDeviation, true)}`
+        }
       }
 
       // Weights.
