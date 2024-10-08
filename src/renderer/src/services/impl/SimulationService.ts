@@ -24,7 +24,7 @@ export class SimulationService extends CustomService implements ISimulationServi
     log: (text: string) => void
   ): [AbortController, Promise<boolean>] {
     const controller: AbortController = new AbortController()
-    const promise: Promise<boolean> = new Promise((resolve, _) => {
+    const promise: Promise<boolean> = new Promise((resolve, reject) => {
       controller.signal.addEventListener('abort', () => resolve(false))
 
       const thread: SimulationThread = new SimulationThread(
@@ -37,7 +37,10 @@ export class SimulationService extends CustomService implements ISimulationServi
         integrator,
         log
       )
-      thread.run().then(() => resolve(true))
+      thread
+        .run()
+        .then(() => resolve(true))
+        .catch((e: any) => reject(e))
     })
 
     return [controller, promise]

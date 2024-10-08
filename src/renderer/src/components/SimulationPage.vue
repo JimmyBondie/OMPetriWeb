@@ -780,7 +780,11 @@ export default {
       )
 
       this.thread = controller
-      this.showResultsBtn = await promise
+      try {
+        this.showResultsBtn = await promise
+      } catch (e: any) {
+        this.logText = `${this.logText}\n${e.message}`
+      }
       this.inSimulation = false
     },
     selectValues(select: boolean, values: Array<Node>) {
