@@ -22,6 +22,7 @@ import { ArcType } from '@renderer/entity/intf/IArc'
 import { INode } from '@renderer/entity/intf/INode'
 import { DateTime } from 'luxon'
 import { Guid } from 'guid-typescript'
+import { IDataNode } from '@renderer/data/intf/IDataNode'
 
 export class FactoryService extends CustomService implements IFactoryService {
   private DEFAULT_COLOUR: Color = new Color('WHITE', 'Default colour')
@@ -34,6 +35,27 @@ export class FactoryService extends CustomService implements IFactoryService {
 
   public get colorDefault(): Color {
     return this.DEFAULT_COLOUR
+  }
+
+  public copy(dao: ModelDAO, target: IGraphNode): IGraphNode | undefined {
+    const node: IDataNode = target.data
+    switch (node.type) {
+      case DataType.PLACE: {
+        const place: DataPlace = new DataPlace(this.getPlaceId(dao), (node as DataPlace).placeType)
+        place.addToken(new Token(this.DEFAULT_COLOUR))
+        return new GraphPlace(this.getGraphNodeId(dao), place)
+      }
+      case DataType.TRANSITION: {
+        const transition: DataTransition = new DataTransition(
+          this.getTransitionId(dao),
+          (node as DataTransition).transitionType
+        )
+        return new GraphTransition(this.getGraphNodeId(dao), transition)
+      }
+      default: {
+        return undefined
+      }
+    }
   }
 
   public createConnection(source: IGraphNode, target: IGraphNode, dataArc?: IDataArc): IGraphArc {

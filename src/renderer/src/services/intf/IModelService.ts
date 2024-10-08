@@ -42,7 +42,9 @@ export interface IModelService {
     posY: number
   ): IGraphNode
   newModel(): ModelDAO
+  paste(dao: ModelDAO, nodes: Array<IGraphNode>, cut: boolean): Array<IGraphNode>
   removeElement(dao: ModelDAO, element: IGraphElement): void
+  removeElements(dao: ModelDAO, elements: Array<IGraphElement>): void
   removeModel(model: ModelDAO): void
   setElementFunction(dao: ModelDAO, element: IElement, func: Function, color?: Color): void
 }

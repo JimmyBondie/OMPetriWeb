@@ -10,6 +10,7 @@ import { IGraphNode } from '@renderer/graph/intf/IGraphNode'
 
 export interface IFactoryService {
   readonly colorDefault: Color
+  copy(dao: ModelDAO, target: IGraphNode): IGraphNode | undefined
   createConnection(source: IGraphNode, target: IGraphNode, dataArc?: IDataArc): IGraphArc
   createDao(): ModelDAO
   createNode(

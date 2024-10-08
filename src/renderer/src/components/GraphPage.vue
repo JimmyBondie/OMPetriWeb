@@ -44,6 +44,7 @@ import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
 import { DataException } from '@renderer/services/impl/Exceptions'
 import { PlaceType } from '@renderer/entity/impl/Place'
 import { TransitionType } from '@renderer/entity/impl/Transition'
+import { GraphNode } from '@renderer/graph/impl/GraphNode'
 
 defineProps<{
   activeElement?: IGraphElement
@@ -70,6 +71,7 @@ defineProps<{
         @dragover="(e: any) => onDragOver(e)"
         @dragleave="onDragLeave"
         @drop="(e: any) => onDrop(e)"
+        @keydown="(e: any) => onKeyDown(e)"
         @connect="(params: any) => onConnect(params)"
         fit-view-on-init
       >
@@ -346,6 +348,8 @@ defineProps<{
 export default {
   data() {
     return {
+      copyCut: false,
+      copyElements: [] as Array<IGraphNode>,
       draggedType: undefined as
         | { dataType: DataType.PLACE; elemType: PlaceType }
         | { dataType: DataType.TRANSITION; elemType: TransitionType }
@@ -359,7 +363,14 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['connect', 'createCluster', 'createNode', 'saveModel']),
+    ...mapMutations([
+      'connect',
+      'createCluster',
+      'createNode',
+      'paste',
+      'removeElements',
+      'saveModel'
+    ]),
     clusterSelectedElements() {
       if (!this.vueFlowInstance) {
         return
@@ -499,6 +510,53 @@ export default {
         posX: position.x,
         posY: position.y
       })
+    },
+    onKeyDown(event: KeyboardEvent) {
+      if (!this.vueFlowInstance) {
+        return
+      }
+
+      if (
+        event.key != 'Delete' &&
+        !(event.ctrlKey && event.key == 'c') &&
+        !(event.ctrlKey && event.key == 'x') &&
+        !(event.ctrlKey && event.key == 'v')
+      ) {
+        return
+      }
+
+      event.preventDefault()
+
+      const selected: Array<FlowGraphNode> = this.vueFlowInstance.getSelectedNodes
+      const shapes: Array<IGraphElement> = new Array<IGraphElement>()
+      for (const node of selected) {
+        for (const shape of (node.data as IDataNode).shapes) {
+          if (node.id == shape.id) {
+            shapes.push(shape)
+            break
+          }
+        }
+      }
+
+      if (event.key == 'Delete') {
+        if (shapes.length > 0) {
+          this.removeElements({ dao: this.dao, elements: shapes })
+        }
+      } else if (event.ctrlKey && event.key == 'c') {
+        this.copyCut = false
+        this.copyElements = shapes.filter<GraphNode>(
+          (value: IGraphElement): value is GraphNode => value instanceof GraphNode
+        )
+      } else if (event.ctrlKey && event.key == 'x') {
+        this.copyCut = true
+        this.copyElements = shapes.filter<GraphNode>(
+          (value: IGraphElement): value is GraphNode => value instanceof GraphNode
+        )
+      } else if (event.ctrlKey && event.key == 'v') {
+        if (this.copyElements.length > 0) {
+          this.paste({ dao: this.dao, nodes: this.copyElements, cut: this.copyCut })
+        }
+      }
     },
     onNodesChange(changes: NodeChange[]) {
       if (!this.vueFlowInstance) {

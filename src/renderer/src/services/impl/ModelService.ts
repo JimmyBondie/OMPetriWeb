@@ -27,6 +27,7 @@ import { DataArc } from '@renderer/data/impl/DataArc'
 import { GraphCluster } from '@renderer/graph/impl/GraphCluster'
 import { Graph } from '@renderer/graph/Graph'
 import { DataCluster } from '@renderer/data/impl/DataCluster'
+import { GraphNode } from '@renderer/graph/impl/GraphNode'
 
 export class ModelService extends CustomService implements IModelService {
   private _models: Array<ModelDAO> = new Array<ModelDAO>()
@@ -236,6 +237,30 @@ export class ModelService extends CustomService implements IModelService {
     return dao
   }
 
+  public paste(dao: ModelDAO, nodes: Array<IGraphNode>, cut: boolean): Array<IGraphNode> {
+    const shapes: Array<IGraphNode> = new Array<IGraphNode>()
+    let shape: IGraphNode | undefined
+    for (const node of nodes) {
+      if (cut) {
+        shape = node
+      } else {
+        shape = this.services.factoryService.copy(dao, node)
+        if (!shape) {
+          continue
+        }
+        this.addNode(dao, shape)
+      }
+
+      shape.position.x = node.position.x + 50
+      shape.position.y = node.position.y + 50
+
+      shapes.push(shape)
+    }
+
+    dao.hasChanges = true
+    return shapes
+  }
+
   private removeArc(dao: ModelDAO, arc: IGraphArc) {
     this.validateArcRemoval(arc)
     this.removeArcShape(dao, arc)
@@ -261,6 +286,30 @@ export class ModelService extends CustomService implements IModelService {
     }
   }
 
+  public removeElements(dao: ModelDAO, elements: Array<IGraphElement>) {
+    const errors: Array<Error> = new Array<Error>()
+
+    for (const element of elements) {
+      try {
+        if (element instanceof GraphArc) {
+          this.removeArc(dao, element)
+        } else {
+          this.removeNode(dao, element as GraphNode)
+        }
+      } catch (e: any) {
+        errors.push(e)
+      }
+    }
+    dao.hasChanges = true
+    if (errors.length > 0) {
+      let msg: string = ''
+      for (const error of errors) {
+        msg += error.message + '\n'
+      }
+      throw new ModelError(msg)
+    }
+  }
+
   public removeModel(model: ModelDAO) {
     const index = this._models.indexOf(model)
     if (index >= 0) {
@@ -271,11 +320,13 @@ export class ModelService extends CustomService implements IModelService {
   private removeNode(dao: ModelDAO, node: IGraphNode) {
     this.validateNodeRemoval(node)
     try {
-      let arc: IGraphArc
+      let arc: IGraphArc | undefined
       while (node.connections.size > 0) {
         arc = node.connections.values().next().value
-        this.removeArcShape(dao, arc)
-        this.removeData(dao, arc.data)
+        if (arc) {
+          this.removeArcShape(dao, arc)
+          this.removeData(dao, arc.data)
+        }
       }
 
       this.removeNodeShape(dao, node)

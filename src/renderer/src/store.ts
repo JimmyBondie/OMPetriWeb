@@ -279,8 +279,14 @@ const store: Store<StoreState> = createStore({
     createNode(state: StoreState, { dao, cluster, type, posX, posY }) {
       state.modelService.create(dao, cluster, type, posX, posY)
     },
+    paste(state: StoreState, { dao, nodes, cut }) {
+      state.modelService.paste(dao, nodes, cut)
+    },
     removeElement(state: StoreState, { dao, element }) {
       state.modelService.removeElement(dao, element)
+    },
+    removeElements(state: StoreState, { dao, elements }) {
+      state.modelService.removeElements(dao, elements)
     },
     removeModel(state: StoreState, model: ModelDAO) {
       state.modelService.removeModel(model)
