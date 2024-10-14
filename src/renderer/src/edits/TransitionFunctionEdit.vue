@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Function } from '@renderer/core/Function'
 import { ModelDAO } from '@renderer/dao/ModelDAO'
-import { Transition } from '@renderer/entity/impl/Transition'
+import { Transition, TransitionType } from '@renderer/entity/impl/Transition'
 import { mapGetters, mapMutations } from 'vuex'
 
 defineProps<{
@@ -13,7 +13,7 @@ defineProps<{
 <template>
   <v-textarea
     :model-value="transition.function.formatString()"
-    :label="$t('Function')"
+    :label="calcLabel()"
     :placeholder="$t('EnterFunction')"
     :rules="[validateFunction]"
     persistent-placeholder
@@ -30,6 +30,21 @@ export default {
   },
   methods: {
     ...mapMutations(['setElementFunction']),
+    calcLabel(): string {
+      switch (this.transition.transitionType) {
+        case TransitionType.CONTINUOUS: {
+          return this.$t('Speed')
+        }
+
+        case TransitionType.DISCRETE: {
+          return this.$t('Delay')
+        }
+
+        case TransitionType.STOCHASTIC: {
+          return this.$t('ProbabilityDensity')
+        }
+      }
+    },
     validateFunction(text: string): boolean | string {
       let input: string
       if (text == '') {
