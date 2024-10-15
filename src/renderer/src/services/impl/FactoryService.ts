@@ -144,14 +144,26 @@ export class FactoryService extends CustomService implements IFactoryService {
   }
 
   public getGraphNodeId(dao: ModelDAO): string {
-    return this.PREFIX_ID_GRAPHNODE + dao.nextNodeId
+    let id: string = ''
+    do {
+      id = this.PREFIX_ID_GRAPHNODE + dao.nextNodeId
+    } while (dao.model.containsElement(id))
+    return id
   }
 
   public getPlaceId(dao: ModelDAO): string {
-    return this.PREFIX_ID_PLACE + dao.nextPlaceId
+    let id: string = ''
+    do {
+      id = this.PREFIX_ID_PLACE + dao.nextPlaceId
+    } while (dao.model.containsElement(id))
+    return id
   }
 
   public getTransitionId(dao: ModelDAO): string {
-    return this.PREFIX_ID_TRANSITION + dao.nextTransitionId
+    let id: string = ''
+    do {
+      id = this.PREFIX_ID_TRANSITION + dao.nextTransitionId
+    } while (dao.model.containsElement(id))
+    return id
   }
 }
