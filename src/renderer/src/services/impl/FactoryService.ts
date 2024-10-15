@@ -64,7 +64,16 @@ export class FactoryService extends CustomService implements IFactoryService {
      */
     let id: string = this.getArcId(source.data, target.data)
     if (!dataArc) {
-      dataArc = new DataArc(id, source.data, target.data, this.defaultArcType)
+      let arcType: ArcType = this.defaultArcType
+      if (
+        source.data.type == DataType.PLACE &&
+        (source.data as DataPlace).placeType == PlaceType.DISCRETE &&
+        target.data.type == DataType.TRANSITION &&
+        (target.data as DataTransition).transitionType == TransitionType.CONTINUOUS
+      ) {
+        arcType = ArcType.TEST
+      }
+      dataArc = new DataArc(id, source.data, target.data, arcType)
       dataArc.addWeight(new Weight(this.DEFAULT_COLOUR))
     }
 

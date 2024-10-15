@@ -26,8 +26,12 @@ export class DataTransition extends Transition implements IDataNode {
     if (this._shapes.size == 0) {
       return ''
     } else {
-      const element: IGraphElement = this._shapes.values().next().value
-      return (element as IGraphNode).labelText
+      const element: IGraphElement | undefined = this._shapes.values().next().value
+      if (!element) {
+        return ''
+      } else {
+        return (element as IGraphNode).labelText
+      }
     }
   }
 

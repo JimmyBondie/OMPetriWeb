@@ -441,9 +441,13 @@ export class ModelService extends CustomService implements IModelService {
             transition.transitionType // target
           ) {
             case TransitionType.CONTINUOUS: {
-              throw new DataException(
-                i18n.global.t('CannotConnectDiscretePlaceAndContinuousTransition')
-              )
+              if (arc.arcType == ArcType.NORMAL) {
+                throw new DataException(
+                  i18n.global.t('CannotConnectDiscretePlaceAndContinuousTransition')
+                )
+              } else {
+                break
+              }
             }
             case TransitionType.DISCRETE: {
               break
