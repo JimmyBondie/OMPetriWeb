@@ -358,7 +358,28 @@ export class OpenModelicaExporter extends Object {
         }
       }
 
-      line += ` '${arc.id}';`
+      line += ` '${arc.id}'(`
+      line += 'testValue='
+
+      let tmp: string = ''
+      let isFirstColour: boolean = true
+      for (const color of colors) {
+        if (isFirstColour) {
+          isFirstColour = false
+        } else {
+          tmp += ','
+        }
+        if (isColoredPn) {
+          tmp += this.getWeightString(model, arc, color)
+        } else {
+          line += this.getWeightString(model, arc, color)
+        }
+      }
+      if (isColoredPn) {
+        line += `{${tmp}}/*${arc.source.id}*/`
+      }
+
+      line += ');'
       if (isDisabled) {
         line += this.CMNT_END
       }
