@@ -15,7 +15,7 @@ export namespace ArcType {
     switch (value) {
       case 'NORMAL':
         return ArcType.NORMAL
-      case 'DISCRETE':
+      case 'INHIBITORY':
         return ArcType.INHIBITORY
       case 'TEST':
         return ArcType.TEST
