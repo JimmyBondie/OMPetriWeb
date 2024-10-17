@@ -22,6 +22,7 @@ export class OpenModelicaExporter extends Object {
   private readonly INDENT: string = '  '
   private readonly CMNT_START: string = '/*'
   private readonly CMNT_END: string = '*/'
+  private readonly CMNT_LINE: string = '//'
 
   public export(
     name: string,
@@ -125,7 +126,7 @@ export class OpenModelicaExporter extends Object {
       let tokenType: string = ''
 
       if (place.disabled) {
-        line += this.CMNT_START
+        line += this.CMNT_LINE
       }
 
       switch (place.placeType) {
@@ -223,10 +224,6 @@ export class OpenModelicaExporter extends Object {
 
       line += ')'
       line += ';'
-
-      if (place.disabled) {
-        line += this.CMNT_END
-      }
 
       content.push(line)
     }
@@ -337,7 +334,7 @@ export class OpenModelicaExporter extends Object {
 
       let line: string = this.INDENT
       if (isDisabled) {
-        line += this.CMNT_START
+        line += this.CMNT_LINE
       }
 
       switch (arc.arcType) {
@@ -380,9 +377,6 @@ export class OpenModelicaExporter extends Object {
       }
 
       line += ');'
-      if (isDisabled) {
-        line += this.CMNT_END
-      }
       content.push(line)
     }
 
@@ -671,7 +665,7 @@ export class OpenModelicaExporter extends Object {
     if (arc.source instanceof Place) {
       connection = this.INDENT
       if (isDisabled) {
-        connection += this.CMNT_START
+        connection += this.CMNT_LINE
       }
       connection += 'connect('
       connection += `'${arc.source.id}'.outTransition[${this.getArcIndexWithTargetNode(arc.source.arcsOut, arc.target)}],`
@@ -679,7 +673,7 @@ export class OpenModelicaExporter extends Object {
       connection += ')'
       connection += ';'
       if (isDisabled) {
-        connection += this.CMNT_END + '\n' + this.INDENT + this.CMNT_START
+        connection += '\n' + this.INDENT + this.CMNT_LINE
       } else {
         connection += '\n' + this.INDENT
       }
@@ -688,9 +682,6 @@ export class OpenModelicaExporter extends Object {
       connection += `'${arc.target.id}'.inPlaces[${this.getArcIndexWithSourceNode(arc.target.arcsIn, arc.source)}]`
       connection += ')'
       connection += ';'
-      if (isDisabled) {
-        connection += this.CMNT_END
-      }
     } else {
       throw new OpenModelicaExporterException(i18n.global.t('InvalidConnection'))
     }
@@ -703,7 +694,7 @@ export class OpenModelicaExporter extends Object {
     let connection: string = this.INDENT
 
     if (isDisabled) {
-      connection += this.CMNT_START
+      connection += this.CMNT_LINE
     }
     connection += 'connect('
     if (arc.source instanceof Place) {
@@ -715,9 +706,6 @@ export class OpenModelicaExporter extends Object {
     }
     connection += ')'
     connection += ';'
-    if (isDisabled) {
-      connection += this.CMNT_END
-    }
 
     return connection
   }
