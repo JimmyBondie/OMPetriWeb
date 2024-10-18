@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Model author="Leon M. Kassebaum" creationDateTime="24-10-15 13:13:43" description="" id="60663092-94ff-5e5a-9fdb-282a9aa94d2a" name="Farm Workflow" currentClusterId="1" currentNodeId="29" currentPlaceId="17" currentTransitionId="16">
+  <Arcs>
+    <Arc id="P11_T1" type="NORMAL" source="P11" target="T1" conflictValue="1">
+      <Shapes>
+        <Connection id="N1_N4" source="N1" target="N4"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P11_T2" type="NORMAL" source="P11" target="T2" conflictValue="1">
+      <Shapes>
+        <Connection id="N1_N5" source="N1" target="N5"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P11_T3" type="NORMAL" source="P11" target="T3" conflictValue="1">
+      <Shapes>
+        <Connection id="N1_N6" source="N1" target="N6"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T3_P12" type="NORMAL" source="T3" target="P12" conflictValue="1">
+      <Shapes>
+        <Connection id="N6_N2" source="N6" target="N2"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T2_P12" type="NORMAL" source="T2" target="P12" conflictValue="1">
+      <Shapes>
+        <Connection id="N5_N2" source="N5" target="N2"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T1_P12" type="NORMAL" source="T1" target="P12" conflictValue="1">
+      <Shapes>
+        <Connection id="N4_N2" source="N4" target="N2"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P12_T4" type="NORMAL" source="P12" target="T4" conflictValue="1">
+      <Shapes>
+        <Connection id="N2_N7" source="N2" target="N7"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P12_T5" type="NORMAL" source="P12" target="T5" conflictValue="1">
+      <Shapes>
+        <Connection id="N2_N8" source="N2" target="N8"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T5_P13" type="NORMAL" source="T5" target="P13" conflictValue="1">
+      <Shapes>
+        <Connection id="N8_N3" source="N8" target="N3"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T4_P13" type="NORMAL" source="T4" target="P13" conflictValue="1">
+      <Shapes>
+        <Connection id="N7_N3" source="N7" target="N3"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M11_T6" type="NORMAL" source="M11" target="T6" conflictValue="1">
+      <Shapes>
+        <Connection id="N9_N10" source="N9" target="N10"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T6_P5" type="NORMAL" source="T6" target="P5" conflictValue="1">
+      <Shapes>
+        <Connection id="N10_N12" source="N10" target="N12"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P5_T7" type="NORMAL" source="P5" target="T7" conflictValue="1">
+      <Shapes>
+        <Connection id="N12_N11" source="N12" target="N11"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T7_M11" type="NORMAL" source="T7" target="M11" conflictValue="1">
+      <Shapes>
+        <Connection id="N11_N9" source="N11" target="N9"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M11_T1" type="TEST" source="M11" target="T1" conflictValue="1">
+      <Shapes>
+        <Connection id="N9_N4" source="N9" target="N4"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>0</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T8_P7" type="NORMAL" source="T8" target="P7" conflictValue="1">
+      <Shapes>
+        <Connection id="N15_N14" source="N15" target="N14"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P7_T9" type="NORMAL" source="P7" target="T9" conflictValue="1">
+      <Shapes>
+        <Connection id="N14_N16" source="N14" target="N16"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T9_M12" type="NORMAL" source="T9" target="M12" conflictValue="1">
+      <Shapes>
+        <Connection id="N16_N13" source="N16" target="N13"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M12_T8" type="NORMAL" source="M12" target="T8" conflictValue="1">
+      <Shapes>
+        <Connection id="N13_N15" source="N13" target="N15"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M12_T2" type="TEST" source="M12" target="T2" conflictValue="1">
+      <Shapes>
+        <Connection id="N13_N5" source="N13" target="N5"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>0</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T10_P9" type="NORMAL" source="T10" target="P9" conflictValue="1">
+      <Shapes>
+        <Connection id="N19_N18" source="N19" target="N18"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P9_T11" type="NORMAL" source="P9" target="T11" conflictValue="1">
+      <Shapes>
+        <Connection id="N18_N20" source="N18" target="N20"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T11_M13" type="NORMAL" source="T11" target="M13" conflictValue="1">
+      <Shapes>
+        <Connection id="N20_N17" source="N20" target="N17"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M13_T10" type="NORMAL" source="M13" target="T10" conflictValue="1">
+      <Shapes>
+        <Connection id="N17_N19" source="N17" target="N19"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M13_T3" type="TEST" source="M13" target="T3" conflictValue="1">
+      <Shapes>
+        <Connection id="N17_N6" source="N17" target="N6"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>0</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T13_P14" type="NORMAL" source="T13" target="P14" conflictValue="1">
+      <Shapes>
+        <Connection id="N24_N22" source="N24" target="N22"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P14_T12" type="NORMAL" source="P14" target="T12" conflictValue="1">
+      <Shapes>
+        <Connection id="N22_N23" source="N22" target="N23"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T12_M21" type="NORMAL" source="T12" target="M21" conflictValue="1">
+      <Shapes>
+        <Connection id="N23_N21" source="N23" target="N21"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M21_T13" type="NORMAL" source="M21" target="T13" conflictValue="1">
+      <Shapes>
+        <Connection id="N21_N24" source="N21" target="N24"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M21_T4" type="TEST" source="M21" target="T4" conflictValue="1">
+      <Shapes>
+        <Connection id="N21_N7" source="N21" target="N7"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>0</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T15_P16" type="NORMAL" source="T15" target="P16" conflictValue="1">
+      <Shapes>
+        <Connection id="N28_N26" source="N28" target="N26"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P16_T14" type="NORMAL" source="P16" target="T14" conflictValue="1">
+      <Shapes>
+        <Connection id="N26_N27" source="N26" target="N27"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="T14_M22" type="NORMAL" source="T14" target="M22" conflictValue="1">
+      <Shapes>
+        <Connection id="N27_N25" source="N27" target="N25"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M22_T15" type="NORMAL" source="M22" target="T15" conflictValue="1">
+      <Shapes>
+        <Connection id="N25_N28" source="N25" target="N28"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="M22_T5" type="TEST" source="M22" target="T5" conflictValue="1">
+      <Shapes>
+        <Connection id="N25_N8" source="N25" target="N8"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>0</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P11_T4" type="INHIBITORY" source="P11" target="T4" conflictValue="1">
+      <Shapes>
+        <Connection id="N1_N7" source="N1" target="N7"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+    <Arc id="P11_T5" type="INHIBITORY" source="P11" target="T5" conflictValue="1">
+      <Shapes>
+        <Connection id="N1_N8" source="N1" target="N8"/>
+      </Shapes>
+      <Weights>
+        <Weight colourId="WHITE">
+          <Function>1</Function>
+        </Weight>
+      </Weights>
+    </Arc>
+  </Arcs>
+  <Places>
+    <Place id="P11" type="CONTINUOUS" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N1"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="3880" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P12" type="CONTINUOUS" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N2"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P13" type="CONTINUOUS" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N3"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P5" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N12"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="M11" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N9"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="1" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P7" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N14"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="M12" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N13"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="1" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P9" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N18"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="M13" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N17"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="1" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P14" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N22"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="M21" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N21"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="1" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="P16" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N26"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="0" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+    <Place id="M22" type="DISCRETE" conflictStrategy="PRIORITY">
+      <Shapes>
+        <Node id="N25"/>
+      </Shapes>
+      <Tokens>
+        <Token colourId="WHITE" start="1" min="0" max="1.7976931348623157e+308"/>
+      </Tokens>
+    </Place>
+  </Places>
+  <Transitions>
+    <Transition id="T1" type="CONTINUOUS" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N4"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>3</Function>
+    </Transition>
+    <Transition id="T2" type="CONTINUOUS" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N5"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>3.5</Function>
+    </Transition>
+    <Transition id="T3" type="CONTINUOUS" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N6"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>4</Function>
+    </Transition>
+    <Transition id="T4" type="CONTINUOUS" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N7"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>3.5</Function>
+    </Transition>
+    <Transition id="T5" type="CONTINUOUS" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N8"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>4</Function>
+    </Transition>
+    <Transition id="T6" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N10"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>240</Function>
+    </Transition>
+    <Transition id="T7" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N11"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>60</Function>
+    </Transition>
+    <Transition id="T8" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N15"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>240</Function>
+    </Transition>
+    <Transition id="T9" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N16"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>60</Function>
+    </Transition>
+    <Transition id="T10" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N19"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>240</Function>
+    </Transition>
+    <Transition id="T11" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N20"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>60</Function>
+    </Transition>
+    <Transition id="T12" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N23"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>60</Function>
+    </Transition>
+    <Transition id="T13" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N24"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>240</Function>
+    </Transition>
+    <Transition id="T14" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N27"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>60</Function>
+    </Transition>
+    <Transition id="T15" type="DISCRETE" distribution="Exponential" expectedValue="0.5" lowerLimit="0" standardDeviation="0.16666666666666666" upperLimit="1">
+      <Shapes>
+        <Node id="N28"/>
+      </Shapes>
+      <LocalParameters/>
+      <Function>240</Function>
+    </Transition>
+  </Transitions>
+  <Colours>
+    <Colour id="WHITE" description="Default colour"/>
+  </Colours>
+  <Graph>
+    <Clusters/>
+    <Nodes>
+      <Node id="N1" posX="150.3165282287319" posY="339.18148580338163"/>
+      <Node id="N2" posX="490.23902987071017" posY="340.2300092780874"/>
+      <Node id="N3" posX="729.8726203410419" posY="339.2858417885288"/>
+      <Node id="N12" posX="130.2191566498442" posY="119.61743524485831"/>
+      <Node id="N9" posX="289.3119595139981" posY="119.88895223396258"/>
+      <Node id="N14" posX="28.132083738241136" posY="560.0402400358523"/>
+      <Node id="N13" posX="189.2507160066553" posY="559.6863001309314"/>
+      <Node id="N18" posX="450.47697829493893" posY="559.3934102289269"/>
+      <Node id="N17" posX="289.034966519534" posY="557.6203566260278"/>
+      <Node id="N22" posX="729.0888359994751" posY="118.49952146385846"/>
+      <Node id="N21" posX="568.7852058796374" posY="118.94093792653183"/>
+      <Node id="N26" posX="729.5564525735397" posY="558.7705068376265"/>
+      <Node id="N25" posX="569.6074692762994" posY="557.6684604747381"/>
+      <Node id="N4" posX="301.59323605475925" posY="239.5709757078812"/>
+      <Node id="N5" posX="301.8348462474981" posY="339.7827500605212"/>
+      <Node id="N6" posX="301.42430235402986" posY="441.1174759444559"/>
+      <Node id="N7" posX="580.9449306443606" posY="279.6819154392289"/>
+      <Node id="N8" posX="581.7419473286958" posY="401.2311406798107"/>
+      <Node id="N10" posX="223.33236855611835" posY="79.11956215063202"/>
+      <Node id="N11" posX="222.9955198537922" posY="159.851110304214"/>
+      <Node id="N15" posX="121.61104369417336" posY="519.2276471293147"/>
+      <Node id="N16" posX="120.94981587644037" posY="599.9751205258314"/>
+      <Node id="N19" posX="382.3482149920865" posY="599.93311804405"/>
+      <Node id="N20" posX="381.7195313128655" posY="517.2467235817602"/>
+      <Node id="N23" posX="662.3485914751373" posY="78.62510269800745"/>
+      <Node id="N24" posX="663.6974213956781" posY="160.00884962038361"/>
+      <Node id="N27" posX="661.7362628039186" posY="519.7428370230656"/>
+      <Node id="N28" posX="662.1911892026706" posY="599.4390088084543"/>
+    </Nodes>
+  </Graph>
+  <Parameters/>
+</Model>
