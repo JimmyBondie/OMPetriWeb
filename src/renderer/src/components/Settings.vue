@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { NodeNamesPosition } from '@renderer/store'
 import { TourGuideClient } from '@sjmc11/tourguidejs'
 import { useLocale, useTheme } from 'vuetify/lib/framework.mjs'
 import { mapGetters, mapMutations } from 'vuex'
@@ -91,6 +92,37 @@ import { mapGetters, mapMutations } from 'vuex'
         <v-list-item-title>{{ $t('ShowArcWeights') }}</v-list-item-title>
         <v-list-item-subtitle>{{ $t('ShowArcWeightsDescription') }}</v-list-item-subtitle>
       </v-list-item>
+
+      <!-- Node Names -->
+      <v-list-item>
+        <template v-slot:prepend>
+          <v-list-item-action start>
+            <v-checkbox-btn
+              :model-value="getShowNodeNames"
+              @update:model-value="(value: boolean) => setShowNodeNames(value)"
+            ></v-checkbox-btn>
+          </v-list-item-action>
+        </template>
+
+        <v-list-item-title>{{ $t('ShowNodeNames') }}</v-list-item-title>
+        <v-list-item-subtitle>{{ $t('ShowNodeNamesDescription') }}</v-list-item-subtitle>
+
+        <v-list-item-action class="pt-2">
+          <v-select
+            :label="$t('Position')"
+            :items="NodeNamesPosition.values()"
+            :model-value="getNodeNamesPosition"
+            @update:model-value="(position) => setNodeNamesPosition(position)"
+            item-title="name"
+            item-value="type"
+            density="compact"
+            :disabled="!getShowNodeNames"
+            hide-details
+            max-width="300"
+          >
+          </v-select>
+        </v-list-item-action>
+      </v-list-item>
     </v-list>
   </v-card>
 </template>
@@ -116,10 +148,16 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getShowArcWeights', 'getTour'])
+    ...mapGetters(['getNodeNamesPosition', 'getShowArcWeights', 'getShowNodeNames', 'getTour'])
   },
   methods: {
-    ...mapMutations(['setLanguage', 'setShowArcWeights', 'setTheme'])
+    ...mapMutations([
+      'setLanguage',
+      'setNodeNamesPosition',
+      'setShowArcWeights',
+      'setShowNodeNames',
+      'setTheme'
+    ])
   },
   mounted() {
     const tour: TourGuideClient = this.getTour

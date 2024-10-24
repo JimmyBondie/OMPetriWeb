@@ -25,8 +25,81 @@ import i18n from './main'
 class StoreStateSettings extends Object {
   initialStart: boolean = true
   language: string = ''
+  nodeNamesPosition: string = ''
   showArcWeights: boolean = true
+  showNodeNames: boolean = false
   theme: string = ''
+}
+
+export enum NodeNamesPosition {
+  LEFT,
+  BOTTOM,
+  RIGHT,
+  TOP
+}
+
+export namespace NodeNamesPosition {
+  export function fromString(value: string | null): NodeNamesPosition {
+    switch (value) {
+      case 'LEFT':
+        return NodeNamesPosition.LEFT
+      case 'BOTTOM':
+        return NodeNamesPosition.BOTTOM
+      case 'RIGHT':
+        return NodeNamesPosition.RIGHT
+      case 'TOP':
+        return NodeNamesPosition.TOP
+      default:
+        return NodeNamesPosition.BOTTOM
+    }
+  }
+
+  export function toString(position: NodeNamesPosition): string {
+    switch (position) {
+      case NodeNamesPosition.LEFT:
+        return 'LEFT'
+      case NodeNamesPosition.BOTTOM:
+        return 'BOTTOM'
+      case NodeNamesPosition.RIGHT:
+        return 'RIGHT'
+      case NodeNamesPosition.TOP:
+        return 'TOP'
+    }
+  }
+
+  export function toText(position: NodeNamesPosition): string {
+    switch (position) {
+      case NodeNamesPosition.LEFT:
+        return i18n.global.t('Left')
+      case NodeNamesPosition.BOTTOM:
+        return i18n.global.t('Bottom')
+      case NodeNamesPosition.RIGHT:
+        return i18n.global.t('Right')
+      case NodeNamesPosition.TOP:
+        return i18n.global.t('Top')
+    }
+  }
+
+  export function values(): Array<{ type: NodeNamesPosition; name: string }> {
+    return [
+      {
+        type: NodeNamesPosition.LEFT,
+        name: NodeNamesPosition.toText(NodeNamesPosition.LEFT)
+      },
+      {
+        type: NodeNamesPosition.BOTTOM,
+        name: NodeNamesPosition.toText(NodeNamesPosition.BOTTOM)
+      },
+      {
+        type: NodeNamesPosition.RIGHT,
+        name: NodeNamesPosition.toText(NodeNamesPosition.RIGHT)
+      },
+      {
+        type: NodeNamesPosition.TOP,
+        name: NodeNamesPosition.toText(NodeNamesPosition.TOP)
+      }
+    ]
+  }
 }
 
 class StoreState extends Object {
@@ -199,6 +272,9 @@ const store: Store<StoreState> = createStore({
     getModels: (state: StoreState): Array<ModelDAO> => {
       return state.modelService.models
     },
+    getNodeNamesPosition: (state: StoreState): NodeNamesPosition => {
+      return NodeNamesPosition.fromString(state.settings.nodeNamesPosition)
+    },
     getSharedValues:
       (state: StoreState) =>
       (results: Simulation, elements: Array<IElement>): Map<string, Array<string>> => {
@@ -206,6 +282,9 @@ const store: Store<StoreState> = createStore({
       },
     getShowArcWeights: (state: StoreState): boolean => {
       return state.settings.showArcWeights
+    },
+    getShowNodeNames: (state: StoreState): boolean => {
+      return state.settings.showNodeNames
     },
     getSimulationResults: (state: StoreState): Array<Simulation> => {
       return state.resultsService.simulationResults
@@ -309,8 +388,14 @@ const store: Store<StoreState> = createStore({
     setLanguage(state: StoreState, language: string) {
       state.settings.language = language
     },
+    setNodeNamesPosition(state: StoreState, nodeNamesPosition: NodeNamesPosition) {
+      state.settings.nodeNamesPosition = NodeNamesPosition.toString(nodeNamesPosition)
+    },
     setShowArcWeights(state: StoreState, showArcWeights: boolean) {
       state.settings.showArcWeights = showArcWeights
+    },
+    setShowNodeNames(state: StoreState, showNodeNames: boolean) {
+      state.settings.showNodeNames = showNodeNames
     },
     setTheme(state: StoreState, theme: string) {
       state.settings.theme = theme
