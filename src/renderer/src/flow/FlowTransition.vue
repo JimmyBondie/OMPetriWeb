@@ -12,7 +12,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
 <template>
   <v-tooltip v-model="showTooltip" :disabled="getShowNodeNames" :text="data.id" location="top">
     <template v-slot:activator="{ props: tooltip }">
-      <Handle :style="getShowNodeNames ? 'transform: translate(-15.5px, -3px)' : ''"></Handle>
+      <Handle :style="getShowNodeNames ? 'transform: translate(-20.5px, -3px)' : ''"></Handle>
       <v-card
         class="pa-1 cursor-pointer"
         :color="selected ? 'blue-lighten-3' : calcColor()"
@@ -27,7 +27,7 @@ defineProps<NodeProps<IDataNode, any, string>>()
         v-if="getShowNodeNames"
         class="text-caption text-truncate"
         :class="calcNameClass()"
-        style="width: 40px"
+        style="width: 50px"
         :style="calcNamePosition()"
       >
         {{ data.id }}
@@ -79,16 +79,16 @@ export default {
     calcNamePosition(): string {
       switch (this.getNodeNamesPosition) {
         case NodeNamesPosition.LEFT:
-          return 'transform: translate(-45px, -30px);'
+          return 'transform: translate(-55px, -30px);'
 
         case NodeNamesPosition.RIGHT:
           return 'transform: translate(20px, -30px);'
 
         case NodeNamesPosition.TOP:
-          return 'transform: translate(-12.5px, -65px);'
+          return 'transform: translate(-17.5px, -65px);'
 
         default:
-          return 'transform: translateX(-12.5px)'
+          return 'transform: translateX(-17.5px)'
       }
     }
   }
