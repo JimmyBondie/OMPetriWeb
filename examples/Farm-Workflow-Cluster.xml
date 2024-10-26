@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Model author="Leon M. Kassebaum" creationDateTime="24-10-15 13:13:43" description="" id="60663092-94ff-5e5a-9fdb-282a9aa94d2a" name="Farm Workflow" currentClusterId="1" currentNodeId="29" currentPlaceId="17" currentTransitionId="16">
+<Model author="Leon M. Kassebaum" creationDateTime="24-10-15 13:13:43" description="" id="60663092-94ff-5e5a-9fdb-282a9aa94d2a" name="Farm Workflow" currentClusterId="6" currentNodeId="29" currentPlaceId="17" currentTransitionId="16">
   <Arcs>
     <Arc id="M11_T6" type="NORMAL" source="M11" target="T6" conflictValue="1">
       <Shapes>
@@ -589,36 +589,77 @@
     <Colour id="WHITE" description="Default colour"/>
   </Colours>
   <Graph>
-    <Clusters/>
+    <Clusters>
+      <Cluster id="C1" label="Machine 1.1" description="">
+        <Graph>
+          <Clusters/>
+          <Nodes>
+            <Node id="N12" posX="9.742846559164377" posY="100.72637909633323"/>
+            <Node id="N9" posX="168.83564942331827" posY="100.9978960854375"/>
+            <Node id="N10" posX="102.85605846543854" posY="60.22850600210694"/>
+            <Node id="N11" posX="102.51920976311237" posY="140.9600541556889"/>
+          </Nodes>
+        </Graph>
+      </Cluster>
+      <Cluster id="C2" label="Machine 1.2" description="">
+        <Graph>
+          <Clusters/>
+          <Nodes>
+            <Node id="N14" posX="9.742846559164349" posY="101.04109890864459"/>
+            <Node id="N13" posX="170.86147882757854" posY="100.68715900372365"/>
+            <Node id="N15" posX="103.22180651509663" posY="60.228506002107"/>
+            <Node id="N16" posX="102.56057869736364" posY="140.97597939862362"/>
+          </Nodes>
+        </Graph>
+      </Cluster>
+      <Cluster id="C3" label="Machine 1.3" description="">
+        <Graph>
+          <Clusters/>
+          <Nodes>
+            <Node id="N18" posX="170.29914501100882" posY="98.8323393550321"/>
+            <Node id="N17" posX="8.857133235603897" posY="97.05928575213306"/>
+            <Node id="N19" posX="102.17038170815641" posY="139.37204717015527"/>
+            <Node id="N20" posX="101.5416980289354" posY="56.685652707865415"/>
+          </Nodes>
+        </Graph>
+      </Cluster>
+      <Cluster id="C4" label="Machine 2.1" description="">
+        <Graph>
+          <Clusters/>
+          <Nodes>
+            <Node id="N22" posX="171.81790332612275" posY="100.10292476795792"/>
+            <Node id="N21" posX="11.514273206284997" posY="100.54434123063129"/>
+            <Node id="N23" posX="105.07765880178488" posY="60.22850600210691"/>
+            <Node id="N24" posX="106.42648872232576" posY="141.61225292448307"/>
+          </Nodes>
+        </Graph>
+      </Cluster>
+      <Cluster id="C5" label="Machine 2.2" description="">
+        <Graph>
+          <Clusters/>
+          <Nodes>
+            <Node id="N26" posX="172.34896982708585" posY="98.37046249310742"/>
+            <Node id="N25" posX="12.399986529845592" posY="97.26841613021907"/>
+            <Node id="N27" posX="104.52878005746481" posY="59.342792678546516"/>
+            <Node id="N28" posX="104.98370645621674" posY="139.03896446393526"/>
+          </Nodes>
+        </Graph>
+      </Cluster>
+    </Clusters>
     <Nodes>
       <Node id="N1" posX="150.3165282287319" posY="339.18148580338163"/>
       <Node id="N2" posX="490.23902987071017" posY="340.2300092780874"/>
       <Node id="N3" posX="729.8726203410419" posY="339.2858417885288"/>
-      <Node id="N12" posX="130.2191566498442" posY="119.61743524485831"/>
-      <Node id="N9" posX="289.3119595139981" posY="119.88895223396258"/>
-      <Node id="N14" posX="28.132083738241136" posY="560.0402400358523"/>
-      <Node id="N13" posX="189.2507160066553" posY="559.6863001309314"/>
-      <Node id="N18" posX="450.47697829493893" posY="559.3934102289269"/>
-      <Node id="N17" posX="289.034966519534" posY="557.6203566260278"/>
-      <Node id="N22" posX="729.0888359994751" posY="118.49952146385846"/>
-      <Node id="N21" posX="568.7852058796374" posY="118.94093792653183"/>
-      <Node id="N26" posX="729.5564525735397" posY="558.7705068376265"/>
-      <Node id="N25" posX="569.6074692762994" posY="557.6684604747381"/>
       <Node id="N4" posX="301.59323605475925" posY="239.5709757078812"/>
       <Node id="N5" posX="301.8348462474981" posY="339.7827500605212"/>
       <Node id="N6" posX="301.42430235402986" posY="441.1174759444559"/>
       <Node id="N7" posX="580.9449306443606" posY="279.6819154392289"/>
       <Node id="N8" posX="581.7419473286958" posY="401.2311406798107"/>
-      <Node id="N10" posX="223.33236855611835" posY="79.11956215063202"/>
-      <Node id="N11" posX="222.9955198537922" posY="159.851110304214"/>
-      <Node id="N15" posX="121.61104369417336" posY="519.2276471293147"/>
-      <Node id="N16" posX="120.94981587644037" posY="599.9751205258314"/>
-      <Node id="N19" posX="382.3482149920865" posY="599.93311804405"/>
-      <Node id="N20" posX="381.7195313128655" posY="517.2467235817602"/>
-      <Node id="N23" posX="662.3485914751373" posY="78.62510269800745"/>
-      <Node id="N24" posX="663.6974213956781" posY="160.00884962038361"/>
-      <Node id="N27" posX="661.7362628039186" posY="519.7428370230656"/>
-      <Node id="N28" posX="662.1911892026706" posY="599.4390088084543"/>
+      <Node id="C1" posX="80.79703001754126" posY="-23.02393597367177"/>
+      <Node id="C2" posX="20.582091747820414" posY="539.6082766457772"/>
+      <Node id="C3" posX="300.65788615359804" posY="539.2578525565577"/>
+      <Node id="C4" posX="599.54482166226" posY="-20.842809306468325"/>
+      <Node id="C5" posX="600.1761077823498" posY="539.959481664309"/>
     </Nodes>
   </Graph>
   <Parameters/>
