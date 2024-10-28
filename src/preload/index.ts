@@ -106,7 +106,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const options: TitleBarOptions = {
     icon: nativeImage.createFromPath(path.join(__dirname, '../../resources/icon.png')),
     backgroundColor: TitlebarColor.fromHex('#2196F3'), // "blue" color from vuetify
-    titleHorizontalAlignment: 'left'
+    ...(process.platform == 'win32' ? { titleHorizontalAlignment: 'left' } : {})
   }
   new Titlebar(options)
 })
