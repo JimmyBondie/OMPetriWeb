@@ -1,6 +1,6 @@
 {
   "name": "ompetriweb",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "./out/main/index.js",
   "type": "module",
   "description": "Application for Modeling and Simulation of Extended Hybrid Petri Nets",
